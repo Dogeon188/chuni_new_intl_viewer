@@ -33,7 +33,6 @@ const getSongList = async (difficulty = Difficulty.master) => {
         [Difficulty.advance]: "sendAdvance",
         [Difficulty.basic]: "sendBasic"
     }
-    console.log(api.difficulty);
     const res = await fetch(`https://chunithm-net-eng.com/mobile/record/musicGenre/${api[difficulty]}`, {
         headers: {
             "Cache-Control": "no-cache"
@@ -53,8 +52,11 @@ const getSongList = async (difficulty = Difficulty.master) => {
 
 const ratingCalc = (score, songRating) => {
     let offset = 0;
-    if (score >= 1007500) {
-        offset = 2;
+    // changed rating calculating mechanic
+    if (score >= 1009000) {
+        offset = 2.15
+    } else if (score >= 1007500) {
+        offset = 2 + (score - 1007500) * 5 / 50000;
     } else if (score >= 1005000) {
         offset = 1.5 + (score - 1005000) * 10 / 50000;
     } else if (score >= 1000000) {
@@ -77,7 +79,8 @@ const requestSongRecordFrag = async (idx, token) => {
     fd.append("idx", idx);
     fd.append("token", token);
 
-    const res = await fetch("https://chunithm-net-eng.com/mobile/record/musicGenre/sendMusicDetail/", {
+    // changed url
+    const res = await fetch("https://chunithm-net-eng.com/mobile/record/musicDetail/", {
         headers: {
             "Cache-Control": "no-cache"
         },
@@ -174,7 +177,25 @@ const main = async () => {
     const recordList = isFastFetch ? await fastRecordFetch() : await fullRecordFetch();
 
     // do rating calc for record list
-    const musicData = await (await fetch("https://api.chunirec.net/1.3/music/showall.json?token=252db1d77e53f52fd85c5b346fef7c90e345b3b3f0b12018a2074298e4b35182")).json();
+    const musicData = await (await fetch("https://api.chunirec.net/2.0/music/showall.json?token=252db1d77e53f52fd85c5b346fef7c90e345b3b3f0b12018a2074298e4b35182&region=jp2")).json();
+    // just a wordaround, not sure Valsqotch's chart constant
+    musicData.push({
+        "meta": {
+            "id":"?",
+            "title": "Valsqotch",
+            "genre": "ORIGINAL",
+            "artist": "owl*tree feat. chi*tree",
+            "release":"2022-03-04",
+            "bpm": 125
+        },
+        "data": {
+            "BAS":{"level":5,"const":0,"maxcombo":-1,"is_const_unknown":1},
+            "ADV":{"level":8.5,"const":0,"maxcombo":-1,"is_const_unknown":1},
+            "EXP":{"level":13.5,"const":13.5,"maxcombo":1402,"is_const_unknown":1},
+            "MAS":{"level":14.5,"const":14.5,"maxcombo":1973,"is_const_unknown":1}
+        }
+    });
+
     recordList.map(r => {
         const songInfo = musicData.find(md => md.meta.title === r.title);
         const songConst = songInfo.data[r.difficulty].const;
