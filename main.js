@@ -1,6 +1,7 @@
 import html2canvas from "html2canvas";
 
 const Difficulty = {
+    ultima: "ULT",
     master: "MAS",
     expert: "EXP",
     advance: "ADV",
@@ -28,15 +29,14 @@ const getSongList = async (difficulty = Difficulty.master) => {
     fd.append("genre", 99);
     fd.append("token", getCookie("_t"));
     const api = {
+        [Difficulty.ultima]: "sendUltima",
         [Difficulty.master]: "sendMaster",
         [Difficulty.expert]: "sendExpert",
         [Difficulty.advance]: "sendAdvance",
         [Difficulty.basic]: "sendBasic"
     }
     const res = await fetch(`https://chunithm-net-eng.com/mobile/record/musicGenre/${api[difficulty]}`, {
-        headers: {
-            "Cache-Control": "no-cache"
-        },
+        headers: { "Cache-Control": "no-cache" },
         method: "POST",
         body: fd
     });
@@ -52,9 +52,9 @@ const getSongList = async (difficulty = Difficulty.master) => {
 
 const ratingCalc = (score, songRating) => {
     let offset = 0;
-    // changed rating calculating mechanic
+
     if (score >= 1009000) {
-        offset = 2.15
+        offset = 2.15;
     } else if (score >= 1007500) {
         offset = 2 + (score - 1007500) * 5 / 50000;
     } else if (score >= 1005000) {
@@ -74,70 +74,7 @@ const ratingCalc = (score, songRating) => {
     return Math.floor((songRating + offset) * 100) / 100;
 }
 
-const requestSongRecordFrag = async (idx, token) => {
-    const fd = new FormData();
-    fd.append("idx", idx);
-    fd.append("token", token);
-
-    // changed url
-    const res = await fetch("https://chunithm-net-eng.com/mobile/record/musicDetail/", {
-        headers: {
-            "Cache-Control": "no-cache"
-        },
-        method: "POST",
-        body: fd
-    });
-
-    const htmlStr = await res.text();
-    const el = document.createElement("div");
-    el.innerHTML = htmlStr;
-
-    const frag = document.createDocumentFragment();
-    frag.appendChild(el);
-    return frag;
-}
-
-const parseSongRecordFrag = (frag) => {
-    const ret = [];
-    const title = frag.querySelector(".play_musicdata_title").innerText;
-    const divMap = {
-        [Difficulty.master]: frag.querySelector(".bg_master"),
-        [Difficulty.expert]: frag.querySelector(".bg_expert"),
-        [Difficulty.advance]: frag.querySelector(".bg_advance"),
-        [Difficulty.basic]: frag.querySelector(".bg_basic")
-    }
-
-    for (const [difficulty, div] of Object.entries(divMap)) {
-        if (div) {
-            ret.push({
-                title,
-                difficulty,
-                date: div.querySelector(".musicdata_detail_date").innerText,
-                score: strToNum(div.querySelector(".text_b").innerText),
-                playCount: strToNum(div.querySelector(".text_n").nextElementSibling.innerText)
-            });
-        }
-    }
-
-    return ret;
-}
-
-const fullRecordFetch = async () => {
-    const ret = [];
-
-    const songList = await getSongList();
-
-    for (const [i, s] of songList.entries()) {
-        msgEl.innerText = `Fetching song data: ${i + 1} / ${songList.length}`;
-        ret.push(...parseSongRecordFrag(await requestSongRecordFrag(s.idx.value, s.token.value)));
-    }
-
-    msgEl.style.display = "none";
-    return ret;
-}
-
-// fetch without date and play count
-const fastRecordFetch = async () => {
+const recordFetch = async () => {
     const ret = [];
 
     msgEl.innerText = "Fetching song data...";
@@ -173,15 +110,14 @@ const main = async () => {
         return;
     }
 
-    const isFastFetch = confirm("[chuni-intl-viewer] Do you want to perform a fast fetch ?");
-    const recordList = isFastFetch ? await fastRecordFetch() : await fullRecordFetch();
+    const recordList = await recordFetch();
 
     // do rating calc for record list
     const musicData = await (await fetch("https://api.chunirec.net/2.0/music/showall.json?token=252db1d77e53f52fd85c5b346fef7c90e345b3b3f0b12018a2074298e4b35182&region=jp2")).json();
-    // just a wordaround, not sure Valsqotch's chart constant
+
+    // just a temporary wordaround, not sure Valsqotch's chart constant
     musicData.push({
         "meta": {
-            "id":"?",
             "title": "Valsqotch",
             "genre": "ORIGINAL",
             "artist": "owl*tree feat. chi*tree",
@@ -189,16 +125,17 @@ const main = async () => {
             "bpm": 125
         },
         "data": {
-            "BAS":{"level":5,"const":0,"maxcombo":-1,"is_const_unknown":1},
-            "ADV":{"level":8.5,"const":0,"maxcombo":-1,"is_const_unknown":1},
+            "BAS":{"level":5,"const":0,"maxcombo":-1,"is_const_unknown":0},
+            "ADV":{"level":8.5,"const":0,"maxcombo":-1,"is_const_unknown":0},
             "EXP":{"level":13.5,"const":13.5,"maxcombo":1402,"is_const_unknown":1},
-            "MAS":{"level":14.5,"const":14.5,"maxcombo":1973,"is_const_unknown":1}
+            "MAS":{"level":14.5,"const":14.5,"maxcombo":1973,"is_const_unknown":0}
         }
     });
 
     recordList.map(r => {
         const songInfo = musicData.find(md => md.meta.title === r.title);
-        const songConst = songInfo.data[r.difficulty].const;
+        let songConst = songInfo.data[r.difficulty].const;
+        if (songConst === 0) songConst = songInfo.data[r.difficulty].level;
         r.rating = ratingCalc(r.score, songConst);
         r.songConst = songConst;
         return r;
@@ -241,18 +178,12 @@ const main = async () => {
     }
 
     const headerRow = ["#", "Song Name", "Difficulty", "Constant", "Score", "Rating"];
-    if (!isFastFetch) {
-        headerRow.push("Last Play", "Play Count");
-    }
     table.appendChild(
         createRow(headerRow, true)
     );
 
     for (const [i, r] of recordList.entries()) {
         const rowData = [i + 1, r.title, r.difficulty, r.songConst.toFixed(1), r.score, r.rating.toFixed(2)];
-        if (!isFastFetch) {
-            rowData.push(r.date, r.playCount);
-        }
         table.appendChild(
             createRow(rowData)
         );
