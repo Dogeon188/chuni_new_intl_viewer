@@ -18,9 +18,7 @@ const getCookie = (key) => {
         .map(e => decodeURIComponent(e.trim()))
         .map(e => e.split("="))
         .find(e => e[0] === key);
-    if (cookieEntry) {
-        return cookieEntry[1]; // value
-    }
+    if (cookieEntry) return cookieEntry[1]; // value
     return "";
 }
 
@@ -77,23 +75,30 @@ const ratingCalc = (score, songRating) => {
 const recordFetch = async () => {
     const ret = [];
 
-    msgEl.innerText = "Fetching song data...";
     for (const difficulty of Object.values(Difficulty)) {
+        msgEl.innerText = `Fetching play record (${difficulty})...`;
         const songList = await getSongList(difficulty);
 
         for (const songData of songList) {
             const title = songData.querySelector(".music_title").innerText;
             const scoreStr = songData.querySelector(".text_b") ? songData.querySelector(".text_b").innerText : null;
+            const icons = songData.querySelector(".play_musicdata_icon");
+            let clear = null;
+            if (icons) for (const clearType of ["fullchain", "fullchain2", "alljustice", "fullcombo", "clear"]) {
+                clear = icons.querySelector(`img[src*="${clearType}"]`);
+                if (clear) break;
+            }
             if (title && scoreStr) {
                 ret.push({
                     title: songData.querySelector(".music_title").innerText,
-                    score: strToNum(songData.querySelector(".text_b").innerText),
-                    difficulty
+                    score: strToNum(scoreStr),
+                    difficulty,
+                    clear
                 });
             }
         }
     }
-    msgEl.style.display = "none";
+    msgEl.innerText = "Play record fetch done.";
     return ret;
 }
 
@@ -111,11 +116,12 @@ const main = async () => {
     }
 
     const recordList = await recordFetch();
-
-    // do rating calc for record list
+    
+    msgEl.innerText = "Acquiring song data...";
     const musicData = await (await fetch("https://api.chunirec.net/2.0/music/showall.json?token=252db1d77e53f52fd85c5b346fef7c90e345b3b3f0b12018a2074298e4b35182&region=jp2")).json();
+    msgEl.innerText = "Acquiring song data done.";
 
-    // just a temporary wordaround, not sure Valsqotch's chart constant
+    // just a temporary wordaround, not sure Valsqotch EXP's chart constant
     musicData.push({
         "meta": {
             "title": "Valsqotch",
@@ -132,6 +138,7 @@ const main = async () => {
         }
     });
 
+    // do rating calc for record list
     recordList.map(r => {
         const songInfo = musicData.find(md => md.meta.title === r.title);
         let songConst = songInfo.data[r.difficulty].const;
@@ -142,7 +149,7 @@ const main = async () => {
     });
     recordList.sort((a, b) => b.rating - a.rating);
 
-    // Genearte result
+    // Generate result
     const createTextDiv = (content = "") => {
         const div = document.createElement("div");
         div.style.textAlign = "left";
@@ -153,6 +160,8 @@ const main = async () => {
 
     const resultDiv = document.createElement("div");
     resultDiv.style.padding = "0.1rem";
+    resultDiv.style.backgroundColor = "#223";
+    resultDiv.style.color = "#eec";
 
     const best30Sum = recordList.slice(0, 30)
         .map((r) => r.rating)
@@ -163,32 +172,47 @@ const main = async () => {
     resultDiv.appendChild(createTextDiv(`Maximum Achievable Rating: ${((best30Sum + recordList[0].rating * 10) / 40).toFixed(2)}`));
 
     const table = document.createElement("table");
-    table.style.border = "0.1rem solid black";
     const createRow = (dataArr, isHeader = false) => {
         const row = document.createElement("tr");
         const tag = isHeader ? "th" : "td";
+        const difficultyColor = {
+            [Difficulty.ultima]: "#3cf",
+            [Difficulty.master]: "#c7f",
+            [Difficulty.expert]: "#e46",
+            [Difficulty.advance]: "#e73",
+            [Difficulty.basic]: "#1c3"
+        }[dataArr.pop()]
         for (const data of dataArr) {
             const item = document.createElement(tag);
-            item.style.border = "0.1rem solid black";
-            item.innerText = data;
+            if (data instanceof HTMLImageElement) item.appendChild(data);
+            else item.innerText = data;
             item.style.padding = "0.5rem";
             row.appendChild(item);
         }
+        if (dataArr[0] <= 40) {
+            // row.style.backgroundColor = (dataArr[0] <= 30) ? "#666" : "#333" ;
+            if (dataArr[0] <= 30) row.children.item(0).style.color = "#fc7";
+            row.children.item(0).style.fontWeight = "bold";
+        }
+        row.children.item(1).style.color = difficultyColor;
+        row.children.item(1).style.fontWeight = "bold";
         return row;
     }
 
-    const headerRow = ["#", "Song Name", "Difficulty", "Constant", "Score", "Rating"];
+    const headerRow = ["#", "Song Name", "Constant", "Score", "Rating", "Clear", "Difficulty"];
     table.appendChild(
         createRow(headerRow, true)
     );
 
     for (const [i, r] of recordList.entries()) {
-        const rowData = [i + 1, r.title, r.difficulty, r.songConst.toFixed(1), r.score, r.rating.toFixed(2)];
+        const rowData = [i + 1, r.title, r.songConst.toFixed(1), r.score, r.rating.toFixed(2), r.clear, r.difficulty];
         table.appendChild(
             createRow(rowData)
         );
     }
     resultDiv.appendChild(table);
+    msgEl.style.display = "none";
+
     document.body.insertAdjacentElement("afterBegin", resultDiv);
 
     // generate button for download result as png
