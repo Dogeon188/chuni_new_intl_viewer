@@ -216,7 +216,7 @@ const main = async () => {
     downloadBtn.style.margin = "0.5rem";
     downloadBtn.onclick = async () => {
         const link = document.createElement("a");
-        link.download = "result.png";
+        link.download = "result_full.png";
         link.href = (await html2canvas(resultDiv, {
             onclone: (d, e) => { e.style.color = "black"; }
         })).toDataURL()
@@ -229,7 +229,7 @@ const main = async () => {
     downloadB30Btn.style.margin = "0.5rem";
     downloadB30Btn.onclick = async () => {
         const link = document.createElement("a");
-        link.download = "result.png";
+        link.download = "result_b40.png";
         link.href = (await html2canvas(resultDiv, {
             onclone: (d, e) => {
                 const trs = e.querySelector(":last-child").children;
