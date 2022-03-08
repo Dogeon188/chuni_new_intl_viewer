@@ -217,9 +217,7 @@ const main = async () => {
     downloadBtn.onclick = async () => {
         const link = document.createElement("a");
         link.download = "result_full.png";
-        link.href = (await html2canvas(resultDiv, {
-            onclone: (d, e) => { e.style.color = "black"; }
-        })).toDataURL()
+        link.href = (await html2canvas(resultDiv, {backgroundColor: "#223"})).toDataURL()
         link.click();
     }
     mainDiv.insertAdjacentElement("afterBegin", downloadBtn);
@@ -231,10 +229,10 @@ const main = async () => {
         const link = document.createElement("a");
         link.download = "result_b40.png";
         link.href = (await html2canvas(resultDiv, {
+            backgroundColor: "#223",
             onclone: (d, e) => {
                 const trs = e.querySelector(":last-child").children;
                 for (;trs.length > 41;) trs[41].remove();
-                e.style.color = "black"
             }
         })).toDataURL()
         link.click();
@@ -245,10 +243,10 @@ const main = async () => {
     const h3 = document.createElement("h3");
     h3.innerText = "Chunithm (International) Score Viewer";
     const githubContact = document.createElement("a");
-    githubContact.href = "https://github.com/kyroslee/chuni_intl_viewer";
+    githubContact.href = "https://github.com/Dogeon188/chuni_new_intl_viewer";
     githubContact.target = "_blank";
     githubContact.rel = "noopener noreferrer";
-    githubContact.innerText = "kyroslee/chuni_intl_viewer@GitHub";
+    githubContact.innerText = "Dogeon188/chuni_intl_new_viewer@GitHub";
     titleDiv.appendChild(h3);
     titleDiv.appendChild(githubContact);
     mainDiv.insertAdjacentElement("afterbegin", titleDiv);
