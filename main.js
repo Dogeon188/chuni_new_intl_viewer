@@ -70,7 +70,7 @@ const ratingCalc = (score, songRating) => {
         offset = -5 + (score - 900000) * 4 / 50000;
     }
 
-    return (songRating + offset).toFixed(2);
+    return strToNum((songRating + offset).toFixed(2));
 }
 
 const recordFetch = async () => {
@@ -202,7 +202,7 @@ const main = async () => {
     table.appendChild(createRow(headerRow, true));
 
     for (const [i, r] of recordList.entries()) {
-        const rowData = [i + 1, r.title, r.songConst.toFixed(1), r.score, r.rating, r.clear, r.difficulty];
+        const rowData = [i + 1, r.title, r.songConst.toFixed(1), r.score, r.rating.toFixed(2), r.clear, r.difficulty];
         table.appendChild(createRow(rowData));
     }
     resultDiv.appendChild(table);
