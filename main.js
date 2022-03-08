@@ -112,7 +112,7 @@ const main = async () => {
 
     if (!getCookie("_t")) {
         alert("[chuni-intl-viewer] Token not found. Please login first.");
-        msgEl.innerText = document.cookie;
+        msgEl.innerText = "This is just a debug message\n" + document.cookie;
         // window.location.href = "https://chunithm-net-eng.com/";
         return;
     }
