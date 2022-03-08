@@ -106,13 +106,14 @@ const recordFetch = async () => {
 const main = async () => {
     if (window.location.hostname !== "chunithm-net-eng.com") {
         alert("[chuni_intl_viewer] This tools could only be used under chunithm-net international.");
-        window.location.href  = "https://chunithm-net-eng.com/";
+        window.location.href = "https://chunithm-net-eng.com/";
         return;
     }
 
     if (!getCookie("_t")) {
         alert("[chuni-intl-viewer] Token not found. Please login first.");
-        window.location.href  = "https://chunithm-net-eng.com/";
+        msgEl.innerText = document.cookie;
+        window.location.href = "https://chunithm-net-eng.com/";
         return;
     }
 
@@ -189,10 +190,10 @@ const main = async () => {
             row.appendChild(item);
         }
         if (dataArr[0] <= 40) {
-            // row.style.backgroundColor = (dataArr[0] <= 30) ? "#666" : "#333" ;
-            if (dataArr[0] <= 30) row.children.item(0).style.color = "#fc7";
+            if (dataArr[0] <= 30) row.children.item(0).style.color = "#fc4";
             row.children.item(0).style.fontWeight = "bold";
         }
+        if (dataArr[0] % 2) { row.style.backgroundColor = "#324"; }
         row.children.item(1).style.color = difficultyColor;
         row.children.item(1).style.fontWeight = "bold";
         return row;
