@@ -85,7 +85,7 @@ const recordFetch = async () => {
             const scoreStr = songData.querySelector(".text_b") ? songData.querySelector(".text_b").innerText : null;
             const icons = songData.querySelector(".play_musicdata_icon");
             let clear = null;
-            if (icons) for (const clearType of ["fullchain", "fullchain2", "alljustice", "fullcombo", "clear"]) {
+            if (icons) for (const clearType of ["fullchain", "fullchain2", "alljustice", "fullcombo"]) {
                 clear = icons.querySelector(`img[src*="${clearType}"]`);
                 if (clear) break;
             }
@@ -112,8 +112,7 @@ const main = async () => {
 
     if (!getCookie("_t")) {
         alert("[chuni-intl-viewer] Token not found. Please login first.");
-        msgEl.innerText = "This is just a debug message\n" + document.cookie;
-        // window.location.href = "https://chunithm-net-eng.com/";
+        window.location.href = "https://chunithm-net-eng.com/";
         return;
     }
 
