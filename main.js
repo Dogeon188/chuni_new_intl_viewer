@@ -8,6 +8,7 @@ const Difficulty = {
     basic: "BAS"
 }
 
+const mainDiv = document.createElement("div");
 const msgEl = document.createElement("div");
 
 const strToNum = (str) => Number([...str].filter(e => e !== ",").join(""));
@@ -159,9 +160,6 @@ const main = async () => {
     }
 
     const resultDiv = document.createElement("div");
-    resultDiv.style.padding = "0.1rem";
-    resultDiv.style.backgroundColor = "#223";
-    resultDiv.style.color = "#eec";
 
     const best30Sum = recordList.slice(0, 30)
         .map((r) => r.rating)
@@ -172,6 +170,7 @@ const main = async () => {
     resultDiv.appendChild(createTextDiv(`Maximum Achievable Rating: ${((best30Sum + recordList[0].rating * 10) / 40).toFixed(2)}`));
 
     const table = document.createElement("table");
+    table.style.width = "100%";
     const createRow = (dataArr, isHeader = false) => {
         const row = document.createElement("tr");
         const tag = isHeader ? "th" : "td";
@@ -200,32 +199,47 @@ const main = async () => {
     }
 
     const headerRow = ["#", "Song Name", "Constant", "Score", "Rating", "Clear", "Difficulty"];
-    table.appendChild(
-        createRow(headerRow, true)
-    );
+    table.appendChild(createRow(headerRow, true));
 
     for (const [i, r] of recordList.entries()) {
         const rowData = [i + 1, r.title, r.songConst.toFixed(1), r.score, r.rating.toFixed(2), r.clear, r.difficulty];
-        table.appendChild(
-            createRow(rowData)
-        );
+        table.appendChild(createRow(rowData));
     }
     resultDiv.appendChild(table);
     msgEl.style.display = "none";
 
-    document.body.insertAdjacentElement("afterBegin", resultDiv);
+    mainDiv.insertAdjacentElement("afterBegin", resultDiv);
 
     // generate button for download result as png
     const downloadBtn = document.createElement("button");
-    downloadBtn.innerText = "Donwload Result as PNG";
+    downloadBtn.innerText = "Donwload Full Result as PNG";
     downloadBtn.style.margin = "0.5rem";
     downloadBtn.onclick = async () => {
         const link = document.createElement("a");
         link.download = "result.png";
-        link.href = (await html2canvas(resultDiv)).toDataURL()
+        link.href = (await html2canvas(resultDiv, {
+            onclone: (d, e) => { e.style.color = "black"; }
+        })).toDataURL()
         link.click();
     }
-    document.body.insertAdjacentElement("afterBegin", downloadBtn);
+    mainDiv.insertAdjacentElement("afterBegin", downloadBtn);
+
+    const downloadB30Btn = document.createElement("button");
+    downloadB30Btn.innerText = "Donwload Best 40 Scores as PNG";
+    downloadB30Btn.style.margin = "0.5rem";
+    downloadB30Btn.onclick = async () => {
+        const link = document.createElement("a");
+        link.download = "result.png";
+        link.href = (await html2canvas(resultDiv, {
+            onclone: (d, e) => {
+                const trs = e.querySelector(":last-child").children;
+                for (;trs.length > 41;) trs[41].remove();
+                e.style.color = "black"
+            }
+        })).toDataURL()
+        link.click();
+    }
+    mainDiv.insertAdjacentElement("afterBegin", downloadB30Btn);
 
     const titleDiv = document.createElement("div");
     const h3 = document.createElement("h3");
@@ -237,7 +251,7 @@ const main = async () => {
     githubContact.innerText = "kyroslee/chuni_intl_viewer@GitHub";
     titleDiv.appendChild(h3);
     titleDiv.appendChild(githubContact);
-    document.body.insertAdjacentElement("afterbegin", titleDiv);
+    mainDiv.insertAdjacentElement("afterbegin", titleDiv);
 };
 
 if (window.chuniIntlViewer) {
@@ -246,6 +260,14 @@ if (window.chuniIntlViewer) {
     window.chuniIntlViewer = true;
     msgEl.style.fontSize = "1.5rem";
     msgEl.style.padding = "1rem";
-    document.body.insertAdjacentElement("afterBegin", msgEl);
+    mainDiv.append(msgEl)
+    Object.assign(mainDiv.style, {
+        padding: "0.1rem",
+        backgroundColor: "#223",
+        color: "#eec",
+        width: "fit-content",
+        minWidth: "100%"
+    });
+    document.body.insertAdjacentElement("afterBegin", mainDiv);
     main();
 }
