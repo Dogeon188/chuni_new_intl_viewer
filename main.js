@@ -163,9 +163,11 @@ const main = async () => {
         .map((r) => r.rating)
         .reduce((acc, val) => acc + val);
 
-    resultDiv.append(createTextDiv(`Generated at: ${new Date().toLocaleDateString()}`));
-    resultDiv.append(createTextDiv(`Best 30 Average: ${(best30Sum / 30).toFixed(2)}`));
-    resultDiv.append(createTextDiv(`Maximum Achievable Rating: ${((best30Sum + recordList[0].rating * 10) / 40).toFixed(2)}`));
+    resultDiv.append(
+        createTextDiv(`Generated at: ${new Date().toLocaleDateString()}`),
+        createTextDiv(`Best 30 Average: ${(best30Sum / 30).toFixed(2)}`),
+        createTextDiv(`Maximum Achievable Rating: ${((best30Sum + recordList[0].rating * 10) / 40).toFixed(2)}`)
+    );
 
     const table = $("<table>").css("width", "100%");
     const createRow = (dataArr, isHeader = false) => {
