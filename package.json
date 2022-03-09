@@ -1,5 +1,5 @@
 {
-  "name": "chuni_intl_viewer",
+  "name": "chuni_new_intl_viewer",
   "version": "1.0.0",
   "description": "A bookmarklet tool to let you view the records of [CHUNITHM-NET (International)](https://chunithm-net-eng.com/) in rating order.",
   "main": "main.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyroslee/chuni_intl_viewer.git"
+    "url": "git+https://github.com/Dogeon188/chuni_new_intl_viewer.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kyroslee/chuni_intl_viewer/issues"
+    "url": "https://github.com/Dogeon188/chuni_new_intl_viewer/issues"
   },
-  "homepage": "https://github.com/kyroslee/chuni_intl_viewer#readme",
+  "homepage": "https://github.com/Dogeon188/chuni_new_intl_viewer#readme",
   "dependencies": {
     "@rollup/plugin-node-resolve": "^11.2.0",
     "express": "^4.17.3",

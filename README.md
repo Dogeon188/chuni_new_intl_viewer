@@ -1,4 +1,4 @@
-# Chunithm (International) Score Viewer
+# Chunithm New (International) Score Viewer
 
 A bookmarklet tool let you to view the records of [CHUNITHM-NET (International)](https://chunithm-net-eng.com/) in rating order.
 
@@ -12,11 +12,11 @@ Also the chart constant of Valsqotch EXP is temporarily set to 13.5, due to the 
 
 ## Usage
 
-1. Drag [chuni intl viewer](https://github.com/kyroslee/chuni_intl_viewer) to your bookmark bar.
+1. Drag [chuni new intl viewer](https://github.com/Dogeon188/chuni_new_intl_viewer) to your bookmark bar.
 2. Edit the bookmark. Copy the following code and paste it as the url of the bookmark
 
     ```js
-    javascript:(function(d,s){s=d.createElement('script');s.src='https://cdn.jsdelivr.net/gh/Dogeon188/chuni_new_intl_viewer/main.min.js?'+Date.now();d.getElementsByTagName('head')[0].appendChild(s);})(document);
+    javascript:(async()=>{eval(await(await fetch('https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/main.min.js')).text())})();
     ```
 
 3. Open [CHUNITHM-NET](https://chunithm-net-eng.com/) and run the bookmarklet

@@ -248,7 +248,7 @@ const main = async () => {
     githubContact.href = "https://github.com/Dogeon188/chuni_new_intl_viewer";
     githubContact.target = "_blank";
     githubContact.rel = "noopener noreferrer";
-    githubContact.innerText = "Dogeon188/chuni_intl_new_viewer@GitHub";
+    githubContact.innerText = "Dogeon188/chuni_new_intl_viewer@GitHub";
     titleDiv.appendChild(h3);
     titleDiv.appendChild(githubContact);
     mainDiv.insertAdjacentElement("afterbegin", titleDiv);
@@ -269,5 +269,10 @@ if (window.chuniIntlViewer) {
         minWidth: "100%"
     });
     document.body.insertAdjacentElement("afterBegin", mainDiv);
-    main();
+    try {
+        main();
+    } catch (error) {
+        msgEl.innerText = "An error occured! Please contact the author and report the bug report below. Your response would make Chunithm Viewer better!\n" + error;
+    }
 }
+
