@@ -72,7 +72,7 @@ const ratingCalc = (score, chartConst) => {
         return (chartConst - 5) / 2 * (score - 500000) / 300000;
     } else return 0;
 
-    return chartConst + offset;
+    return Math.floor((chartConst + offset + Number.EPSILON) * 100) / 100;
 }
 
 const recordFetch = async () => {
@@ -150,7 +150,7 @@ const main = async () => {
         r.songConst = songConst;
         return r;
     });
-    recordList.sort((a, b) => b.rating - a.rating);
+    recordList.sort((a, b) => (b.rating === a.rating) ? (b.songConst - a.songConst) : (b.rating - a.rating));
 
     // Generate result
     const createTextDiv = (content = "") => {
@@ -200,7 +200,7 @@ const main = async () => {
         return row;
     }
 
-    const headerRow = ["#", "Song Name", "Constant", "Score", "Rating", "Clear", "Difficulty"];
+    const headerRow = ["#", "Song Name", "Constant", "Score", "Rating", "FC/AJ", "Difficulty"];
     table.appendChild(createRow(headerRow, true));
 
     for (const [i, r] of recordList.entries()) {
