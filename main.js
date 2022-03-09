@@ -8,8 +8,8 @@ const Difficulty = {
     basic: "BAS"
 }
 
-const mainDiv = document.createElement("div");
-const msgEl = document.createElement("div");
+const mainDiv = $("<div>");
+const msgEl = $("<div>");
 
 const strToNum = (str) => Number([...str].filter(e => e !== ",").join(""));
 
@@ -40,11 +40,7 @@ const getSongList = async (difficulty = Difficulty.master) => {
         body: fd
     });
     const htmlStr = await res.text();
-    const el = document.createElement("div");
-    el.innerHTML = htmlStr;
-    const frag = document.createDocumentFragment();
-    frag.appendChild(el);
-    const formList = [...frag.querySelectorAll("form")];
+    const formList = [...($("<div>").html(htmlStr).find("form"))]
     formList.shift();
     return formList;
 }
@@ -79,21 +75,24 @@ const recordFetch = async () => {
     const ret = [];
 
     for (const difficulty of Object.values(Difficulty)) {
-        msgEl.innerText = `Fetching play record (${difficulty})...`;
+        msgEl.text(`Fetching play record (${difficulty})...`);
         const songList = await getSongList(difficulty);
 
-        for (const songData of songList) {
-            const title = songData.querySelector(".music_title").innerText;
-            const scoreStr = songData.querySelector(".text_b") ? songData.querySelector(".text_b").innerText : null;
-            const icons = songData.querySelector(".play_musicdata_icon");
+        for (const songDataForm of songList) {
+            const songData = $(songDataForm);
+            const title = songData.find(".music_title").text();
+            const scoreStr = songData.find(".text_b").length ? songData.find(".text_b").text() : null;
+            const icons = songData.find(".play_musicdata_icon");
             let clear = null;
-            if (icons) for (const clearType of ["fullchain", "fullchain2", "alljustice", "fullcombo"]) {
-                clear = icons.querySelector(`img[src*="${clearType}"]`);
-                if (clear) break;
+            if (icons.length) {
+                for (const clearType of ["fullchain", "fullchain2", "alljustice", "fullcombo"]) {
+                    clear = icons.find(`img[src*="${clearType}"]`);
+                    if (clear.length) break;
+                }
             }
             if (title && scoreStr) {
                 ret.push({
-                    title: songData.querySelector(".music_title").innerText,
+                    title,
                     score: strToNum(scoreStr),
                     difficulty,
                     clear
@@ -101,7 +100,7 @@ const recordFetch = async () => {
             }
         }
     }
-    msgEl.innerText = "Play record fetch done.";
+    msgEl.text("Play record fetch done.");
     return ret;
 }
 
@@ -120,9 +119,9 @@ const main = async () => {
 
     const recordList = await recordFetch();
     
-    msgEl.innerText = "Acquiring song data...";
+    msgEl.text("Acquiring song data...");
     const musicData = await (await fetch("https://api.chunirec.net/2.0/music/showall.json?token=252db1d77e53f52fd85c5b346fef7c90e345b3b3f0b12018a2074298e4b35182&region=jp2")).json();
-    msgEl.innerText = "Acquiring song data done.";
+    msgEl.text("Acquiring song data done.");
 
     // just a temporary wordaround, not sure Valsqotch EXP's chart constant
     musicData.push({
@@ -153,29 +152,25 @@ const main = async () => {
     recordList.sort((a, b) => (b.rating === a.rating) ? (b.songConst - a.songConst) : (b.rating - a.rating));
 
     // Generate result
-    const createTextDiv = (content = "") => {
-        const div = document.createElement("div");
-        div.style.textAlign = "left";
-        div.style.margin = "0.1rem";
-        div.innerText = content;
-        return div;
-    }
+    const createTextDiv = (content = "") => $("<div>").text(content).css({
+        textAlign: "left",
+        margin: "0.5rem"
+    });
 
-    const resultDiv = document.createElement("div");
+    const resultDiv = $("<div>");
 
     const best30Sum = recordList.slice(0, 30)
         .map((r) => r.rating)
         .reduce((acc, val) => acc + val);
 
-    resultDiv.appendChild(createTextDiv(`Generated at: ${new Date().toLocaleDateString()}`));
-    resultDiv.appendChild(createTextDiv(`Best 30 Average: ${(best30Sum / 30).toFixed(2)}`));
-    resultDiv.appendChild(createTextDiv(`Maximum Achievable Rating: ${((best30Sum + recordList[0].rating * 10) / 40).toFixed(2)}`));
+    resultDiv.append(createTextDiv(`Generated at: ${new Date().toLocaleDateString()}`));
+    resultDiv.append(createTextDiv(`Best 30 Average: ${(best30Sum / 30).toFixed(2)}`));
+    resultDiv.append(createTextDiv(`Maximum Achievable Rating: ${((best30Sum + recordList[0].rating * 10) / 40).toFixed(2)}`));
 
-    const table = document.createElement("table");
-    table.style.width = "100%";
+    const table = $("<table>").css("width", "100%");
     const createRow = (dataArr, isHeader = false) => {
-        const row = document.createElement("tr");
-        const tag = isHeader ? "th" : "td";
+        const row = $("<tr>");
+        const tag = isHeader ? "<th>" : "<td>";
         const difficultyColor = {
             [Difficulty.ultima]: "#3cf",
             [Difficulty.master]: "#c7f",
@@ -184,95 +179,88 @@ const main = async () => {
             [Difficulty.basic]: "#1c3"
         }[dataArr.pop()]
         for (const data of dataArr) {
-            const item = document.createElement(tag);
-            if (data instanceof HTMLImageElement) item.appendChild(data);
-            else item.innerText = data;
-            item.style.padding = "0.5rem";
-            row.appendChild(item);
+            const item = $(tag);
+            if (data instanceof $) item.append(data[0]);
+            else item.text(data);
+            item.css("padding", "0.5rem");
+            row.append(item);
         }
-        if (dataArr[0] <= 40) {
-            if (dataArr[0] <= 30) row.children.item(0).style.color = "#fc4";
-            row.children.item(0).style.fontWeight = "bold";
-        }
-        if (dataArr[0] % 2) { row.style.backgroundColor = "#324"; }
-        row.children.item(1).style.color = difficultyColor;
-        row.children.item(1).style.fontWeight = "bold";
+        row.children().eq(1).css({
+            color: difficultyColor,
+            fontWeight: "bold"
+        });
         return row;
     }
 
     const headerRow = ["#", "Song Name", "Constant", "Score", "Rating", "FC/AJ", "Difficulty"];
-    table.appendChild(createRow(headerRow, true));
+    table.append(createRow(headerRow, true));
 
     for (const [i, r] of recordList.entries()) {
         const rowData = [i + 1, r.title, r.songConst.toFixed(1), r.score, r.rating.toFixed(2), r.clear, r.difficulty];
-        table.appendChild(createRow(rowData));
+        table.append(createRow(rowData));
     }
-    resultDiv.appendChild(table);
-    msgEl.style.display = "none";
+    table.children(":odd").css("backgroundColor", "#324");
+    table.slice(1, 31).children().first().css("color", "#fc4");
+    table.slice(1, 41).children().first().css("fontWeight", "bold");
+    resultDiv.append(table);
+    msgEl.hide();
 
-    mainDiv.insertAdjacentElement("afterBegin", resultDiv);
+    mainDiv.prepend(
+        $("<button>")
+            .text("Donwload Best 40 Scores as PNG")
+            .css("margin", "0.5rem")
+            .click(async () => {
+                $("<a>").attr({
+                    download: "result_b40.png",
+                    href: (await html2canvas(resultDiv[0], {
+                        backgroundColor: "#223",
+                        onclone: (d, e) => {
+                            const trs = e.querySelector(":last-child").children;
+                            for (;trs.length > 41;) trs[41].remove();
+                        }
+                    })).toDataURL()
+                }).click()}),
+        $("<button>")
+            .text("Donwload Full Result as PNG")
+            .css("margin", "0.5rem")
+            .click(async () => {
+                $("<a>").attr({
+                    download: "result_full.png",
+                    href: (await html2canvas(resultDiv[0], {backgroundColor: "#223"})).toDataURL()
+                }).click();}),
+        resultDiv);
 
-    // generate button for download result as png
-    const downloadBtn = document.createElement("button");
-    downloadBtn.innerText = "Donwload Full Result as PNG";
-    downloadBtn.style.margin = "0.5rem";
-    downloadBtn.onclick = async () => {
-        const link = document.createElement("a");
-        link.download = "result_full.png";
-        link.href = (await html2canvas(resultDiv, {backgroundColor: "#223"})).toDataURL()
-        link.click();
-    }
-    mainDiv.insertAdjacentElement("afterBegin", downloadBtn);
-
-    const downloadB30Btn = document.createElement("button");
-    downloadB30Btn.innerText = "Donwload Best 40 Scores as PNG";
-    downloadB30Btn.style.margin = "0.5rem";
-    downloadB30Btn.onclick = async () => {
-        const link = document.createElement("a");
-        link.download = "result_b40.png";
-        link.href = (await html2canvas(resultDiv, {
-            backgroundColor: "#223",
-            onclone: (d, e) => {
-                const trs = e.querySelector(":last-child").children;
-                for (;trs.length > 41;) trs[41].remove();
-            }
-        })).toDataURL()
-        link.click();
-    }
-    mainDiv.insertAdjacentElement("afterBegin", downloadB30Btn);
-
-    const titleDiv = document.createElement("div");
-    const h3 = document.createElement("h3");
-    h3.innerText = "Chunithm (International) Score Viewer";
-    const githubContact = document.createElement("a");
-    githubContact.href = "https://github.com/Dogeon188/chuni_new_intl_viewer";
-    githubContact.target = "_blank";
-    githubContact.rel = "noopener noreferrer";
-    githubContact.innerText = "Dogeon188/chuni_new_intl_viewer@GitHub";
-    titleDiv.appendChild(h3);
-    titleDiv.appendChild(githubContact);
-    mainDiv.insertAdjacentElement("afterbegin", titleDiv);
+    const titleDiv = $("<div>");
+    const h3 = $("<h3>").text("Chunithm (International) Score Viewer");
+    const githubContact = $("<a>").attr({
+        href: "https://github.com/Dogeon188/chuni_new_intl_viewer",
+        target: "_blank",
+        rel: "noopener noreferrer"
+    }).text("Dogeon188/chuni_new_intl_viewer@GitHub")
+    titleDiv.append(h3, githubContact);
+    mainDiv.prepend(titleDiv);
 };
 
 if (window.chuniIntlViewer) {
     alert("[chuni-intl-viewer] Please refresh the page before another new fetch.");
 } else {
     window.chuniIntlViewer = true;
-    msgEl.style.fontSize = "1.5rem";
-    msgEl.style.padding = "1rem";
-    mainDiv.append(msgEl)
-    Object.assign(mainDiv.style, {
+    msgEl.css({
+        fontSize: "1.5rem",
+        padding: "1rem"
+    });
+    mainDiv.append(msgEl).css({
         padding: "0.1rem",
         backgroundColor: "#223",
         color: "#eec",
         width: "fit-content",
         minWidth: "100%"
     });
-    document.body.insertAdjacentElement("afterBegin", mainDiv);
+    $(document.body).prepend(mainDiv);
     try {
         main();
     } catch (error) {
-        msgEl.innerText = "An error occured! Please contact the author and report the bug report below. Your response would make Chunithm Viewer better!\n" + error;
+        msgEl.text("An error occured! Please contact the author and report the bug report below. Your response would make Chunithm Viewer better!\n" + error);
     }
 }
 
