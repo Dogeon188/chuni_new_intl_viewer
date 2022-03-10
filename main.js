@@ -6,7 +6,7 @@ const Difficulty = {
     expert: "EXP",
     advance: "ADV",
     basic: "BAS"
-}
+};
 
 const mainDiv = $("<div>");
 const msgEl = $("<div>");
@@ -33,7 +33,7 @@ const getSongList = async (difficulty = Difficulty.master) => {
         [Difficulty.expert]: "sendExpert",
         [Difficulty.advance]: "sendAdvance",
         [Difficulty.basic]: "sendBasic"
-    }
+    };
     const res = await fetch(`https://chunithm-net-eng.com/mobile/record/musicGenre/${api[difficulty]}`, {
         headers: { "Cache-Control": "no-cache" },
         method: "POST",
@@ -57,7 +57,7 @@ const ratingCalc = (score, chartConst) => {
         [900000, chartConst - 5],
         [800000, (chartConst - 5) / 2],
         [500000, 0]
-    ]
+    ];
     let p;
     points.some((v, i) => (p = i, score > v[0]));
     const prev = points[p-1], cur = points[p];
@@ -151,13 +151,11 @@ const main = async () => {
         margin: "0.5rem"
     });
 
-    const resultDiv = $("<div>");
-
     const best30Sum = recordList.slice(0, 30)
         .map((r) => r.rating)
         .reduce((acc, val) => acc + val);
 
-    resultDiv.append(
+    const resultDiv = $("<div>").append(
         createTextDiv(`Generated at: ${new Date().toLocaleDateString()}`),
         createTextDiv(`Best 30 Average: ${(best30Sum / 30).toFixed(2)}`),
         createTextDiv(`Maximum Achievable Rating: ${((best30Sum + recordList[0].rating * 10) / 40).toFixed(2)}`)
@@ -173,7 +171,7 @@ const main = async () => {
             [Difficulty.expert]: "#e46",
             [Difficulty.advance]: "#e73",
             [Difficulty.basic]: "#1c3"
-        }[dataArr.pop()]
+        }[dataArr.pop()];
         for (const data of dataArr) {
             const item = $(tag);
             if (data instanceof $) item.append(data[0]);
