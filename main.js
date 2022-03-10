@@ -212,25 +212,25 @@ const main = async () => {
             .text("Donwload Best 40 Scores as PNG")
             .css("margin", "0.5rem")
             .click(async () => {
-                const link = document.createElement("a");
-                link.download = "result_b40.png";
-                link.href = (await html2canvas(resultDiv[0], {
-                    backgroundColor: "#223",
-                    onclone: (d, e) => {
-                        const trs = e.querySelector(":last-child").children;
-                        for (;trs.length > 41;) trs[41].remove();
-                    }
-                })).toDataURL();
-                link.click();
+                $("<a>").attr({
+                    download: "result_b40.png",
+                    href: (await html2canvas(resultDiv[0], {
+                        backgroundColor: "#223",
+                        onclone: (d, e) => {
+                            const trs = e.querySelector(":last-child").children;
+                            for (;trs.length > 41;) trs[41].remove();
+                        }
+                    })).toDataURL()
+                })[0].click();
             }),
         $("<button>")
             .text("Donwload Full Result as PNG")
             .css("margin", "0.5rem")
             .click(async () => {
-                const link = document.createElement("a");
-                link.download = "result_full.png";
-                link.href = (await html2canvas(resultDiv[0], {backgroundColor: "#223"})).toDataURL();
-                link.click();
+                $("<a>").attr({
+                    download: "result_full.png",
+                    href: (await html2canvas(resultDiv[0], {backgroundColor: "#223"})).toDataURL()
+                })[0].click();
             }),
         resultDiv
     );
