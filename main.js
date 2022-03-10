@@ -46,29 +46,23 @@ const getSongList = async (difficulty = Difficulty.master) => {
 }
 
 const ratingCalc = (score, chartConst) => {
-    let offset = 0;
-
-    if (score >= 1009000) {
-        offset = 2.15;
-    } else if (score >= 1007500) {
-        offset = 2 + (score - 1007500) / 1500 * 0.15;
-    } else if (score >= 1005000) {
-        offset = 1.5 + (score - 1005000) / 2500 * 0.5;
-    } else if (score >= 1000000) {
-        offset = 1 + (score - 1000000) / 5000 * 0.5;
-    } else if (score >= 975000) {
-        offset = (score - 975000) / 25000;
-    } else if (score >= 925000) {
-        offset = -3 + (score - 925000) / 50000 * 3;
-    } else if (score >= 900000) {
-        offset = -5 + (score - 900000) / 25000 * 2;
-    } else if (score >= 800000) {
-        return (chartConst - 5) / 2 * (1 + (score - 800000) / 100000);
-    } else if (score >= 500000) {
-        return (chartConst - 5) / 2 * (score - 500000) / 300000;
-    } else return 0;
-
-    return Math.floor((chartConst + offset + Number.EPSILON) * 100) / 100;
+    const points = [
+        [1010000, chartConst + 2.15],
+        [1009000, chartConst + 2.15],
+        [1007500, chartConst + 2],
+        [1005000, chartConst + 1.5],
+        [1000000, chartConst + 1],
+        [975000, chartConst],
+        [925000, chartConst - 3],
+        [900000, chartConst - 5],
+        [800000, (chartConst - 5) / 2],
+        [500000, 0]
+    ]
+    let p;
+    points.some((v, i) => (p = i, score > v[0]));
+    const prev = points[p-1], cur = points[p];
+    const ret = cur[1] + (prev[1] - cur[1]) / (prev[0] - cur[0]) * (score - cur[0]);
+    return Math.floor((ret + Number.EPSILON) * 100) / 100;
 }
 
 const recordFetch = async () => {
