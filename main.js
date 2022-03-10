@@ -187,6 +187,8 @@ const main = async () => {
             item.css("padding", "0.5rem");
             row.append(item);
         }
+        if (dataArr[0] <= 30) row.children().first().css("color", "#fc4");
+        if (dataArr[0] <= 40) row.children().first().css("fontWeight", "bold");
         row.children().eq(1).css({
             color: difficultyColor,
             fontWeight: "bold"
@@ -202,8 +204,6 @@ const main = async () => {
         table.append(createRow(rowData));
     }
     table.children(":odd").css("backgroundColor", "#324");
-    table.slice(1, 31).children().first().css("color", "#fc4");
-    table.slice(1, 41).children().first().css("fontWeight", "bold");
     resultDiv.append(table);
     msgEl.hide();
 
@@ -212,25 +212,28 @@ const main = async () => {
             .text("Donwload Best 40 Scores as PNG")
             .css("margin", "0.5rem")
             .click(async () => {
-                $("<a>").attr({
-                    download: "result_b40.png",
-                    href: (await html2canvas(resultDiv[0], {
-                        backgroundColor: "#223",
-                        onclone: (d, e) => {
-                            const trs = e.querySelector(":last-child").children;
-                            for (;trs.length > 41;) trs[41].remove();
-                        }
-                    })).toDataURL()
-                }).click()}),
+                const link = document.createElement("a");
+                link.download = "result_b40.png";
+                link.href = (await html2canvas(resultDiv[0], {
+                    backgroundColor: "#223",
+                    onclone: (d, e) => {
+                        const trs = e.querySelector(":last-child").children;
+                        for (;trs.length > 41;) trs[41].remove();
+                    }
+                })).toDataURL();
+                link.click();
+            }),
         $("<button>")
             .text("Donwload Full Result as PNG")
             .css("margin", "0.5rem")
             .click(async () => {
-                $("<a>").attr({
-                    download: "result_full.png",
-                    href: (await html2canvas(resultDiv[0], {backgroundColor: "#223"})).toDataURL()
-                }).click();}),
-        resultDiv);
+                const link = document.createElement("a");
+                link.download = "result_full.png";
+                link.href = (await html2canvas(resultDiv[0], {backgroundColor: "#223"})).toDataURL();
+                link.click();
+            }),
+        resultDiv
+    );
 
     const titleDiv = $("<div>");
     const h3 = $("<h3>").text("Chunithm (International) Score Viewer");
