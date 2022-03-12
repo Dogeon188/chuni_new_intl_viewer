@@ -115,31 +115,16 @@ const main = async () => {
     const recordList = await recordFetch();
     
     msgEl.text("Acquiring song data...");
-    const musicData = await (await fetch("https://api.chunirec.net/2.0/music/showall.json?token=252db1d77e53f52fd85c5b346fef7c90e345b3b3f0b12018a2074298e4b35182&region=jp2")).json();
+    const musicData = await (await fetch("https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/songData.json")).json();
     msgEl.text("Acquiring song data done.");
-
-    // just a temporary wordaround, not sure Valsqotch EXP's chart constant
-    musicData.push({
-        "meta": {
-            "title": "Valsqotch",
-            "genre": "ORIGINAL",
-            "artist": "owl*tree feat. chi*tree",
-            "release":"2022-03-04",
-            "bpm": 125
-        },
-        "data": {
-            "BAS":{"level":5,"const":0,"maxcombo":-1,"is_const_unknown":0},
-            "ADV":{"level":8.5,"const":0,"maxcombo":-1,"is_const_unknown":0},
-            "EXP":{"level":13.5,"const":13.5,"maxcombo":1402,"is_const_unknown":1},
-            "MAS":{"level":14.5,"const":14.5,"maxcombo":1973,"is_const_unknown":0}
-        }
-    });
 
     // do rating calc for record list
     recordList.map(r => {
-        const songInfo = musicData.find(md => md.meta.title === r.title);
-        let songConst = songInfo.data[r.difficulty].const;
-        if (songConst === 0) songConst = songInfo.data[r.difficulty].level;
+        const songInfo = musicData[r.title];
+        if (songInfo === undefined) {
+            alert(`[chuni-intl-viewer] Found unknown song "${r.title}", please inform the author to update song data.`)
+        }
+        let songConst = songInfo[r.difficulty];
         r.rating = ratingCalc(r.score, songConst);
         r.songConst = songConst;
         return r;
