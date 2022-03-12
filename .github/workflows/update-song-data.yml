@@ -1,0 +1,13 @@
+name: update-song-data
+on: repository_dispatch
+jobs:
+  build-latest-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: npm run buildData
+      - run: git commit -a -m "Auto update songData.json from Github Actions"
+      - run: git push origin HEAD:master
