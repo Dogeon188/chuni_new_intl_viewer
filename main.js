@@ -129,8 +129,7 @@ const main = async () => {
         r.songConst = songConst;
         return r;
     });
-    recordList.sort((a, b) => (b.rating === a.rating) ? (b.songConst - a.songConst) : (b.rating - a.rating));
-
+    recordList.sort((a, b) => b.rating - a.rating || b.songConst - a.songConst);
     // Generate result
     const createTextDiv = (content = "") => $("<div>").text(content).css({
         textAlign: "left",
@@ -138,7 +137,7 @@ const main = async () => {
     });
 
     const best30Sum = recordList.slice(0, 30)
-        .map((r) => r.rating)
+        .map(r => r.rating)
         .reduce((acc, val) => acc + val);
 
     const resultDiv = $("<div>").append(
@@ -196,7 +195,7 @@ const main = async () => {
                         backgroundColor: "#223",
                         onclone: (d, e) => {
                             const trs = e.querySelector(":last-child").children;
-                            for (;trs.length > 41;) trs[41].remove();
+                            while (trs.length > 41) trs[41].remove();
                         }
                     })).toDataURL()
                 })[0].click();
