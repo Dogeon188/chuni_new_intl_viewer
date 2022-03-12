@@ -4,7 +4,8 @@
   "description": "A bookmarklet tool to let you view the records of [CHUNITHM-NET (International)](https://chunithm-net-eng.com/) in rating order.",
   "main": "main.js",
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "buildData": "node musicData.js"
   },
   "repository": {
     "type": "git",

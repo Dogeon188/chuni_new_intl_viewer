@@ -26,6 +26,7 @@ Also the chart constant of Valsqotch EXP is temporarily set to 13.5, due to the 
 
 1. `npm install`
 2. `npm run build`
+3. `npm run buildData`
 
 ## Tips
 
