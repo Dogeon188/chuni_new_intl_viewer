@@ -4,6 +4,9 @@ const fs = require("fs")
 let rawData = ""
 let musicData = {}
 
+// just a temporary wordaround, not sure Valsqotch EXP's chart constant
+musicData["Valsqotch"] = {BAS: 5, ADV: 8.5, EXP: 13.5, MAS: 14.5}
+
 const parseData = () => {
     console.log("Fetched song data. Now parsing it...")
     let rawDataJSON = JSON.parse(rawData)
