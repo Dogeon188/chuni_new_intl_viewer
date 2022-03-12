@@ -9,6 +9,8 @@ jobs:
         with:
           node-version: '16'
       - run: npm run buildData
-      - run: git config user.email dogcatdog188@gmail.com
-      - run: git commit -a -m "Auto update songData.json from Github Actions"
-      - run: git push origin HEAD:master
+      - uses: test-room-7/action-update-file@v1
+        with:
+            file-path: songData.json
+            commit-msg: Update resources
+            github-token: ${{ secrets.GITHUB_TOKEN }}
