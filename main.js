@@ -115,6 +115,7 @@ const main = async () => {
     const recordList = await recordFetch()
     
     msgEl.text("Acquiring song data...")
+    // const musicData = await (await fetch("http://localhost:3000/songData.json")).json()
     const musicData = await (await fetch("https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/songData.json")).json()
     msgEl.text("Acquiring song data done.")
 
@@ -122,12 +123,13 @@ const main = async () => {
     recordList.map(r => {
         const songInfo = musicData[r.title]
         if (songInfo === undefined) {
-            alert(`[chuni-intl-viewer] Found unknown song "${r.title}", please inform the author to update song data.`)
-            msgEl.text()
+            alert(`[chuni-intl-viewer] Found unknown song "${r.title} ${r.difficulty}", please inform the author to update song data.`)
+            r.songConst = 0
+            r.rating = 0
+            return
         }
         r.songConst = songInfo[r.difficulty]
         r.rating = ratingCalc(r.score, r.songConst)
-        return r
     })
     recordList.sort((a, b) => b.rating - a.rating || b.songConst - a.songConst)
     // Generate result
@@ -166,7 +168,10 @@ const main = async () => {
         }
         if (dataArr[0] <= 30) row.children().first().css("color", "#fc4")
         if (dataArr[0] <= 40) row.children().first().css("fontWeight", "bold")
-        row.children().eq(1).css("color", difficultyColor)
+        row.children().eq(1).css({
+            color: difficultyColor,
+            fontWeight: "bold"
+        })
         return row
     }
 
@@ -174,8 +179,15 @@ const main = async () => {
     table.append(createRow(headerRow, true))
 
     for (const [i, r] of recordList.entries()) {
-        const rowData = [i + 1, r.title, r.songConst.toFixed(1), r.score, r.rating.toFixed(2), r.clear, r.difficulty]
-        table.append(createRow(rowData))
+        table.append(createRow([
+            i + 1,
+            r.title,
+            r.songConst ? r.songConst.toFixed(1) : "??.?",
+            r.score,
+            r.rating ? r.rating.toFixed(2) : "??.??",
+            r.clear,
+            r.difficulty
+        ]))
     }
     table.children(":odd").css("backgroundColor", "#324")
     resultDiv.append(table)
