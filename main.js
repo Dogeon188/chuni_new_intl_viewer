@@ -239,7 +239,8 @@ const main = async () => {
         backgroundColor: "#324",
         border: "#536 3px solid",
         color: "#ccb",
-        borderRadius: "3px"
+        borderRadius: "3px",
+        cursor: "pointer"
     })
 
     const titleDiv = $("<div>")
