@@ -202,6 +202,7 @@ const main = async () => {
                     href: (await html2canvas(resultDiv[0], {
                         backgroundColor: "#223",
                         onclone: (d, e) => {
+                            e.style.width = "fit-content"
                             const trs = e.querySelector(":last-child").children
                             while (trs.length > 31) trs[31].remove()
                         }
@@ -216,6 +217,7 @@ const main = async () => {
                     href: (await html2canvas(resultDiv[0], {
                         backgroundColor: "#223",
                         onclone: (d, e) => {
+                            e.style.width = "fit-content"
                             const trs = e.querySelector(":last-child").children
                             while (trs.length > 41) trs[41].remove()
                         }
@@ -227,7 +229,10 @@ const main = async () => {
             .click(async () => {
                 $("<a>").attr({
                     download: "result_full.png",
-                    href: (await html2canvas(resultDiv[0], {backgroundColor: "#223"})).toDataURL()
+                    href: (await html2canvas(resultDiv[0], {
+                        backgroundColor: "#223",
+                        onclone: (d, e) => {e.style.width = "fit-content"}
+                    })).toDataURL()
                 })[0].click()
             }),
         resultDiv
