@@ -11,6 +11,8 @@ const Difficulty = {
 const mainDiv = $("<div>")
 const msgEl = $("<div>")
 
+const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
 const strToNum = (str) => Number([...str].filter(e => e !== ",").join(""))
 
 const getCookie = (key) => {
@@ -46,7 +48,7 @@ const getSongList = async (difficulty = Difficulty.master) => {
 }
 
 const saveOrShareCanvas = (name, cv) => {
-    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){
+    if (isMobile()){
         cv.toBlob(b => {
             if (b === null) return alert("[chuni-intl-viewer] Something went wrong when converting your scores to PNG. Please ask the author to fix it.")
             const f = new File([b], name, {type: "image/png"})
@@ -207,6 +209,21 @@ const main = async () => {
     resultDiv.append(table)
     msgEl.hide()
 
+    mainDiv.prepend(resultDiv)
+
+    if (!isMobile()) mainDiv.prepend(
+        $("<button>")
+            .text("Full Result")
+            .click(async ce => {
+                $(ce.target).fadeTo(100, 0.5)
+                saveOrShareCanvas("result_full.png", await html2canvas(resultDiv[0], {
+                    backgroundColor: "#223",
+                    onclone: (d, e) => {e.style.width = "fit-content"}
+                }))
+                $(ce.target).fadeTo(100, 1)
+            })
+    )
+
     mainDiv.prepend(
         $("<button>")
             .text("Best 30")
@@ -235,18 +252,7 @@ const main = async () => {
                     }
                 }))
                 $(ce.target).fadeTo(100, 1)
-            }),
-        $("<button>")
-            .text("Full Result")
-            .click(async ce => {
-                $(ce.target).fadeTo(100, 0.5)
-                saveOrShareCanvas("result_full.png", await html2canvas(resultDiv[0], {
-                    backgroundColor: "#223",
-                    onclone: (d, e) => {e.style.width = "fit-content"}
-                }))
-                $(ce.target).fadeTo(100, 1)
-            }),
-        resultDiv
+            })
     )
     mainDiv.find("button").css({
         margin: "0.5rem",
