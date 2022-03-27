@@ -45,6 +45,20 @@ const getSongList = async (difficulty = Difficulty.master) => {
     return formList
 }
 
+const saveOrShareCanvas = (name, cv) => {
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){
+        cv.toBlob(b => {
+            if (b === null) return alert("[chuni-intl-viewer] Something went wrong when converting your scores to PNG. Please ask the author to fix it.")
+            const f = new File([b], name, {type: "image/png"})
+            if (navigator.canShare && navigator.canShare({files: [f]})) {
+                navigator.share({files: [f]}).catch(console.log)
+            }
+        })
+    } else {
+        $("<a>").attr({download: name, href: cv.toDataURL()})[0].click()
+    }
+}
+
 const ratingCalc = (score, chartConst) => {
     chartConst *= 100
     const points = [
@@ -197,58 +211,34 @@ const main = async () => {
         $("<button>")
             .text("Best 30")
             .click(async () => {
-                (await html2canvas(resultDiv[0], {
+                saveOrShareCanvas("result_b30.png", await html2canvas(resultDiv[0], {
                     backgroundColor: "#223",
                     onclone: (d, e) => {
                         e.style.width = "fit-content"
                         const trs = e.querySelector(":last-child").children
                         while (trs.length > 31) trs[31].remove()
                     }
-                })).toBlob(b => {
-                    if (b === null) return alert("[chuni-intl-viewer] Something went wrong when converting your scores to PNG. Please ask the author to fix it.")
-                    const f = new File([b], "result_b30.png", {type: "image/png"})
-                    if (navigator.canShare && navigator.canShare({files: [f]})) {
-                        navigator.share({files: [f]}).catch(console.log)
-                    }
-                })
-                
-                
-                // $("<a>").attr({
-                //     href: (await html2canvas(resultDiv[0], {
-                //         backgroundColor: "#223",
-                //         onclone: (d, e) => {
-                //             e.style.width = "fit-content"
-                //             const trs = e.querySelector(":last-child").children
-                //             while (trs.length > 31) trs[31].remove()
-                //         }
-                //     })).toDataURL()
-                // })[0].click()
+                }))
             }),
         $("<button>")
             .text("Best 40")
             .click(async () => {
-                $("<a>").attr({
-                    download: "result_b40.png",
-                    href: (await html2canvas(resultDiv[0], {
-                        backgroundColor: "#223",
-                        onclone: (d, e) => {
-                            e.style.width = "fit-content"
-                            const trs = e.querySelector(":last-child").children
-                            while (trs.length > 41) trs[41].remove()
-                        }
-                    })).toDataURL()
-                })[0].click()
+                saveOrShareCanvas("result_b40.png", await html2canvas(resultDiv[0], {
+                    backgroundColor: "#223",
+                    onclone: (d, e) => {
+                        e.style.width = "fit-content"
+                        const trs = e.querySelector(":last-child").children
+                        while (trs.length > 41) trs[41].remove()
+                    }
+                }))
             }),
         $("<button>")
             .text("Full Result")
             .click(async () => {
-                $("<a>").attr({
-                    download: "result_full.png",
-                    href: (await html2canvas(resultDiv[0], {
-                        backgroundColor: "#223",
-                        onclone: (d, e) => {e.style.width = "fit-content"}
-                    })).toDataURL()
-                })[0].click()
+                saveOrShareCanvas("result_full.png", await html2canvas(resultDiv[0], {
+                    backgroundColor: "#223",
+                    onclone: (d, e) => {e.style.width = "fit-content"}
+                }))
             }),
         resultDiv
     )
