@@ -210,7 +210,8 @@ const main = async () => {
     mainDiv.prepend(
         $("<button>")
             .text("Best 30")
-            .click(async () => {
+            .click(async ce => {
+                $(ce.target).fadeTo(100, 0.5)
                 saveOrShareCanvas("result_b30.png", await html2canvas(resultDiv[0], {
                     backgroundColor: "#223",
                     onclone: (d, e) => {
@@ -219,10 +220,12 @@ const main = async () => {
                         while (trs.length > 31) trs[31].remove()
                     }
                 }))
+                $(ce.target).fadeTo(100, 1)
             }),
         $("<button>")
             .text("Best 40")
-            .click(async () => {
+            .click(async ce => {
+                $(ce.target).fadeTo(100, 0.5)
                 saveOrShareCanvas("result_b40.png", await html2canvas(resultDiv[0], {
                     backgroundColor: "#223",
                     onclone: (d, e) => {
@@ -231,14 +234,17 @@ const main = async () => {
                         while (trs.length > 41) trs[41].remove()
                     }
                 }))
+                $(ce.target).fadeTo(100, 1)
             }),
         $("<button>")
             .text("Full Result")
-            .click(async () => {
+            .click(async ce => {
+                $(ce.target).fadeTo(100, 0.5)
                 saveOrShareCanvas("result_full.png", await html2canvas(resultDiv[0], {
                     backgroundColor: "#223",
                     onclone: (d, e) => {e.style.width = "fit-content"}
                 }))
+                $(ce.target).fadeTo(100, 1)
             }),
         resultDiv
     )
