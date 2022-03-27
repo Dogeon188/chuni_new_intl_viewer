@@ -211,8 +211,8 @@ const main = async () => {
 
     mainDiv.prepend(resultDiv)
 
-    if (!isMobile()) mainDiv.prepend(
-        $("<button>")
+    if (!isMobile()) {
+        mainDiv.prepend($("<button>")
             .text("Full Result")
             .click(async ce => {
                 $(ce.target).fadeTo(100, 0.5)
@@ -222,7 +222,7 @@ const main = async () => {
                 }))
                 $(ce.target).fadeTo(100, 1)
             })
-    )
+    )}
 
     mainDiv.prepend(
         $("<button>")
