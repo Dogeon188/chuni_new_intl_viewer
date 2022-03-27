@@ -195,22 +195,37 @@ const main = async () => {
 
     mainDiv.prepend(
         $("<button>")
-            .text("\u2B73 Best 30")
+            .text("Best 30")
             .click(async () => {
-                $("<a>").attr({
-                    download: "result_b30.png",
-                    href: (await html2canvas(resultDiv[0], {
-                        backgroundColor: "#223",
-                        onclone: (d, e) => {
-                            e.style.width = "fit-content"
-                            const trs = e.querySelector(":last-child").children
-                            while (trs.length > 31) trs[31].remove()
-                        }
-                    })).toDataURL()
-                })[0].click()
+                (await html2canvas(resultDiv[0], {
+                    backgroundColor: "#223",
+                    onclone: (d, e) => {
+                        e.style.width = "fit-content"
+                        const trs = e.querySelector(":last-child").children
+                        while (trs.length > 31) trs[31].remove()
+                    }
+                })).toBlob(b => {
+                    if (b === null) return alert("[chuni-intl-viewer] Something went wrong when converting your scores to PNG. Please ask the author to fix it.")
+                    const f = new File([b], "result_b30.png", {type: "image/png"})
+                    if (navigator.canShare && navigator.canShare({files: [f]})) {
+                        navigator.share({files: [f]}).catch(console.log)
+                    }
+                })
+                
+                
+                // $("<a>").attr({
+                //     href: (await html2canvas(resultDiv[0], {
+                //         backgroundColor: "#223",
+                //         onclone: (d, e) => {
+                //             e.style.width = "fit-content"
+                //             const trs = e.querySelector(":last-child").children
+                //             while (trs.length > 31) trs[31].remove()
+                //         }
+                //     })).toDataURL()
+                // })[0].click()
             }),
         $("<button>")
-            .text("\u2B73 Best 40")
+            .text("Best 40")
             .click(async () => {
                 $("<a>").attr({
                     download: "result_b40.png",
@@ -225,7 +240,7 @@ const main = async () => {
                 })[0].click()
             }),
         $("<button>")
-            .text("\u2B73 Full Result")
+            .text("Full Result")
             .click(async () => {
                 $("<a>").attr({
                     download: "result_full.png",
@@ -246,7 +261,14 @@ const main = async () => {
         color: "#ccb",
         borderRadius: "3px",
         cursor: "pointer"
-    })
+    }).prepend($("<i>").css({
+        backgroundImage: "url(https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/assets/dl.png)",
+        display: "inline-block",
+        width: "1em",
+        height: "1em",
+        backgroundPosition: "0 0",
+        backgroundSize: "cover"
+    }))
 
     const titleDiv = $("<div>")
     const h3 = $("<h3>").text("Chunithm (International) Score Viewer")
