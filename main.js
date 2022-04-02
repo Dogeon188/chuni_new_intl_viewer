@@ -139,7 +139,8 @@ const main = async () => {
     recordList.map(r => {
         const songInfo = musicData[r.title]
         if (songInfo === undefined) {
-            alert(`[chuni-intl-viewer] Found unknown song "${r.title} ${r.difficulty}", please inform the author to update song data.`)
+            alert(`[chuni-intl-viewer] Found unknown song "${r.title} ${r.difficulty}", the data shuold be updating soon, please run chuni-viewer again in about a minute to get proper song data.`)
+            fetch(new Request("https://chuniupdate.dogeon188.repl.co/sendUpdate", {method: "POST"}))
             r.songConst = 0
             r.rating = 0
             return
