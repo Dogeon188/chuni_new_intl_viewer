@@ -14,11 +14,20 @@ const parseData = () => {
         if (musicData[song.meta.title] !== undefined) {
             console.log(`Found duplicate song title "${song.meta.title}"! Should check before actually using the data.`)
         }
+        if (Object.keys(song.data).includes("WE")) {
+            continue
+        }
         musicData[song.meta.title] = {}
         for (const diff in song.data) {
-            musicData[song.meta.title][diff] = (song.data[diff].const === 0) ? 
-                song.data[diff].level :
-                song.data[diff].const
+            if (song.data[diff].const === 0) {
+                if (["ULT", "MAS"].includes(diff)) {
+                    console.log(`${song.meta.title} ${diff} doesn't have chart constant!`)
+                } else {
+                    musicData[song.meta.title][diff] = song.data[diff].level
+                }
+            } else {
+                musicData[song.meta.title][diff] = song.data[diff].const
+            }
         }
     }
     fs.writeFileSync("songData.json", JSON.stringify(musicData))
