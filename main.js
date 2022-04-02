@@ -53,7 +53,7 @@ const saveOrShareCanvas = (name, cv) => {
             if (b === null) return alert("[chuni-intl-viewer] Something went wrong when converting your scores to PNG. Please ask the author to fix it.")
             const f = new File([b], name, {type: "image/png"})
             if (navigator.canShare && navigator.canShare({files: [f]})) {
-                navigator.share({files: [f]}).catch(console.log)
+                navigator.share({files: [f], text: "#CHUNITHM"}).catch(console.log)
             }
         })
     } else {
