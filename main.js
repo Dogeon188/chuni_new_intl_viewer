@@ -304,10 +304,8 @@ if (window.chuniIntlViewer) {
         minWidth: "100%"
     })
     $(document.body).prepend(mainDiv)
-    try {
-        main()
-    } catch (error) {
-        msgEl.text("An error occured! Please contact the author and report the bug report below. Your response would make Chunithm Viewer better!\n" + error)
-    }
+    main().catch(e => {
+        msgEl.text("An error occured! Please contact the author and report the bug report below. Your response would make Chunithm Viewer better!\n" + e)
+    })
 }
 
