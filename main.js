@@ -162,7 +162,11 @@ const main = async () => {
     const resultDiv = $("<div>").append(
         createTextDiv(`Generated at: ${new Date().toLocaleDateString()}`),
         createTextDiv(`Best 30 Average: ${(best30Sum / 30).toFixed(2)}`),
-        createTextDiv(`Maximum Achievable Rating: ${((best30Sum + recordList[0].rating * 10) / 40).toFixed(2)}`)
+        createTextDiv(`Maximum Achievable Rating: ${((best30Sum + recordList[0].rating * 10) / 40).toFixed(2)}`),
+        createTextDiv(`Total MAS Score: ${recordList
+            .filter(r => r.difficulty === "MAS")
+            .map(r => r.score)
+            .reduce((a, b) => a + b)}`)
     )
 
     const table = $("<table>").css("width", "100%")
