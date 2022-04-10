@@ -62,10 +62,7 @@ async function fetchRawRecord () {
 }
 
 export async function getRecord () {
-    // msgEl.text("Acquiring song data...")
-    // const musicData = await (await fetch("http://localhost:3000/songData.json")).json()
     const musicData = await (await fetch("https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/songData.json")).json()
-    // msgEl.text("Acquiring song data done.")
 
     // do rating calc for record list
     const recordList = await fetchRawRecord() as ChuniRecord[]

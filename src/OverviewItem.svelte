@@ -6,6 +6,7 @@
 <style lang="sass">
     dt
         color: #c9e
+        font-size: small
     dd
         margin-inline-start: 1rem
 </style>

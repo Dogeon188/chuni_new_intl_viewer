@@ -11,13 +11,13 @@
 
 <style lang="sass">
     body
-        padding: 0.1rem
+        padding-top: 1rem
         background-color: #223
         color: #eec
         margin: 0
         min-height: 100%
         min-width: 600px
-        width: fit-content
+        width: 100%
         a
             color: #3cc
             text-decoration: none
@@ -29,7 +29,9 @@
         <a href="https://github.com/Dogeon188/chuni_new_intl_viewer" target="_blank" rel="noopener noreferrer">Dogeon188/chuni_new_intl_viewer@GitHub</a>
     </div>
     {#if !loaded}
-        <div id="chuni-msg">Loading...</div>
+        <div>
+            <p>Loading...</p>
+        </div>
     {:else}
         <Result {recordList}/>
     {/if}
