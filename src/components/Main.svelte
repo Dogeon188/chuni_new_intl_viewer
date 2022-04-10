@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getRecord } from "./utils/fetch"
+    import { getRecord } from "../utils/fetch"
     import Result from "./Result.svelte"
     let loaded = false;
     let recordList = [] as ChuniRecord[]
