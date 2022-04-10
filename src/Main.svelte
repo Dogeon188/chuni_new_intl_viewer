@@ -11,7 +11,7 @@
 
 <style lang="sass">
     body
-        padding: 0.1rem
+        padding: 0.1em
         background-color: #223
         color: #eec
         margin: 0
