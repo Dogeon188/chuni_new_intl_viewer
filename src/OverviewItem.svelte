@@ -8,7 +8,8 @@
         color: #c9e
         font-size: small
     dd
-        margin-inline-start: 1rem
+        // margin-inline-start: 1rem
+        margin-inline-start: 0
 </style>
 
 <div>

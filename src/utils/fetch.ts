@@ -79,5 +79,6 @@ export async function getRecord () {
         r.rating = calcRating(r.score, r.const)
     })
     recordList.sort((a, b) => b.rating - a.rating || b.const - a.const)
+    recordList.map((r, i) => {r.rank = i + 1})
     return recordList
 }

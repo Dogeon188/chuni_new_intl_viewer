@@ -1,7 +1,7 @@
-import { toBlob, toCanvas, toPng } from "html-to-image"
+import { toBlob } from "html-to-image"
 import { isMobile } from "./utils"
 
-async function savePic(mode: "b30"|"b40") {
+export async function saveResultAsPicture(mode: "b30"|"b40") {
     const resultNode = <HTMLElement>document.body.shadowRoot?.querySelector("main")
     let n = <HTMLElement>resultNode?.cloneNode(true)
     resultNode?.parentElement?.appendChild(n)
@@ -25,10 +25,4 @@ async function savePic(mode: "b30"|"b40") {
             })[0].click()
         }
     })
-}
-
-export async function saveResultAsPicture (ce: MouseEvent, mode: "b30"|"b40") {
-    $(ce.currentTarget as HTMLButtonElement).fadeTo(100, 0.5)
-    await savePic(mode)
-    $(ce.currentTarget as HTMLButtonElement).fadeTo(100, 1)
 }

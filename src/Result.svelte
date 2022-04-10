@@ -4,8 +4,9 @@
     import Overview from "./Overview.svelte"
     import { saveResultAsPicture } from "./utils/img"
     import { calcB30, calcMaxRating } from "./utils/rating"
+    import { isMobile } from "./utils/utils"
     
-    let filterb40 = false
+    let filterb40 = isMobile()
     let sortBy = 0
     const sorts = {
         "Rating": (a: ChuniRecord, b: ChuniRecord) => (b.rating - a.rating || b.const - a.const),
@@ -38,6 +39,9 @@
         color: #eec,
         border-radius: 0.3rem,
         cursor: pointer
+        &:disabled
+            cursor: default
+            opacity: 0.5
         &.filter
             border-color: #48c
             background-color: #159
@@ -55,14 +59,15 @@
     table
         border-spacing: 0
         width: 100%
+        padding-bottom: 0.5rem
     td, th
         padding: 0.5rem
     th.current-sort:before
         content: "▼"
     tbody
-        & tr:nth-child(-n+30) td:first-child
+        & tr.best30 td:first-child
             color: #fc4
-        & tr:nth-child(-n+40) td:first-child
+        & tr.best40 td:first-child
             font-weight: bold
         & tr:nth-child(odd)
             background-color: #324
@@ -88,13 +93,16 @@
         if (filterb40) sortBy = 0}}>
         {filterb40 ? "Show All" : "Show B40"}
     </button>
-    <button class="dl" on:click={(ce) => saveResultAsPicture(ce, "b30")}>
+    <button class="dl" on:click={() => saveResultAsPicture("b30")} disabled="{sortBy != 0}">
         <i/>Best 30
     </button>
-    <button class="dl" on:click={(ce) => saveResultAsPicture(ce, "b40")}>
+    <button class="dl" on:click={() => saveResultAsPicture("b40")} disabled="{sortBy != 0}">
         <i/>Best 40
     </button>
-    <button class="sort" on:click={() => {sortBy++, sortBy %= Object.keys(sorts).length}}>
+    <button class="sort" on:click={() => {
+        sortBy = (sortBy + 1) % Object.keys(sorts).length
+        filterb40 = false
+        }}>
         Sort: {Object.keys(sorts)[sortBy]}
     </button>
 </div>
@@ -111,17 +119,18 @@
         {#each ["#", "Title", "Const.", "Score", "Rating", "FC/AJ"] as h}
             <th
                 class="{h == Object.keys(sorts)[sortBy] ? "current-sort" : ""}"
-                on:click={
-                Object.keys(sorts).indexOf(h) >= 0 ? () => {
-                    sortBy = Object.keys(sorts).indexOf(h)
-                } : null}>{h}</th>
+                on:click={() => {
+                    let i = Object.keys(sorts).indexOf(h)
+                    if (i >= 0) sortBy = Object.keys(sorts).indexOf(h)
+                    if (i > 0) filterb40 = false
+                }}>{h}</th>
         {/each}
         </tr>
     </thead>
     <tbody>
-    {#each filteredList as song, i}
-        <tr>
-            <td>{i + 1}</td>
+    {#each filteredList as song}
+        <tr class="{song.rank <= 30 ? "best30" : ""} {song.rank <= 40 ? "best40" : ""}">
+            <td>{song.rank}</td>
             <td class="diff-{song.difficulty.toLowerCase()}">{song.title}</td>
             <td>{song.const?.toFixed(1) ?? "??.?"}</td>
             <td>{song.score}</td>

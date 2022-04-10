@@ -13,7 +13,12 @@
         width: fit-content
         padding: 0.5rem
         margin: 0.5rem
-        text-align: left
+        // text-align: left
+        text-align: center
+
+        display: flex
+        justify-content: space-around
+        width: calc(100% - 2rem - 6px)
 </style>
 
 <div>
