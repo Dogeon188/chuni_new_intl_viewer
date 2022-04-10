@@ -5,7 +5,7 @@
 
 <style lang="sass">
     dt
-        font-size: 0.3em
+        font-size: 0.5em
         color: #c9e
     dd
         margin-inline-start: 1em

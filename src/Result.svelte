@@ -30,7 +30,7 @@
         &.filter
             border-color: #48c
             background-color: #159
-            width: 9em
+            // width: 9em
         &.dl i
             background-image: url(https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/assets/dl.png)
             display: inline-block
@@ -52,6 +52,8 @@
         & tr:nth-child(odd)
             background-color: #324
         & tr td:nth-child(2)
+            overflow: hidden
+            text-overflow: ellipsis
             font-weight: bold
             &.diff-ult
                 color: #3cf
@@ -68,7 +70,7 @@
 
 <div class="buttons">
     <button class="filter" on:click={() => {filterb40 = !filterb40}}>
-        {filterb40 ? "Show All" : "Show Best 40"}
+        {filterb40 ? "Show All" : "Show B40"}
     </button>
     <button class="dl" on:click={
         (ce) => saveResultAsPicture(ce, "b30")

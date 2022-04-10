@@ -16,7 +16,8 @@
         color: #eec
         margin: 0
         min-height: 100%
-        min-width: fit-content
+        min-width: 600px
+        width: fit-content
         a
             color: #3cc
             text-decoration: none
