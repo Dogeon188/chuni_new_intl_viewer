@@ -17,7 +17,7 @@
         margin: 0
         min-height: 100%
         min-width: 600px
-        width: 100%
+        width: fit-content
         a
             color: #3cc
             text-decoration: none
