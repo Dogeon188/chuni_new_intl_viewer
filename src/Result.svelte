@@ -4,9 +4,8 @@
     import Overview from "./Overview.svelte"
     import { saveResultAsPicture } from "./utils/img"
     import { calcB30, calcMaxRating } from "./utils/rating"
-    import { isMobile } from "./utils/utils"
     
-    let filterb40 = isMobile()
+    let filterb40 = false
     let sortBy = 0
     const sorts = {
         "Rating": (a: ChuniRecord, b: ChuniRecord) => (b.rating - a.rating || b.const - a.const),
