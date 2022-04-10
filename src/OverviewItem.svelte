@@ -5,10 +5,10 @@
 
 <style lang="sass">
     dt
-        font-size: 0.8em
+        font-size: 0.5rem
         color: #c9e
     dd
-        margin-inline-start: 1em
+        margin-inline-start: 1rem
 </style>
 
 <div>

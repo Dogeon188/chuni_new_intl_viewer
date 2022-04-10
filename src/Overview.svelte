@@ -8,11 +8,11 @@
 <style lang="sass">
     div
         border: #536 3px solid
-        border-radius: 0.5em
+        border-radius: 0.5rem
         background-color: #324
         width: fit-content
-        padding: 0.5em
-        margin: 0.5em
+        padding: 0.5rem
+        margin: 0.5rem
         text-align: left
 </style>
 

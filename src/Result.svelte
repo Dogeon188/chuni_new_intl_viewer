@@ -18,32 +18,32 @@
 
 <style lang="sass">
     button
-        margin: 0.5em,
-        padding: 0.3em
+        margin: 0.5rem,
+        padding: 0.3rem
         font-family: inherit,
         font-weight: bold,
         background-color: #324,
         border: #536 3px solid,
         color: #eec,
-        border-radius: 0.3em,
+        border-radius: 0.3rem,
         cursor: pointer
         &.filter
             border-color: #48c
             background-color: #159
-            // width: 9em
+            // width: 9rem
         &.dl i
             background-image: url(https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/assets/dl.png)
             display: inline-block
-            width: 1em
-            height: 1em
+            width: 1rem
+            height: 1rem
             background-position: 0px 0px
             background-size: cover
     table
         border-spacing: 0
-        padding-bottom: 1em
+        padding-bottom: 1rem
         width: 100%
     td, th
-        padding: 0.5em
+        padding: 0.5rem
     tbody
         & tr:nth-child(-n+30) td:first-child
             color: #fc4
