@@ -2,13 +2,11 @@
 
 A bookmarklet tool let you to view the records of [CHUNITHM-NET (International)](https://chunithm-net-eng.com/) in rating order.
 
-Chart constant data extracted from [chunirec](https://developer.chunirec.net/docs/v2.0/).
+Chart constant data ~~extracted~~ compiled from [chunirec](https://developer.chunirec.net/docs/v2.0/).
 
 ## Some Notes
 
-[The original repository](https://github.com/kyroslee/chuni_intl_viewer) isn't working now, so I'm just modifying a bit, at lease make it able to run. Therefore, I own nothing in this git, nor the sacred API token.
-Note that there are still some quirk that records with same rating would be sorted differently to the official data, and TBH i don't really know how to fix that.
-Also the chart constant of Valsqotch EXP is temporarily set to 13.5, due to the lack of japanese data. If you somehow know its chart constant, please contact me.
+[The original repository](https://github.com/kyroslee/chuni_intl_viewer) isn't working now, so I ~~just modified it a bit~~ remade the score viewer to make it function again. Therefore, I own ~~nothing in this git~~, nor the sacred chunirec API token.
 
 ## Usage
 
@@ -26,7 +24,6 @@ Also the chart constant of Valsqotch EXP is temporarily set to 13.5, due to the 
 
 1. `npm install`
 2. `npm run build`
-3. `npm run buildData`
 
 ## Tips
 
