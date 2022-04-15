@@ -11,6 +11,8 @@ jobs:
       - run: npm run buildData
       - uses: test-room-7/action-update-file@v1
         with:
-            file-path: songData.json
-            commit-msg: Update songData.json with GitHub actions
-            github-token: ${{ secrets.GITHUB_TOKEN }}
+          file-path: |
+            songData.json
+            dataLog.md
+          commit-msg: Update songData.json with GitHub actions
+          github-token: ${{ secrets.GITHUB_TOKEN }}

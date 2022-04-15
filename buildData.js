@@ -6,15 +6,17 @@ let oldData = JSON.parse(fs.readFileSync("songData.json"))
 let rawData = ""
 let musicData = {}
 
-// just a temporary wordaround, not sure Valsqotch EXP's chart constant
-musicData["Valsqotch"] = {BAS: 5, ADV: 8.5, EXP: 13.5, MAS: 14.5}
+const logger = fs.createWriteStream("dataLog.md")
+const log = (m = "") => {logger.write(m + "\n")}
+log("# Chunithm Viewer - Song Data Changelog\n")
 
 const parseData = () => {
+    let errors = { dup: [], unc: [] }
     console.log("Fetched song data. Now parsing it...")
     let rawDataJSON = JSON.parse(rawData)
     for (const song of rawDataJSON) {
         if (musicData[song.meta.title] !== undefined) {
-            console.log(`Found duplicate song title "${song.meta.title}"! Should check before actually using the data.`)
+            errors.dup.push(song.meta.title)
         }
         if (Object.keys(song.data).includes("WE")) {
             continue
@@ -22,25 +24,41 @@ const parseData = () => {
         musicData[song.meta.title] = {}
         for (const diff in song.data) {
             if (song.data[diff].const === 0) {
-                if (["ULT", "MAS"].includes(diff)) {
-                    console.log(`    ${song.meta.title} ${diff} doesn't have chart constant!`)
-                } else {
-                    musicData[song.meta.title][diff] = song.data[diff].level
+                if (song.data[diff].is_const_unknown) {
+                    errors.unc.push([song.meta.title, diff])
                 }
+                musicData[song.meta.title][diff] = song.data[diff].level
             } else {
                 musicData[song.meta.title][diff] = song.data[diff].const
             }
         }
     }
+
+    if (errors.unc.length || errors.dup.length) {
+        log("## Errors\n")
+        if (errors.dup.length) {
+            log(`### Duplicated songs\n`)
+            errors.dup.forEach(s => {log("- " + s)})
+            log()
+        }
+        if (errors.unc.length) {
+            log(`### Songs w/ unknown const\n`)
+            log("Name|Diff.")
+            log("----|-----")
+            errors.unc.forEach(s => {log(`${s[0]}|\`${s[1]}\``)})
+            log()
+        }
+    }
 }
 
 const compareData = () => {
+    log("## Changes\n")
+    let news = {}
     let diff = {}
 
-    console.log("New song(s):")
     for (let i in musicData) {
         if (!oldData.hasOwnProperty(i)) {
-            console.log("   ", i, musicData[i])
+            news[i] = musicData[i]
         } else {
             for (let d in oldData[i]) {
                 if (oldData[i][d] !== musicData[i][d]) {
@@ -54,16 +72,37 @@ const compareData = () => {
             delete oldData[i]
         }
     }
-    console.log("Changed song(s):")
-    for (let i in diff) {
-        console.log("   ", i)
-        for (let d in diff[i]) {
-            console.log("       ", d, diff[i][d].old, "->", diff[i][d].new)
+
+    if (Object.keys(news).length){
+        log("### New songs\n")
+        log("Name|BAS|ADV|EXP|MAS|ULT")
+        log("----|---|---|---|---|---")
+        for (let i in news) {
+            log(`${i}|\`${Object.values(news[i]).join("\`|\`")}\``)
         }
+        log()
     }
-    console.log("Deleted song(s):")
-    for (let i in oldData) {
-        console.log("   ", i, oldData[i])
+
+    if (Object.keys(diff).length){
+        log("### Changed songs\n")
+        log("Name|Diff.|Old|New")
+        log("----|-----|---|---")
+        for (let i in diff) {
+            for (let d in diff[i]) {
+                log(`${i}|\`${d}\`|\`${diff[i][d].old}\`|\`${diff[i][d].new}\``)
+            }
+        }
+        log()
+    }
+
+    if (Object.keys(oldData).length){
+        log("### Deleted songs\n")
+        log("Name|BAS|ADV|EXP|MAS|ULT")
+        log("----|---|---|---|---|---")
+        for (let i in oldData) {
+            log(`${i}|\`${Object.values(oldData[i]).join("\`|\`")}\``)
+        }
+        log()
     }
 }
 
