@@ -9,7 +9,7 @@ const Difficulty = {
     basic: "BAS"
 }
 
-async function getSongList (diff = Difficulty.master) {
+async function getSongList(diff = Difficulty.master) {
     const fd = new FormData()
     fd.append("genre", "99")
     fd.append("token", getCookie("_t"))
@@ -31,14 +31,14 @@ async function getSongList (diff = Difficulty.master) {
     return formList
 }
 
-async function fetchRawRecord () {
+async function fetchRawRecord() {
     const rawSongList = []
 
     for (const difficulty of Object.values(Difficulty)) {
         rawSongList.push(await getSongList(difficulty))
     }
 
-    return rawSongList.flatMap((d, di) => 
+    return rawSongList.flatMap((d, di) =>
         d.map(s => {
             const songData = $(s)
             const icons = songData.find(".play_musicdata_icon")
@@ -61,7 +61,7 @@ async function fetchRawRecord () {
     )
 }
 
-export async function getRecord () {
+export async function getRecord() {
     const musicData = await (await fetch("https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/songData.json")).json()
 
     // do rating calc for record list
@@ -70,7 +70,7 @@ export async function getRecord () {
         const songInfo = musicData[r.title]
         if (songInfo === undefined) {
             alert(`[chuni-intl-viewer] Found unknown song "${r.title} ${r.difficulty}".\nThe data should be updating soon, please run chuni-viewer again later to get proper song data.`)
-            fetch(new Request("https://chuniupdate.dogeon188.repl.co/sendUpdate", {method: "POST"}))
+            fetch(new Request("https://chuniupdate.dogeon188.repl.co/sendUpdate", { method: "POST" }))
             r.const = 0
             r.rating = 0
             return
@@ -79,6 +79,6 @@ export async function getRecord () {
         r.rating = calcRating(r.score, r.const)
     })
     recordList.sort((a, b) => b.rating - a.rating || b.const - a.const)
-    recordList.map((r, i) => {r.rank = i + 1})
+    recordList.map((r, i) => { r.rank = i + 1 })
     return recordList
 }

@@ -1,7 +1,7 @@
 import { toBlob } from "html-to-image"
 import { isMobile } from "./utils"
 
-export async function saveResultAsPicture(mode: "b30"|"b40") {
+export async function saveResultAsPicture(mode: "b30" | "b40") {
     const resultNode = <HTMLElement>document.body.shadowRoot?.querySelector("main")
     let n = <HTMLElement>resultNode?.cloneNode(true)
     resultNode?.parentElement?.appendChild(n)
@@ -10,13 +10,13 @@ export async function saveResultAsPicture(mode: "b30"|"b40") {
         if (i > (mode == "b30" ? 30 : 40)) tr.remove()
     })
 
-    toBlob(n, {backgroundColor: "#223"}).then(async blob => {
+    toBlob(n, { backgroundColor: "#223" }).then(async blob => {
         n.remove()
         if (blob == null) return alert("[chuni-intl-viewer] Something went wrong when converting your scores to PNG. Please ask the author to fix it.")
-        if (isMobile()){
-            const f = new File([blob], `result_${mode}.png`, {type: blob.type})
-            if (navigator?.canShare({files: [f]})) {
-                navigator.share({files: [f], text: "#CHUNITHM"}).catch(console.log)
+        if (isMobile()) {
+            const f = new File([blob], `result_${mode}.png`, { type: blob.type })
+            if (navigator?.canShare({ files: [f] })) {
+                navigator.share({ files: [f], text: "#CHUNITHM" }).catch(console.log)
             }
         } else {
             $("<a>").attr({

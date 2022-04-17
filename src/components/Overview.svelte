@@ -22,8 +22,8 @@
 </style>
 
 <div>
-    <OverviewItem title="Generated at" content={new Date().toLocaleDateString()}/>
-    <OverviewItem title="Best 30 Avg." content={b30.toFixed(2)}/>
-    <OverviewItem title="Max Achievable" content={maxAchievable.toFixed(2)}/>
-    <OverviewItem title="Total MAS Score" content={totalMasterScore.toString()}/>
+    <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
+    <OverviewItem title="Best 30 Avg." content={b30.toFixed(2)} />
+    <OverviewItem title="Max Achievable" content={maxAchievable.toFixed(2)} />
+    <OverviewItem title="Total MAS Score" content={totalMasterScore.toString()} />
 </div>

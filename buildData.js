@@ -7,7 +7,8 @@ let rawData = ""
 let musicData = {}
 
 const logger = fs.createWriteStream("dataLog.md")
-const log = (m = "") => {logger.write(m + "\n")}
+const log = (m = "") => { logger.write(m + "\n") }
+
 log("# Chunithm Viewer - Song Data Changelog\n")
 
 const parseData = () => {
@@ -38,14 +39,14 @@ const parseData = () => {
         log("## Errors\n")
         if (errors.dup.length) {
             log(`### Duplicated songs\n`)
-            errors.dup.forEach(s => {log("- " + s)})
+            errors.dup.forEach(s => { log("- " + s) })
             log()
         }
         if (errors.unc.length) {
             log(`### Songs w/ unknown const\n`)
             log("Name|Diff.")
             log("----|-----")
-            errors.unc.forEach(s => {log(`${s[0]}|\`${s[1]}\``)})
+            errors.unc.forEach(s => { log(`${s[0]}|\`${s[1]}\``) })
             log()
         }
     }
@@ -64,16 +65,16 @@ const compareData = () => {
                 if (oldData[i][d] !== musicData[i][d]) {
                     diff[i] = diff[i] || {}
                     diff[i][d] = {
-                            old: oldData[i][d],
-                            new: musicData[i][d]
-                        }
+                        old: oldData[i][d],
+                        new: musicData[i][d]
+                    }
                 }
             }
             delete oldData[i]
         }
     }
 
-    if (Object.keys(news).length){
+    if (Object.keys(news).length) {
         log("### New songs\n")
         log("Name|BAS|ADV|EXP|MAS|ULT")
         log("----|---|---|---|---|---")
@@ -83,7 +84,7 @@ const compareData = () => {
         log()
     }
 
-    if (Object.keys(diff).length){
+    if (Object.keys(diff).length) {
         log("### Changed songs\n")
         log("Name|Diff.|Old|New")
         log("----|-----|---|---")
@@ -95,7 +96,7 @@ const compareData = () => {
         log()
     }
 
-    if (Object.keys(oldData).length){
+    if (Object.keys(oldData).length) {
         log("### Deleted songs\n")
         log("Name|BAS|ADV|EXP|MAS|ULT")
         log("----|---|---|---|---|---")
@@ -108,17 +109,17 @@ const compareData = () => {
 
 const req = request(
     "https://api.chunirec.net/2.0/music/showall.json?token=252db1d77e53f52fd85c5b346fef7c90e345b3b3f0b12018a2074298e4b35182&region=jp2",
-    {method: "GET"},
+    { method: "GET" },
     res => {
-    res.on('data', d => {rawData += d})
-    res.on("end", () => {
-        parseData()
-        console.log("Parsed data.")
-        console.log("Comparing data difference...")
-        compareData()
-        fs.writeFileSync("songData.json", JSON.stringify(musicData))
-        console.log("Stored data at songData.json")
+        res.on('data', d => { rawData += d })
+        res.on("end", () => {
+            parseData()
+            console.log("Parsed data.")
+            console.log("Comparing data difference...")
+            compareData()
+            fs.writeFileSync("songData.json", JSON.stringify(musicData))
+            console.log("Stored data at songData.json")
+        })
     })
-})
 req.on("error", console.error)
 req.end()

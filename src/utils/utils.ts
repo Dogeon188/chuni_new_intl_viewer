@@ -1,4 +1,4 @@
-export function getCookie (key: string) {
+export function getCookie(key: string) {
     const cookieEntry = document.cookie
         .split(";")
         .map(e => decodeURIComponent(e.trim()))
@@ -8,10 +8,10 @@ export function getCookie (key: string) {
     return ""
 }
 
-export function isMobile () {
+export function isMobile() {
     return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 }
 
-export function parseNumber (str: string) {
+export function parseNumber(str: string) {
     return Number([...str].filter(e => e !== ",").join(""))
 }
