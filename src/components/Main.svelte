@@ -1,6 +1,8 @@
 <script lang="ts">
     import { getRecord } from "../utils/fetch"
     import Result from "./Result.svelte"
+    import { msgText } from "../stores"
+
     let loaded = false
     let recordList = [] as ChuniRecord[]
     ;(async () => {
@@ -33,6 +35,7 @@
     {#if !loaded}
         <div>
             <p>Loading...</p>
+            <p>{$msgText}</p>
         </div>
     {:else}
         <Result {recordList} />

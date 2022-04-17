@@ -1,11 +1,12 @@
 import { calcRating } from "./rating"
 import { getCookie, parseNumber } from "./utils"
+import { msgText } from "../stores"
 
 const Difficulty = {
     ultima: "ULT",
     master: "MAS",
     expert: "EXP",
-    advance: "ADV",
+    advanced: "ADV",
     basic: "BAS"
 }
 
@@ -17,7 +18,7 @@ async function getSongList(diff = Difficulty.master) {
         [Difficulty.ultima]: "sendUltima",
         [Difficulty.master]: "sendMaster",
         [Difficulty.expert]: "sendExpert",
-        [Difficulty.advance]: "sendAdvance",
+        [Difficulty.advanced]: "sendAdvanced",
         [Difficulty.basic]: "sendBasic"
     }
     const res = await fetch(`https://chunithm-net-eng.com/mobile/record/musicGenre/${api[diff]}`, {
@@ -25,16 +26,16 @@ async function getSongList(diff = Difficulty.master) {
         method: "POST",
         body: fd
     })
-    const htmlStr = await res.text()
-    const formList = [...$(htmlStr).find("form")]
+    const formList = [...$(await res.text()).find("form")]
     formList.shift()
     return formList
 }
 
 async function fetchRawRecord() {
-    const rawSongList = []
+    const rawSongList: HTMLFormElement[][] = []
 
     for (const difficulty of Object.values(Difficulty)) {
+        msgText.set(`Fetching ${difficulty} record...`)
         rawSongList.push(await getSongList(difficulty))
     }
 
@@ -62,10 +63,11 @@ async function fetchRawRecord() {
 }
 
 export async function getRecord() {
+    msgText.set("Fetching song data...")
     const musicData = await (await fetch("https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/songData.json")).json()
-
-    // do rating calc for record list
     const recordList = await fetchRawRecord() as ChuniRecord[]
+
+    msgText.set("Calculating data...")
     recordList.map(r => {
         const songInfo = musicData[r.title]
         if (songInfo === undefined) {
