@@ -78,16 +78,9 @@
             overflow: hidden
             text-overflow: ellipsis
             font-weight: bold
-            &.diff-ult
-                color: #3cf
-            &.diff-mas
-                color: #e9f
-            &.diff-exp
-                color: #e46
-            &.diff-adv
-                color: #e73
-            &.diff-bas
-                color: #1c3
+            @each $diff, $diffc in (ult: #3cf, mas: #e9f, exp: #e46, adv: #e73, bas: #1c3)
+                &.diff-#{$diff}
+                    color: $diffc
 </style>
 
 <div class="buttons">
