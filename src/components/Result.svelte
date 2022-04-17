@@ -9,11 +9,11 @@
     let filterb40 = isMobile()
     let sortBy = 0
     const sorts = {
-        Rating: (a: ChuniRecord, b: ChuniRecord) =>
+        "Rating": (a: ChuniRecord, b: ChuniRecord) =>
             b.rating - a.rating || b.const - a.const,
-        Score: (a: ChuniRecord, b: ChuniRecord) => b.score - a.score,
+        "Score": (a: ChuniRecord, b: ChuniRecord) => b.score - a.score,
         "Const.": (a: ChuniRecord, b: ChuniRecord) => b.const - a.const,
-        Title: (a: ChuniRecord, b: ChuniRecord) => {
+        "Title": (a: ChuniRecord, b: ChuniRecord) => {
             if (a.title < b.title) return -1
             if (a.title > b.title) return 1
             return 0
@@ -108,18 +108,18 @@
     </button>
 </div>
 
-<main id="chuni-viewer-main">
+<main>
     <Overview
         b30={calcB30(ratingList)}
         maxAchievable={calcMaxRating(ratingList)}
         {totalMasterScore} />
 
-    <table id="chuni-result-table">
+    <table>
         <thead>
             <tr>
                 {#each ["#", "Title", "Const.", "Score", "Rating", "FC/AJ"] as h}
                     <th
-                        class={h == Object.keys(sorts)[sortBy] ? "current-sort" : ""}
+                        class:current-sort={h == Object.keys(sorts)[sortBy]}
                         on:click={() => {
                             let i = Object.keys(sorts).indexOf(h)
                             if (i >= 0) sortBy = Object.keys(sorts).indexOf(h)
@@ -131,8 +131,8 @@
         <tbody>
             {#each filteredList as song}
                 <tr
-                    class={(song.rank <= 30 ? "best30 " : "") +
-                        (song.rank <= 40 ? "best40" : "")}>
+                    class:best30 = {song.rank <= 30}
+                    class:best40 = {song.rank <= 40}>
                     <td>{song.rank}</td>
                     <td class="diff-{song.difficulty.toLowerCase()}">{song.title}</td>
                     <td>{song.const?.toFixed(1) ?? "??.?"}</td>
