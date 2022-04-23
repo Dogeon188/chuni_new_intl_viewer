@@ -3,3 +3,4 @@ public/
 package-lock.json
 server.js
 .prettierrc
+.env

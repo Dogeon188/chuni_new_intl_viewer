@@ -9,6 +9,8 @@ jobs:
         with:
           node-version: '16'
       - run: npm run buildData
+        env:
+          CHUNIREC_TOKEN: ${{ secrets.CHUNIREC_TOKEN }}
       - uses: test-room-7/action-update-file@v1
         with:
           file-path: |

@@ -108,17 +108,17 @@ const compareData = () => {
 }
 
 const req = request(
-    "https://api.chunirec.net/2.0/music/showall.json?token=252db1d77e53f52fd85c5b346fef7c90e345b3b3f0b12018a2074298e4b35182&region=jp2",
+    "https://api.chunirec.net/2.0/music/showall.json?region=jp2&token=" + process.env.CHUNIREC_TOKEN,
     { method: "GET" },
     res => {
         res.on('data', d => { rawData += d })
         res.on("end", () => {
             parseData()
             console.log("Parsed data.")
-            console.log("Comparing data difference...")
-            compareData()
-            fs.writeFileSync("songData.json", JSON.stringify(musicData))
-            console.log("Stored data at songData.json")
+            // console.log("Comparing data difference...")
+            // compareData()
+            // fs.writeFileSync("songData.json", JSON.stringify(musicData))
+            // console.log("Stored data at songData.json")
         })
     })
 req.on("error", console.error)
