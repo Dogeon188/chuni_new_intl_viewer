@@ -1,6 +1,8 @@
 const { request } = require("https")
 const fs = require("fs")
 
+require("dotenv").config()
+
 let oldData = JSON.parse(fs.readFileSync("songData.json"))
 
 let rawData = ""
