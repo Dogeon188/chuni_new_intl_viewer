@@ -2,7 +2,7 @@
     export let recordList: ChuniRecord[]
 
     import Overview from "./Overview.svelte"
-    import { saveResultAsPicture } from "../utils/img"
+    import { saveResultAsPicture } from "../utils/share"
     import { calcB30, calcMaxRating } from "../utils/rating"
     import { isMobile } from "../utils/utils"
 

@@ -16,7 +16,7 @@ export async function saveResultAsPicture(mode: "b30" | "b40") {
         if (isMobile()) {
             const f = new File([blob], `result_${mode}.png`, { type: blob.type })
             if (navigator?.canShare({ files: [f] })) {
-                navigator.share({ files: [f], text: "#CHUNITHM" }).catch(console.log)
+                navigator.share({ files: [f] }).catch(console.log)
             }
         } else {
             $("<a>").attr({
