@@ -24,4 +24,6 @@ async function main() {
     new Svelte({ target: shadow })
 }
 
+alert("Debugging")
+
 main()
