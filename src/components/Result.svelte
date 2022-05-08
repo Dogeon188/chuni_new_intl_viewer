@@ -1,5 +1,6 @@
 <script lang="ts">
     export let recordList: ChuniRecord[]
+    export let playerStats: ChuniPlayerStats
 
     import Overview from "./Overview.svelte"
     import { saveResultAsPicture } from "../utils/share"
@@ -29,10 +30,6 @@
     $: filteredList = filterb40 ? sortedList.slice(0, 40) : sortedList
 
     const ratingList = recordList.map((s) => s.rating)
-    const totalMasterScore = recordList
-        .filter((r) => r.difficulty === "MAS")
-        .map((r) => r.score)
-        .reduce((a, b) => a + b)
 </script>
 
 <style lang="sass">
@@ -127,6 +124,7 @@
     <Overview
         b30={calcB30(ratingList)}
         maxAchievable={calcMaxRating(ratingList)}
+        {playerStats}
         />
 
     <table>

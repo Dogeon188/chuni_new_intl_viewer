@@ -1,12 +1,14 @@
 <script lang="ts">
-    import { getRecord } from "../utils/fetch"
+    import { getPlayerStats, getRecord } from "../utils/fetch"
     import Result from "./Result.svelte"
     import { msgText } from "../stores"
 
     let loaded = false
     let recordList = [] as ChuniRecord[]
+    let playerStats: ChuniPlayerStats
     ;(async () => {
         recordList = await getRecord()
+        playerStats = await getPlayerStats()
         loaded = true
     })()
 </script>
@@ -39,6 +41,6 @@
             <p>{$msgText}</p>
         </div>
     {:else}
-        <Result {recordList} />
+        <Result {recordList} {playerStats} />
     {/if}
 </body>

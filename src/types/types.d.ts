@@ -7,3 +7,9 @@ interface ChuniRecord {
     rating: number;
     clear: string | null;
 }
+
+interface ChuniPlayerStats {
+    name: string;
+    honor: string;
+    rating: string;
+}

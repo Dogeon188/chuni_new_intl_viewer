@@ -81,3 +81,21 @@ export async function getRecord() {
     recordList.map((r, i) => { r.rank = i + 1 })
     return recordList
 }
+
+export async function getPlayerStats(): Promise<ChuniPlayerStats> {
+    const res = await fetch(`https://chunithm-net-eng.com/mobile/home/`, {
+        headers: { "Cache-Control": "no-cache" },
+    })
+    const homePage = $(await res.text())
+    let rating = [...homePage.find(".player_rating_num_block img")].map(i => {
+            let num = (/(?<=rating_.*_).*(?=.png)/g.exec(i.getAttribute("src") ?? "") ?? [])[0]
+            if (num == "comma") return "."
+            return num.slice(1)
+        }
+    ).join("")
+    return {
+        name: homePage.find(".player_name_in")[0].innerHTML,
+        honor: homePage.find(".player_honor_text_view span")[0].innerHTML,
+        rating
+    }
+}

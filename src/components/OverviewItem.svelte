@@ -4,15 +4,16 @@
 </script>
 
 <style lang="sass">
-    dt
+    div
+        padding: 10px
+    .overview-title
         color: #c9e
         font-size: small
-    dd
-        // margin-inline-start: 1rem
+    .overview-content
         margin-inline-start: 0
 </style>
 
 <div>
-    <dt>{title}</dt>
-    <dd>{content}</dd>
+    <span class="overview-title">{title}</span>
+    <span class="overview-content">{content}<span>
 </div>
