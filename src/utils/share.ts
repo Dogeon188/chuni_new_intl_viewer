@@ -6,11 +6,12 @@ export async function saveResultAsPicture(mode: "b30" | "b40") {
     let n = <HTMLElement>resultNode?.cloneNode(true)
     resultNode?.parentElement?.appendChild(n)
 
+    n.style.margin = "initial"
     n.querySelectorAll("tr").forEach((tr, i) => {
         if (i > (mode == "b30" ? 30 : 40)) tr.remove()
     })
 
-    toBlob(n, { backgroundColor: "#223" }).then(async blob => {
+    toBlob(n, { backgroundColor: "#113" }).then(async blob => {
         n.remove()
         if (blob == null) return alert("[chuni-intl-viewer] Something went wrong when converting your scores to PNG. Please ask the author to fix it.")
         if (isMobile()) {

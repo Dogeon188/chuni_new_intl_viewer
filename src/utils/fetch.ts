@@ -45,12 +45,9 @@ async function fetchRawRecord() {
             const icons = songData.find(".play_musicdata_icon")
             let clear = null
             if (icons.length) {
-                for (const clearType of ["fullchain", "fullchain2", "alljustice", "fullcombo"]) {
-                    if (icons.find(`img[src*="${clearType}"]`).length) {
-                        clear = clearType
-                        break
-                    }
-                }
+                if (icons.find(`img[src*="alljustice"]`).length) clear = "AJ"
+                else if (icons.find(`img[src*="fullcombo"]`).length) clear = "FC"
+                
             }
             return {
                 title: songData.find(".music_title")?.text(),

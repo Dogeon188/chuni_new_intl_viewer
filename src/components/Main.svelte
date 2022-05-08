@@ -14,9 +14,10 @@
 <style lang="sass">
     body
         padding-top: 1rem
-        background-color: #223
+        background-color: #113
         color: #eec
         margin: 0
+        font-size: 14px
         min-height: 100%
         min-width: fit-content
         a
