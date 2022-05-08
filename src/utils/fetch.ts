@@ -83,9 +83,7 @@ export async function getRecord() {
 }
 
 export async function getPlayerStats(): Promise<ChuniPlayerStats> {
-    const res = await fetch(`https://chunithm-net-eng.com/mobile/home/`, {
-        headers: { "Cache-Control": "no-cache" },
-    })
+    const res = await fetch(`https://chunithm-net-eng.com/mobile/home/`)
     const homePage = $(await res.text())
     let rating = [...homePage.find(".player_rating_num_block img")].map(i => {
             let num = (/(?<=rating_.*_).*(?=.png)/g.exec(i.getAttribute("src") ?? "") ?? [])[0]
