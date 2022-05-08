@@ -5,7 +5,7 @@
 
 <style lang="sass">
     div
-        padding: 10px
+        padding: 5px
     .overview-title
         color: #c9e
         font-size: small
