@@ -13,7 +13,7 @@
         "Rating": (a: ChuniRecord, b: ChuniRecord) =>
             b.rating - a.rating || b.const - a.const,
         "Score": (a: ChuniRecord, b: ChuniRecord) => b.score - a.score,
-        "Const.": (a: ChuniRecord, b: ChuniRecord) => b.const - a.const,
+        "Const": (a: ChuniRecord, b: ChuniRecord) => b.const - a.const,
         "Title": (a: ChuniRecord, b: ChuniRecord) => {
             if (a.title < b.title) return -1
             if (a.title > b.title) return 1
@@ -69,8 +69,10 @@
         margin: auto
     td, th
         padding: 0.5rem
+    th
+        color: #aac
     th.current-sort
-        text-decoration: underline double #669
+        color: #eec
     tbody
         tr.best30 td:first-child
             color: #fc4
@@ -126,11 +128,10 @@
         maxAchievable={calcMaxRating(ratingList)}
         {playerStats}
         />
-
     <table>
         <thead>
             <tr>
-                {#each ["#", "Title", "Const.", "Score", "Rating", "AJ"] as h}
+                {#each ["#", "Title", "Const", "Score", "Rating", "AJ"] as h}
                     <th
                         class:current-sort={h == Object.keys(sorts)[sortBy]}
                         on:click={() => {

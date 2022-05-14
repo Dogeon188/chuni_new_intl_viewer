@@ -10,9 +10,10 @@ export function calcRating(score: number, chartConst: number) {
         [925000, chartConst - 300],
         [900000, chartConst - 500],
         [800000, (chartConst - 500) / 2],
-        [500000, 0]
+        [500000, 0],
+        [0, 0]
     ]
-    let p: number = 1
+    let p = 1
     points.some((v, i) => (p = i, score > v[0]))
     const prev = points[p - 1], cur = points[p]
     const ret = cur[1] + (prev[1] - cur[1]) / (prev[0] - cur[0]) * (score - cur[0])

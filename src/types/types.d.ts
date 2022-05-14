@@ -1,3 +1,5 @@
+type ChunirecDifficulty = "ULT" | "MAS" | "EXP" | "ADV" | "BAS"
+
 interface ChuniRecord {
     title: string;
     score: number;

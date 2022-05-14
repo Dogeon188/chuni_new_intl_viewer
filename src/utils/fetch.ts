@@ -8,7 +8,7 @@ const Difficulty = {
     expert: "EXP",
     advanced: "ADV",
     basic: "BAS"
-}
+} as Record<string, ChunirecDifficulty>
 
 async function getSongList(diff = Difficulty.master) {
     const fd = new FormData()
