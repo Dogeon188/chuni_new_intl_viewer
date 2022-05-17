@@ -13,18 +13,18 @@
         width: fit-content
         padding: 0.5rem
         margin: 0.5rem
-        text-align: left
         display: grid
         align-items: center
         width: calc(100% - 2rem - 6px)
         .stats-name
             grid-column: 1
-            text-align: center
+            width: max-content
+            justify-self: center
         .stats-rating
             grid-column: 2
+            justify-self: center
         .stats-honor
             grid-area: 2/1/2/3
-            text-align: center
             color: #998
             background: #113
             border-radius: 3px
