@@ -7,11 +7,11 @@ interface ChuniRecord {
     const: number;
     rank: number;
     rating: number;
-    clear: string | null;
+    clear: "AJ" | "FC" | null;
 }
 
 interface ChuniPlayerStats {
     name: string;
-    honor: string;
+    honor: {text: string, type: string};
     rating: string;
 }

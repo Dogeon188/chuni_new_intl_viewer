@@ -20,17 +20,19 @@
         .stats-name
             grid-column: 1
             text-align: center
-            font-weight: bold
         .stats-rating
             grid-column: 2
         .stats-honor
             grid-area: 2/1/2/3
             text-align: center
-            color: #aab
+            color: #998
             background: #113
             border-radius: 3px
             padding: 5px
             margin: 0 20px
+            @each $t, $tc in ("normal": #998, "bronze": #d83, "silver": #ddd, "gold": #fb4, "rainbow": #6e8)
+                &.stats-honor-#{$t}
+                    color: $tc
         .overview-items
             display: flex
             flex-direction: column
@@ -40,7 +42,7 @@
 <div id="chuni-overview">
     <h2 class="stats-name">{playerStats.name}</h2>
     <h3 class="stats-rating">{playerStats.rating}</h3>
-    <div class="stats-honor">{playerStats.honor}</div>
+    <div class="stats-honor stats-honor-{playerStats.honor.type}">{playerStats.honor.text}</div>
     <div class="overview-items">
         <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
         <OverviewItem title="B30 Avg." content={b30.toFixed(2)} />

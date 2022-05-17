@@ -86,7 +86,7 @@
             font-weight: bold
             text-align: initial
             max-width: 300px
-            @each $diff, $diffc in (ult: #3cf, mas: #e9f, exp: #e46, adv: #e73, bas: #1c3)
+            @each $diff, $diffc in ("ult": #3cf, "mas": #e9f, "exp": #e46, "adv": #e73, "bas": #1c3)
                 &.diff-#{$diff}
                     color: $diffc
     span.clear-fc

@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "tests/chart/chart.ts"],
   "exclude": ["node_modules/*"],
   "compilerOptions": {
     "target": "es2020",
