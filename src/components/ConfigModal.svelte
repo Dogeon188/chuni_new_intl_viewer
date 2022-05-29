@@ -2,7 +2,7 @@
     import { showConfig, sortBy, filterB40 } from "../stores"
 </script>
 
-<div class="modal-wrapper">
+<div class="modal-wrapper" class:hidden={!$showConfig}>
     <div class="modal-bg" on:click={showConfig.toggle} />
     <div class="modal">
         <div class="close-btn" on:click={showConfig.toggle}>✕</div>
@@ -46,6 +46,8 @@
         height: 100vh
         display: flex
         align-items: center
+        &.hidden
+            display: none
     .modal-bg
         position: fixed
         background: #0004
@@ -59,7 +61,7 @@
         margin: auto
         padding: 2rem
         position: relative
-        border: #345 3px solid
+        box-shadow: 2rem 2rem 10px #0006
         border-radius: 1rem
         text-align: left
     h3
@@ -80,6 +82,7 @@
         color: inherit
         cursor: pointer
         text-align: left
+        appearance: none
     .close-btn
         position: absolute
         top: .5rem

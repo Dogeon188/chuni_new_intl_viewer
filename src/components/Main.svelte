@@ -17,9 +17,7 @@
         <Result {recordList} />
         <Buttons />
     {/await}
-    {#if $showConfig}
-        <ConfigModal />
-    {/if}
+    <ConfigModal />
     <footer>
         <span>
             <a

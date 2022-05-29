@@ -32,6 +32,7 @@
         height: 2rem
         background: #536
         border-radius: 50%
+        box-shadow: 0.2rem 0.2rem 5px #000
         display: inline-flex
         justify-content: center
         align-items: center
