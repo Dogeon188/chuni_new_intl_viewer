@@ -1,7 +1,7 @@
 import { toBlob } from "html-to-image"
 import { isMobile } from "./utils"
 
-export async function saveResultAsPicture(mode: "b30" | "b40") {
+export async function saveResultAsPicture(mode: "b30" | "b40" = "b40") {
     const resultNode = <HTMLElement>document.body.shadowRoot?.querySelector("main")
     let n = <HTMLElement>resultNode?.cloneNode(true)
     resultNode?.parentElement?.appendChild(n)

@@ -43,17 +43,12 @@ async function fetchRawRecord() {
         d.map(s => {
             const songData = $(s)
             const icons = songData.find(".play_musicdata_icon")
-            let clear = null
-            if (icons.length) {
-                if (icons.find(`img[src*="alljustice"]`).length) clear = "AJ"
-                else if (icons.find(`img[src*="fullcombo"]`).length) clear = "FC"
-                
-            }
             return {
                 title: songData.find(".music_title")?.text(),
                 score: parseNumber(songData.find(".text_b")?.text()),
                 difficulty: Object.values(Difficulty)[di],
-                clear
+                clear: icons.find(`img[src*="alljustice"]`).length ? "AJ" :
+                        icons.find(`img[src*="fullcombo"]`).length ? "FC" : ""
             }
         }).filter(s => s.title !== null && s.score > 0)
     )

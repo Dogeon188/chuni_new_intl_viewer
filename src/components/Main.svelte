@@ -1,19 +1,25 @@
 <script lang="ts">
     import { getRecord } from "../utils/fetch"
     import Result from "./Result.svelte"
-    import { msgText } from "../stores"
+    import Buttons from "./Buttons.svelte"
+    import ConfigModal from "./ConfigModal.svelte"
+    import { msgText, showConfig } from "../stores"
 </script>
 
 <body>
-    <h3>Chunithm International Score Viewer</h3>
     {#await getRecord()}
+        <h3>Chunithm International Score Viewer</h3>
         <div>
             <p>Loading...</p>
             <p>{$msgText}</p>
         </div>
     {:then recordList} 
         <Result {recordList} />
+        <Buttons />
     {/await}
+    {#if $showConfig}
+        <ConfigModal />
+    {/if}
     <footer>
         <span>
             <a
