@@ -24,6 +24,6 @@ export function calcB30(ratingList: number[]) {
     return ratingList.slice(0, 30).reduce((a, b) => a + b) / 30
 }
 
-export function calcMaxRating(ratingList: number[]) {
+export function calcMaxPossible(ratingList: number[]) {
     return (calcB30(ratingList) * 30 + ratingList[0] * 10) / 40
 }

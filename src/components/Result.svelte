@@ -1,10 +1,9 @@
 <script lang="ts">
     export let recordList: ChuniRecord[]
-    export let playerStats: ChuniPlayerStats
 
     import Overview from "./Overview.svelte"
     import { saveResultAsPicture } from "../utils/share"
-    import { calcB30, calcMaxRating } from "../utils/rating"
+    import { calcB30, calcMaxPossible } from "../utils/rating"
     import { isMobile } from "../utils/utils"
 
     let filterb40 = isMobile()
@@ -125,8 +124,7 @@
 <main>
     <Overview
         b30={calcB30(ratingList)}
-        maxAchievable={calcMaxRating(ratingList)}
-        {playerStats}
+        maxPossible={calcMaxPossible(ratingList)}
         />
     <table>
         <thead>

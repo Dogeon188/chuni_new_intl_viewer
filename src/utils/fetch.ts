@@ -3,11 +3,11 @@ import { getCookie, parseNumber } from "./utils"
 import { msgText } from "../stores"
 
 const Difficulty = {
-    ultima: "ULT",
-    master: "MAS",
-    expert: "EXP",
+    basic: "BAS",
     advanced: "ADV",
-    basic: "BAS"
+    expert: "EXP",
+    master: "MAS",
+    ultima: "ULT"
 } as Record<string, ChunirecDifficulty>
 
 async function getSongList(diff = Difficulty.master) {
@@ -101,4 +101,19 @@ export async function getPlayerStats(): Promise<ChuniPlayerStats> {
         },
         rating
     }
+}
+
+export async function getOfficialR10() {
+    const res = await fetch("https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailRecent/")
+    const musicData = await (await fetch("https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/songData.json")).json()
+    const r10list = [...$(await res.text()).find("form")].map(s => {
+        const songData = $(s)
+        const r = {
+            score: parseNumber(songData.find(".text_b")?.text()),
+            title: songData.find(".music_title")?.text(),
+            diff: Object.values(Difficulty)[+songData.find("input[name=diff]")?.attr("value")]
+        }
+        return calcRating(r.score, musicData[r.title][r.diff])
+    })
+    return r10list.reduce((a, b) => a + b) / 10
 }

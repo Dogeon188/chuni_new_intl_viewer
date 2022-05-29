@@ -4,16 +4,15 @@
 </script>
 
 <style lang="sass">
-    div
-        padding: 5px
     .overview-title
         color: #c9e
         font-size: small
+        grid-column: 1
+        justify-self: end
     .overview-content
-        margin-inline-start: 0
+        justify-self: start
+        grid-column: 2
 </style>
 
-<div>
-    <span class="overview-title">{title}</span>
-    <span class="overview-content">{content}<span>
-</div>
+<span class="overview-title">{title}</span>
+<span class="overview-content">{content}</span>

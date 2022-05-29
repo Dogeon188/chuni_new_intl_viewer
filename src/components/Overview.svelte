@@ -1,8 +1,11 @@
 <script lang="ts">
     import OverviewItem from "./OverviewItem.svelte"
+    import { getOfficialR10, getPlayerStats } from "../utils/fetch"
     export let b30: number
-    export let maxAchievable: number
-    export let playerStats: ChuniPlayerStats
+    export let maxPossible: number
+
+    let officialR10 = getOfficialR10()
+    let playerStats = getPlayerStats()
 </script>
 
 <style lang="sass">
@@ -34,18 +37,24 @@
                 &.stats-honor-#{$t}
                     color: $tc
         .overview-items
-            display: flex
-            flex-direction: column
+            display: grid
             grid-area: 1/3/3/3
+            gap: 5px
+            padding: 5px
 </style>
 
 <div id="chuni-overview">
-    <h2 class="stats-name">{playerStats.name}</h2>
-    <h3 class="stats-rating">{playerStats.rating}</h3>
-    <div class="stats-honor stats-honor-{playerStats.honor.type}">{playerStats.honor.text}</div>
+    {#await playerStats then stats}
+        <h2 class="stats-name">{stats.name}</h2>
+        <h2 class="stats-rating">{stats.rating}</h2>
+        <div class="stats-honor stats-honor-{stats.honor.type}">{stats.honor.text}</div>
+    {/await}
     <div class="overview-items">
         <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
-        <OverviewItem title="B30 Avg." content={b30.toFixed(2)} />
-        <OverviewItem title="Max Rating" content={maxAchievable.toFixed(2)} />
+        <OverviewItem title="B30 Avg" content={b30.toFixed(2)} />
+        {#await officialR10 then r10}
+            <OverviewItem title="R10 Avg" content={r10.toFixed(2)} />
+        {/await}
+        <OverviewItem title="Max Possible" content={maxPossible.toFixed(2)} />
     </div>
 </div>

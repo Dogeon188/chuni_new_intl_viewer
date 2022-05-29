@@ -1,16 +1,7 @@
 <script lang="ts">
-    import { getPlayerStats, getRecord } from "../utils/fetch"
+    import { getRecord } from "../utils/fetch"
     import Result from "./Result.svelte"
     import { msgText } from "../stores"
-
-    let loaded = false
-    let recordList = [] as ChuniRecord[]
-    let playerStats: ChuniPlayerStats
-    ;(async () => {
-        recordList = await getRecord()
-        playerStats = await getPlayerStats()
-        loaded = true
-    })()
 </script>
 
 <style lang="sass">
@@ -25,22 +16,41 @@
         a
             color: #3cc
             text-decoration: none
+    footer
+        padding: 10px
 </style>
 
 <body>
-    <div>
-        <h3>Chunithm International Score Viewer</h3>
-        <a
-            href="https://github.com/Dogeon188/chuni_new_intl_viewer"
-            target="_blank"
-            rel="noopener noreferrer">Dogeon188/chuni_new_intl_viewer@GitHub</a>
-    </div>
-    {#if !loaded}
+    <h3>Chunithm International Score Viewer</h3>
+    {#await getRecord()}
         <div>
             <p>Loading...</p>
             <p>{$msgText}</p>
         </div>
-    {:else}
-        <Result {recordList} {playerStats} />
-    {/if}
+    {:then recordList} 
+        <Result {recordList} />
+    {/await}
+    <footer>
+        <span>
+            <a
+                href="https://github.com/Dogeon188/chuni_new_intl_viewer"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Source</a>
+        </span><br/>
+        <span>
+            Original & most works by <a
+                href="https://github.com/kyroslee/chuni_intl_viewer"
+                target="_blank"
+                rel="noopener noreferrer"
+                >kyroslee</a>
+        </span><br/>
+        <span>
+            Mostly inspired by <a
+                href="https://github.com/caxerx/chuni_intl_viewer"
+                target="_blank"
+                rel="noopener noreferrer"
+                >caxerx</a>
+        </span>
+    </footer>
 </body>
