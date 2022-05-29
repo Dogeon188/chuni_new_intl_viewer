@@ -28,8 +28,8 @@
         flex-direction: column
         gap: .75rem
     .btn
-        width: 2rem
-        height: 2rem
+        width: 2.5rem
+        height: 2.5rem
         background: #536
         border-radius: 50%
         box-shadow: 0.2rem 0.2rem 5px #000
