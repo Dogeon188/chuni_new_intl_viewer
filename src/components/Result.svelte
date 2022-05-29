@@ -10,7 +10,7 @@
     let sortBy = 0
     const sorts = {
         "Rating": (a: ChuniRecord, b: ChuniRecord) =>
-            b.rating - a.rating || b.const - a.const,
+            b.rating - a.rating || b.const - a.const || a.score - b.score,
         "Score": (a: ChuniRecord, b: ChuniRecord) => b.score - a.score,
         "Const": (a: ChuniRecord, b: ChuniRecord) => b.const - a.const,
         "Title": (a: ChuniRecord, b: ChuniRecord) => {
@@ -20,7 +20,7 @@
             return diffs.indexOf(b.difficulty) - diffs.indexOf(a.difficulty)
         },
         "AJ": (a: ChuniRecord, b: ChuniRecord) => {
-            if (a.clear == b.clear) return b.rating - a.rating || b.const - a.const
+            if (a.clear == b.clear) return a.rank - b.rank
             const clears = [null, "FC", "AJ"]
             return clears.indexOf(b.clear) - clears.indexOf(a.clear)
         },

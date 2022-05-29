@@ -77,7 +77,7 @@ export async function getRecord() {
         r.const = songInfo[r.difficulty]
         r.rating = calcRating(r.score, r.const)
     })
-    recordList.sort((a, b) => b.rating - a.rating || b.const - a.const)
+    recordList.sort((a, b) => b.rating - a.rating || b.const - a.const || a.score - b.score)
     recordList.map((r, i) => { r.rank = i + 1 })
     return recordList
 }
