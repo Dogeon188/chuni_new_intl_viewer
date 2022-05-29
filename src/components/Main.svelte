@@ -4,22 +4,6 @@
     import { msgText } from "../stores"
 </script>
 
-<style lang="sass">
-    body
-        padding-top: 1rem
-        background-color: #113
-        color: #eec
-        margin: 0
-        font-size: 14px
-        min-height: 100%
-        min-width: fit-content
-        a
-            color: #3cc
-            text-decoration: none
-    footer
-        padding: 10px
-</style>
-
 <body>
     <h3>Chunithm International Score Viewer</h3>
     {#await getRecord()}
@@ -54,3 +38,19 @@
         </span>
     </footer>
 </body>
+
+<style lang="sass">
+    body
+        padding-top: 1rem
+        background-color: #113
+        color: #eec
+        margin: 0
+        font-size: 14px
+        min-height: 100%
+        min-width: fit-content
+        a
+            color: #3cc
+            text-decoration: none
+    footer
+        padding: 10px
+</style>

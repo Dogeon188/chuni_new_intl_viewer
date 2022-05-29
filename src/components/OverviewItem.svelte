@@ -3,6 +3,9 @@
     export let content: string
 </script>
 
+<span class="overview-title">{title}</span>
+<span class="overview-content">{content}</span>
+
 <style lang="sass">
     .overview-title
         color: #c9e
@@ -13,6 +16,3 @@
         justify-self: start
         grid-column: 2
 </style>
-
-<span class="overview-title">{title}</span>
-<span class="overview-content">{content}</span>
