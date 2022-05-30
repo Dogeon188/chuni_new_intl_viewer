@@ -59,7 +59,7 @@
     td, th
         padding: 0.5rem
     td
-        border-top: #436 2px solid
+        border-top: #436 1.5px solid
     th
         color: #aac
     th.current-sort
