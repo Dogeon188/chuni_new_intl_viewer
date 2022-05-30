@@ -5,9 +5,11 @@ function createToggleable(dft = false, onToggle = (cur: boolean) => {}) {
     const { subscribe, set, update } = writable(dft)
     return {
         subscribe,
-        set,
+        set(value: boolean) {
+            set(value)
+            onToggle(value)
+        },
         toggle: () => update(b => {
-            onToggle(!b)
             return !b
         })
     }

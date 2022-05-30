@@ -3,17 +3,17 @@
 
     import { sortBy, filterB40 } from "../stores"
 
-    const sorts = {
-        "Rating": (a: ChuniRecord, b: ChuniRecord) => a.rank - b.rank,
-        "Score": (a: ChuniRecord, b: ChuniRecord) => b.score - a.score,
-        "Const": (a: ChuniRecord, b: ChuniRecord) => b.const - a.const,
-        "Title": (a: ChuniRecord, b: ChuniRecord) => {
+    const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
+        "Rating": (a, b) => a.rank - b.rank,
+        "Score": (a, b) => b.score - a.score,
+        "Const": (a, b) => b.const - a.const,
+        "Title": (a, b) => {
             if (a.title < b.title) return -1
             if (a.title > b.title) return 1
             const diffs = ["ULT", "MAS", "EXP", "ADV", "BAS"]
             return diffs.indexOf(b.difficulty) - diffs.indexOf(a.difficulty)
         },
-        "AJ": (a: ChuniRecord, b: ChuniRecord) => {
+        "AJ": (a, b) => {
             if (a.clear == b.clear) return a.rank - b.rank
             const clears = ["", "FC", "AJ"]
             return clears.indexOf(b.clear) - clears.indexOf(a.clear)
@@ -26,10 +26,11 @@
 <table>
     <thead>
         <tr>
-            {#each ["#", "Title", "Const", "Score", "Rating", "AJ"] as h}
+            <th on:click={() => $sortBy = "Rating"}>#</th>
+            {#each ["Title", "Const", "Score", "Rating", "AJ"] as h}
                 <th
                     class:current-sort={h == $sortBy}
-                    on:click={() => $sortBy = (h == "#" ? "Rating" : h)}>{h}</th>
+                    on:click={() => $sortBy = h}>{h}</th>
             {/each}
         </tr>
     </thead>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { showConfig, sortBy, filterB40 } from "../stores"
+    import ToggleSwitch from "./ToggleSwitch.svelte"
 </script>
 
 <div class="modal-wrapper" class:hidden={!$showConfig}>
@@ -18,17 +19,16 @@
                     <option value="AJ">AJ&#xFF0F;FC</option>
                 </select>
             </label>
+            <!-- svelte-ignore a11y-label-has-associated-control -->
             <label>
                 <span>Show Only B40</span>
-                <button
-                    class="filter-b40"
-                    on:click={filterB40.toggle}>
-                    {$filterB40 ? "Show Only B40" : "Show All"}
-                </button>
+                <ToggleSwitch bind:checked={$filterB40}/>
             </label>
             <!-- <label>
                 <span>Filter By</span>
-                <input type="text">
+                Constant
+                B40
+                Difficulty
             </label> -->
         </div>
     </div>
@@ -70,7 +70,7 @@
         padding: .5rem
         flex-direction: column
         gap: .5rem
-    select, button.filter-b40
+    select
         width: 100%
         padding: .75rem
         background: #123
