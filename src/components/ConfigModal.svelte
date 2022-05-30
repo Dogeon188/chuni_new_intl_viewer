@@ -22,10 +22,7 @@
                 <span>Show Only B40</span>
                 <button
                     class="filter-b40"
-                    on:click={() => {
-                        filterB40.toggle()
-                        if ($filterB40) $sortBy = "Rating"
-                    }}>
+                    on:click={filterB40.toggle}>
                     {$filterB40 ? "Show Only B40" : "Show All"}
                 </button>
             </label>

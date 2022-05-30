@@ -1,8 +1,8 @@
 <script lang="ts">
     import OverviewItem from "./OverviewItem.svelte"
     import { getOfficialR10, getPlayerStats } from "../utils/fetch"
-    export let b30: number
-    export let maxPossible: number
+    import { calcB30, calcMaxPossible } from "../utils/rating"
+    export let ratingList: number[]
 </script>
 
 <div id="chuni-overview">
@@ -13,11 +13,11 @@
     {/await}
     <div class="overview-items">
         <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
-        <OverviewItem title="Best 30 AVG" content={b30.toFixed(2)} />
+        <OverviewItem title="Best 30 AVG" content={calcB30(ratingList).toFixed(2)} />
         {#await getOfficialR10() then r10}
             <OverviewItem title="Recent 10 AVG" content={r10.toFixed(2)} />
         {/await}
-        <OverviewItem title="Max Possible" content={maxPossible.toFixed(2)} />
+        <OverviewItem title="Max Possible" content={calcMaxPossible(ratingList).toFixed(2)} />
     </div>
 </div>
 

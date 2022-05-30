@@ -1,8 +1,6 @@
 <script lang="ts">
     export let recordList: ChuniRecord[]
 
-    import Overview from "./Overview.svelte"
-    import { calcB30, calcMaxPossible } from "../utils/rating"
     import { sortBy, filterB40 } from "../stores"
 
     const sorts = {
@@ -23,51 +21,35 @@
     }
     $: sortedList = recordList.sort(sorts[$sortBy])
     $: filteredList = $filterB40 ? sortedList.slice(0, 40) : sortedList
-
-    const ratingList = recordList.map((s) => s.rating)
 </script>
 
-<main>
-    <Overview
-        b30={calcB30(ratingList)}
-        maxPossible={calcMaxPossible(ratingList)}
-        />
-    <table>
-        <thead>
-            <tr>
-                {#each ["#", "Title", "Const", "Score", "Rating", "AJ"] as h}
-                    <th
-                        class:current-sort={h == $sortBy}
-                        on:click={() => $sortBy = (h == "#" ? "Rating" : h)}>{h}</th>
-                {/each}
-            </tr>
-        </thead>
-        <tbody>
-            {#each filteredList as song}
-                <tr
-                    class:best30 = {song.rank <= 30}
-                    class:best40 = {song.rank <= 40}>
-                    <td>{song.rank}</td>
-                    <td class="diff-{song.difficulty.toLowerCase()}">{song.title}</td>
-                    <td>{song.const?.toFixed(1) ?? "??.?"}</td>
-                    <td>{song.score}</td>
-                    <td>{song.rating?.toFixed(2) ?? "??.??"}</td>
-                    <td>
-                        {#if song.clear !== null}
-                            <span class="clear-{song.clear?.toLowerCase()}">{song.clear}</span>
-                        {/if}
-                    </td>
-                </tr>
+<table>
+    <thead>
+        <tr>
+            {#each ["#", "Title", "Const", "Score", "Rating", "AJ"] as h}
+                <th
+                    class:current-sort={h == $sortBy}
+                    on:click={() => $sortBy = (h == "#" ? "Rating" : h)}>{h}</th>
             {/each}
-        </tbody>
-    </table>
-</main>
-
+        </tr>
+    </thead>
+    <tbody>
+        {#each filteredList as song}
+            <tr
+                class:best30 = {song.rank <= 30}
+                class:best40 = {song.rank <= 40}>
+                <td>{song.rank}</td>
+                <td data-diff="{song.difficulty}">{song.title}</td>
+                <td>{song.const?.toFixed(1) ?? "??.?"}</td>
+                <td>{song.score}</td>
+                <td>{song.rating?.toFixed(2) ?? "??.??"}</td>
+                <td data-clear="{song.clear}">{song.clear}</td>
+            </tr>
+        {/each}
+    </tbody>
+</table>
 
 <style lang="sass">
-    main
-        width: fit-content
-        margin: auto
     table
         border-spacing: 0
         width: 100%
@@ -76,6 +58,8 @@
         margin: auto
     td, th
         padding: 0.5rem
+    td
+        border-top: #436 2px solid
     th
         color: #aac
     th.current-sort
@@ -85,21 +69,19 @@
             color: #fc4
         tr.best40 td:first-child
             font-weight: bold
-        tr:nth-child(odd)
-            background-color: #224
+        tr:not(.best40) td:first-child
+            color: #ccc
         tr td:nth-child(2)
-            overflow: hidden
-            text-overflow: ellipsis
             font-weight: bold
-            text-align: initial
+            text-align: left
             max-width: 300px
-            @each $diff, $diffc in ("ult": #3cf, "mas": #e9f, "exp": #e46, "adv": #e73, "bas": #1c3)
-                &.diff-#{$diff}
+            @each $diff, $diffc in ("ULT": #3cf, "MAS": #e9f, "EXP": #e46, "ADV": #e73, "BAS": #1c3)
+                &[data-diff="#{$diff}"]
                     color: $diffc
-    span.clear-fc
-        color: #5e7
-        font-weight: bold
-    span.clear-aj
-        color: #fc1
-        font-weight: bold
+        tr td:nth-child(6)
+            font-weight: bold
+            &[data-clear="FC"]
+                color: #5e7
+            &[data-clear="AJ"]
+                color: #fc1
 </style>

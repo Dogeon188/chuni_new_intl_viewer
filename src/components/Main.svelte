@@ -3,7 +3,8 @@
     import Result from "./Result.svelte"
     import Buttons from "./Buttons.svelte"
     import ConfigModal from "./ConfigModal.svelte"
-    import { msgText, showConfig } from "../stores"
+    import Overview from "./Overview.svelte"
+    import { msgText } from "../stores"
 </script>
 
 <body>
@@ -14,7 +15,10 @@
             <p>{$msgText}</p>
         </div>
     {:then recordList} 
-        <Result {recordList} />
+        <main>
+            <Overview ratingList={ recordList.map((s) => s.rating) } />
+            <Result {recordList} />
+        </main>
         <Buttons />
     {/await}
     <ConfigModal />
@@ -46,7 +50,7 @@
 <style lang="sass">
     body
         padding-top: 1rem
-        background-color: #113
+        background-color: #103
         color: #eec
         margin: 0
         font-size: 14px
@@ -55,6 +59,9 @@
         a
             color: #3cc
             text-decoration: none
+    main
+        width: fit-content
+        margin: auto
     footer
         padding: 10px
 </style>
