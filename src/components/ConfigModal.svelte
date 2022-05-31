@@ -1,6 +1,7 @@
 <script lang="ts">
     import { showConfig, sortBy, filterB40, theme } from "../stores"
     import { themeNames } from "../themes"
+    import Select from "./Select.svelte"
     import ToggleSwitch from "./ToggleSwitch.svelte"
 </script>
 
@@ -10,28 +11,30 @@
         <div class="close-btn" on:click={showConfig.toggle}>✕</div>
         <h3>Options</h3>
         <div class="config-content">
+            <!-- svelte-ignore a11y-label-has-associated-control -->
             <label>
                 <span>Sort By</span>
-                <select bind:value={$sortBy}>
+                <Select bind:value={$sortBy}>
                     <option value="Rating" selected>Rating</option>
                     <option value="Score">Score</option>
                     <option value="Const">Chart Constant</option>
                     <option value="Title">Title</option>
                     <option value="AJ">AJ&#xFF0F;FC</option>
-                </select>
+                </Select>
             </label>
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <label>
                 <span>Show Only B40</span>
-                <ToggleSwitch bind:checked={$filterB40}/>
+                <ToggleSwitch bind:checked={$filterB40} />
             </label>
+            <!-- svelte-ignore a11y-label-has-associated-control -->
             <label>
                 <span>Theme</span>
-                <select bind:value={$theme}>
+                <Select bind:value={$theme}>
                     {#each themeNames as t}
                         <option value={t}>{t}</option>
                     {/each}
-                </select>
+                </Select>
             </label>
             <!-- <label>
                 <span>Filter By</span>
@@ -64,6 +67,7 @@
     .modal
         background: var(--theme-bg_main)
         width: 70%
+        max-width: 32rem
         margin: auto
         padding: 2rem
         position: relative
@@ -79,23 +83,13 @@
         padding: .5rem
         flex-direction: column
         gap: .5rem
-    select
-        width: 100%
-        padding: .75rem
-        background: var(--theme-bg_main)
-        border: var(--theme-border) 2px solid
-        border-radius: .5rem
-        color: inherit
-        cursor: pointer
-        text-align: left
-        appearance: none
     .close-btn
         position: absolute
         top: .5rem
         right: .5rem
         width: 2rem
         height: 2rem
-        background-color: var(--theme-bg_sub)
+        background-color: var(--theme-border)
         border-radius: 50%
         display: inline-flex
         justify-content: center

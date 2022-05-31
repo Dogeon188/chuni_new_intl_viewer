@@ -43,6 +43,7 @@
             align-items: center
             height: 100%
             right: .6rem
+            font-weight: bold
         &:before // slider
             position: absolute
             content: ""
