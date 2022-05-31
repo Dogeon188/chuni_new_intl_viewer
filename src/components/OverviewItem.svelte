@@ -8,7 +8,7 @@
 
 <style lang="sass">
     .overview-title
-        color: #c9e
+        color: var(--theme-label)
         font-size: small
         grid-column: 1
         justify-self: end

@@ -4,16 +4,16 @@
     import { sortBy, filterB40 } from "../stores"
 
     const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
-        "Rating": (a, b) => a.rank - b.rank,
-        "Score": (a, b) => b.score - a.score,
-        "Const": (a, b) => b.const - a.const,
-        "Title": (a, b) => {
+        Rating: (a, b) => a.rank - b.rank,
+        Score: (a, b) => b.score - a.score,
+        Const: (a, b) => b.const - a.const,
+        Title: (a, b) => {
             if (a.title < b.title) return -1
             if (a.title > b.title) return 1
             const diffs = ["ULT", "MAS", "EXP", "ADV", "BAS"]
             return diffs.indexOf(b.difficulty) - diffs.indexOf(a.difficulty)
         },
-        "AJ": (a, b) => {
+        AJ: (a, b) => {
             if (a.clear == b.clear) return a.rank - b.rank
             const clears = ["", "FC", "AJ"]
             return clears.indexOf(b.clear) - clears.indexOf(a.clear)
@@ -26,25 +26,22 @@
 <table>
     <thead>
         <tr>
-            <th on:click={() => $sortBy = "Rating"}>#</th>
+            <th on:click={() => ($sortBy = "Rating")}>#</th>
             {#each ["Title", "Const", "Score", "Rating", "AJ"] as h}
-                <th
-                    class:current-sort={h == $sortBy}
-                    on:click={() => $sortBy = h}>{h}</th>
+                <th class:current-sort={h == $sortBy} on:click={() => ($sortBy = h)}
+                    >{h}</th>
             {/each}
         </tr>
     </thead>
     <tbody>
         {#each filteredList as song}
-            <tr
-                class:best30 = {song.rank <= 30}
-                class:best40 = {song.rank <= 40}>
+            <tr class:best30={song.rank <= 30} class:best40={song.rank <= 40}>
                 <td>{song.rank}</td>
-                <td data-diff="{song.difficulty}">{song.title}</td>
+                <td data-diff={song.difficulty}>{song.title}</td>
                 <td>{song.const?.toFixed(1) ?? "??.?"}</td>
                 <td>{song.score}</td>
                 <td>{song.rating?.toFixed(2) ?? "??.??"}</td>
-                <td data-clear="{song.clear}">{song.clear}</td>
+                <td data-clear={song.clear}>{song.clear}</td>
             </tr>
         {/each}
     </tbody>
@@ -60,29 +57,29 @@
     td, th
         padding: 0.5rem
     td
-        border-top: #436 1.5px solid
+        border-top: var(--theme-border) 1.5px solid
     th
-        color: #aac
+        color: var(--theme-text_dim)
     th.current-sort
-        color: #eec
+        color: inherit
     tbody
         tr.best30 td:first-child
-            color: #fc4
+            color: var(--theme-rank_b30)
         tr.best40 td:first-child
             font-weight: bold
         tr:not(.best40) td:first-child
-            color: #ccc
+            color: var(--theme-text_dim)
         tr td:nth-child(2)
             font-weight: bold
             text-align: left
             max-width: 300px
-            @each $diff, $diffc in ("ULT": #3cf, "MAS": #e9f, "EXP": #e46, "ADV": #e73, "BAS": #1c3)
+            @each $diff in ("ULT", "MAS", "EXP", "ADV", "BAS")
                 &[data-diff="#{$diff}"]
-                    color: $diffc
+                    color: var(--theme-song_#{to-lower-case($diff)})
         tr td:nth-child(6)
             font-weight: bold
             &[data-clear="FC"]
-                color: #5e7
+                color: var(--theme-clear_fc)
             &[data-clear="AJ"]
-                color: #fc1
+                color: var(--theme-clear_aj)
 </style>

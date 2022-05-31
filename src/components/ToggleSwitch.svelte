@@ -3,8 +3,8 @@
 </script>
 
 <label>
-    <input type="checkbox" bind:checked>
-    <span/>
+    <input type="checkbox" bind:checked />
+    <span />
 </label>
 
 <style lang="sass">
@@ -18,7 +18,7 @@
         height: 0
         opacity: 0
         &:checked + span
-            background-color: #739
+            background-color: var(--theme-switch_on)
             &:before
                 transform: translateX(2.5rem)
             &:after
@@ -32,10 +32,11 @@
         left: 0
         right: 0
         bottom: 0
-        background-color: #345
+        background-color: var(--theme-bg_sub)
         transition: .2s
         border-radius: 2rem
         &:after // text
+            color: var(--theme-switch_fill)
             position: absolute
             content: "OFF"
             display: flex
@@ -49,7 +50,7 @@
             width: 1.6rem
             left: .2rem
             bottom: .2rem
-            background-color: #ccd
+            background-color: var(--theme-switch_fill)
             transition: .2s
             border-radius: 50%
 </style>

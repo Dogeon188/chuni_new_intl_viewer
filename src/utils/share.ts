@@ -11,7 +11,7 @@ export async function saveResultAsPicture(mode: "b30" | "b40" = "b40") {
         if (i > (mode == "b30" ? 30 : 40)) tr.remove()
     })
 
-    toBlob(n, { backgroundColor: "#113" }).then(async blob => {
+    toBlob(n, { backgroundColor: "#123" }).then(async blob => {
         n.remove()
         if (blob == null) return alert("[chuni-intl-viewer] Something went wrong when converting your scores to PNG. Please ask the author to fix it.")
         if (isMobile()) {

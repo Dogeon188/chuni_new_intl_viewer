@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { showConfig, sortBy, filterB40 } from "../stores"
+    import { showConfig, sortBy, filterB40, theme } from "../stores"
+    import { themeNames } from "../themes"
     import ToggleSwitch from "./ToggleSwitch.svelte"
 </script>
 
@@ -24,6 +25,14 @@
                 <span>Show Only B40</span>
                 <ToggleSwitch bind:checked={$filterB40}/>
             </label>
+            <label>
+                <span>Theme</span>
+                <select bind:value={$theme}>
+                    {#each themeNames as t}
+                        <option value={t}>{t}</option>
+                    {/each}
+                </select>
+            </label>
             <!-- <label>
                 <span>Filter By</span>
                 Constant
@@ -47,18 +56,18 @@
             display: none
     .modal-bg
         position: fixed
-        background: #0004
+        background: #0006
         top: 0
         left: 0
         width: 100vw
         height: 100vh
     .modal
-        background: #123
+        background: var(--theme-bg_main)
         width: 70%
         margin: auto
         padding: 2rem
         position: relative
-        box-shadow: 2rem 2rem 10px #0006
+        box-shadow: 2rem 2rem 10px #0008
         border-radius: 1rem
         text-align: left
     h3
@@ -73,8 +82,8 @@
     select
         width: 100%
         padding: .75rem
-        background: #123
-        border: #345 2px solid
+        background: var(--theme-bg_main)
+        border: var(--theme-border) 2px solid
         border-radius: .5rem
         color: inherit
         cursor: pointer
@@ -86,7 +95,7 @@
         right: .5rem
         width: 2rem
         height: 2rem
-        background: #566
+        background-color: var(--theme-bg_sub)
         border-radius: 50%
         display: inline-flex
         justify-content: center

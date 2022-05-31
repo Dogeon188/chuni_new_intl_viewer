@@ -15,3 +15,11 @@ export function isMobile() {
 export function parseNumber(str: string) {
     return Number([...str].filter(e => e !== ",").join(""))
 }
+
+export function setRootColors(theme: Theme) {
+    const root = $(":root")
+    for (let [k, v] of Object.entries(theme)) {
+        root.css(`--theme-${k}`, v)
+    }
+    document.body.style.backgroundColor = theme.bg_main
+}

@@ -17,15 +17,17 @@
         {#await getOfficialR10() then r10}
             <OverviewItem title="Recent 10 AVG" content={r10.toFixed(2)} />
         {/await}
-        <OverviewItem title="Max Possible" content={calcMaxPossible(ratingList).toFixed(2)} />
+        <OverviewItem
+            title="Max Possible"
+            content={calcMaxPossible(ratingList).toFixed(2)} />
     </div>
 </div>
 
 <style lang="sass">
     div#chuni-overview
-        border: #547 3px solid
+        border: var(--theme-border) 3px solid
         border-radius: 0.5rem
-        background-color: #224
+        background-color: var(--theme-bg_sub)
         width: fit-content
         padding: 0.5rem
         margin: 0.5rem
@@ -41,14 +43,15 @@
             justify-self: center
         .stats-honor
             grid-area: 2/1/3/3
-            color: #998
-            background: #113
+            color: var(--theme-honor_normal)
+            background: var(--theme-bg_main)
             border-radius: 3px
             padding: 5px
             margin: 0 20px
-            @each $t, $tc in ("normal": #998, "bronze": #d83, "silver": #ddd, "gold": #fb4, "rainbow": #6e8)
+            font-weight: bold
+            @each $t in ("normal", "bronze", "silver", "gold", "rainbow")
                 &.stats-honor-#{$t}
-                    color: $tc
+                    color: var(--theme-honor_#{$t})
         .overview-items
             width: fit-content
             display: grid
