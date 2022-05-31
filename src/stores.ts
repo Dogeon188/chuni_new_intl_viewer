@@ -3,7 +3,7 @@ import { isMobile } from "./utils/utils"
 import { setRootColors } from "./utils/utils"
 import { themes } from "./themes"
 
-function createToggleable(dft = false, onToggle = (cur: boolean) => {}) {
+function createToggleable(dft = false, onToggle = (cur: boolean) => { }) {
     const { subscribe, set, update } = writable(dft)
     return {
         subscribe,
@@ -17,13 +17,16 @@ function createToggleable(dft = false, onToggle = (cur: boolean) => {}) {
     }
 }
 
+if (localStorage.CV_theme == null) localStorage.CV_theme = "Dark"
+if (localStorage.CV_filterB40 == null) localStorage.CV_filterB40 = isMobile()
+
 export const msgText = writable("")
-export const filterB40 = createToggleable(isMobile(), cur => {
+export const filterB40 = createToggleable(JSON.parse(localStorage.CV_filterB40), cur => {
     if (cur) sortBy.set("Rating")
+    localStorage.CV_filterB40 = cur
 })
 export const theme = (() => {
-    if (localStorage.CV_theme == null) localStorage.CV_theme = "Dark"
-    const {subscribe, set, update} = writable(localStorage.CV_theme as ThemeNames)
+    const { subscribe, set, update } = writable(localStorage.CV_theme as ThemeNames)
     return {
         subscribe,
         set(theme: ThemeNames) {
@@ -35,7 +38,7 @@ export const theme = (() => {
     }
 })()
 export const sortBy = (() => {
-    const {subscribe, set, update} = writable("Rating")
+    const { subscribe, set, update } = writable("Rating")
     return {
         subscribe,
         set(sort: string) {
