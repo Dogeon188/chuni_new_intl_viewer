@@ -31,8 +31,6 @@
 </body>
 
 <style lang="sass">
-    :global(:root)
-        --theme-text: #eed
     body
         padding-top: 1rem
         background-color: var(--theme-bg_main)

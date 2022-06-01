@@ -29,7 +29,7 @@
         height: 100vh
     .modal
         background: var(--theme-bg_main)
-        width: 50%
+        width: 70%
         max-width: 32rem
         margin: auto
         padding: 2rem

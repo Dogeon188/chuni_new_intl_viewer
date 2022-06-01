@@ -56,6 +56,8 @@
         background: var(--theme-bg_main)
         width: 70%
         max-width: 32rem
+        max-height: 80%
+        overflow-y: scroll
         margin: auto
         padding: 2rem
         position: relative
@@ -66,11 +68,6 @@
         margin: 0
     .config-content
         padding: 5px
-    label
-        display: flex
-        padding: .5rem
-        flex-direction: column
-        gap: .5rem
     .close-btn
         position: absolute
         top: .5rem

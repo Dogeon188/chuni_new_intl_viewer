@@ -18,8 +18,8 @@ export const themes: Record<ThemeNames, Theme> = {
         song_exp: "#e46",
         song_adv: "#e73",
         song_bas: "#1c3",
-        clear_aj: "#5e7",
-        clear_fc: "#fc1",
+        clear_aj: "#fc1",
+        clear_fc: "#5e7",
         switch_on: "#36b",
         switch_fill: "#eed"
     },
@@ -42,8 +42,8 @@ export const themes: Record<ThemeNames, Theme> = {
         song_exp: "#e46",
         song_adv: "#e73",
         song_bas: "#1c3",
-        clear_aj: "#5e7",
-        clear_fc: "#fc1",
+        clear_aj: "#fc1",
+        clear_fc: "#5e7",
         switch_on: "#739",
         switch_fill: "#eed"
     },
@@ -66,8 +66,8 @@ export const themes: Record<ThemeNames, Theme> = {
         song_exp: "#c10",
         song_adv: "#f50",
         song_bas: "#373",
-        clear_aj: "#1a3",
-        clear_fc: "#c81",
+        clear_aj: "#c81",
+        clear_fc: "#1a3",
         switch_on: "#3bd",
         switch_fill: "#ffe"
     },
