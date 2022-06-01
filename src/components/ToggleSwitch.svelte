@@ -1,14 +1,23 @@
 <script lang="ts">
     export let checked = false
+    export let label: string
 </script>
 
 <label>
+    <span>{label}</span>
     <input type="checkbox" bind:checked />
-    <span />
+    <div class="wrapper">
+        <span class="slider" />
+    </div>
 </label>
 
 <style lang="sass">
     label
+        display: flex
+        padding: .5rem
+        flex-direction: column
+        gap: .2rem
+    .wrapper
         position: relative
         width: 4.5rem
         height: 2rem
@@ -17,7 +26,7 @@
         width: 0
         height: 0
         opacity: 0
-        &:checked + span
+        &:checked + .wrapper .slider
             background-color: var(--theme-switch_on)
             &:before
                 transform: translateX(2.5rem)
@@ -25,7 +34,7 @@
                 content: "ON"
                 left: .6rem
                 right: initial
-    span
+    .slider
         position: absolute
         cursor: pointer
         top: 0

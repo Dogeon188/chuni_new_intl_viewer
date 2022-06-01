@@ -1,12 +1,21 @@
 <script lang="ts">
     export let value: string
+    export let label: string
 </script>
 
-<select bind:value>
-    <slot />
-</select>
+<label>
+    <span>{label}</span>
+    <select bind:value>
+        <slot />
+    </select>
+</label>
 
 <style lang="sass">
+    label
+        display: flex
+        padding: .5rem
+        flex-direction: column
+        gap: .5rem
     select
         width: 100%
         height: 3rem

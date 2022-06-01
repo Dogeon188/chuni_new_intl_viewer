@@ -11,31 +11,19 @@
         <div class="close-btn" on:click={showConfig.toggle}>✕</div>
         <h3>Options</h3>
         <div class="config-content">
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>
-                <span>Sort By</span>
-                <Select bind:value={$sortBy}>
-                    <option value="Rating" selected>Rating</option>
-                    <option value="Score">Score</option>
-                    <option value="Const">Chart Constant</option>
-                    <option value="Title">Title</option>
-                    <option value="AJ">AJ&#xFF0F;FC</option>
-                </Select>
-            </label>
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>
-                <span>Show Only B40</span>
-                <ToggleSwitch bind:checked={$filterB40} />
-            </label>
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label>
-                <span>Theme</span>
-                <Select bind:value={$theme}>
-                    {#each themeNames as t}
-                        <option value={t}>{t}</option>
-                    {/each}
-                </Select>
-            </label>
+            <Select label="Sort By" bind:value={$sortBy}>
+                <option value="Rating" selected>Rating</option>
+                <option value="Score">Score</option>
+                <option value="Const">Chart Constant</option>
+                <option value="Title">Title</option>
+                <option value="AJ">AJ&#xFF0F;FC</option>
+            </Select>
+            <ToggleSwitch label="Show Only B40" bind:checked={$filterB40} />
+            <Select label="Theme" bind:value={$theme}>
+                {#each themeNames as t}
+                    <option value={t}>{t}</option>
+                {/each}
+            </Select>
             <!-- <label>
                 <span>Filter By</span>
                 Constant

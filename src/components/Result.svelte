@@ -60,6 +60,7 @@
         border-top: var(--theme-border) 1.5px solid
     th
         color: var(--theme-text_dim)
+        cursor: pointer
     th.current-sort
         color: inherit
     tbody
