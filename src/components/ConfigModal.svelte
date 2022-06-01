@@ -12,7 +12,7 @@
         <h3>Options</h3>
         <div class="config-content">
             <Select label="Sort By" bind:value={$sortBy}>
-                <option value="Rating" selected>Rating</option>
+                <option value="Rating">Rating</option>
                 <option value="Score">Score</option>
                 <option value="Const">Chart Constant</option>
                 <option value="Title">Title</option>
@@ -57,7 +57,7 @@
         width: 70%
         max-width: 32rem
         max-height: 80%
-        overflow-y: scroll
+        overflow-y: auto
         margin: auto
         padding: 2rem
         position: relative

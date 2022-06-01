@@ -16,6 +16,10 @@ export function parseNumber(str: string) {
     return Number([...str].filter(e => e !== ",").join(""))
 }
 
+export function floorAndFixTo2(f: Number) {
+    return 
+}
+
 export function setRootColors(theme: Theme) {
     const root = $(":root")
     for (let [k, v] of Object.entries(theme)) {

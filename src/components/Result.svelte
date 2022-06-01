@@ -46,6 +46,11 @@
         {/each}
     </tbody>
 </table>
+{#if $filterB40}    
+    <div class="see-more" on:click={filterB40.toggle}>
+        See more...
+    </div>
+{/if}
 
 <style lang="sass">
     table
@@ -83,4 +88,11 @@
                 color: var(--theme-clear_fc)
             &[data-clear="AJ"]
                 color: var(--theme-clear_aj)
+    .see-more
+        background-color: var(--theme-bg_sub)
+        border-radius: .5rem
+        padding: .5rem
+        margin: .5rem 5rem
+        text-align: center
+        cursor: pointer
 </style>

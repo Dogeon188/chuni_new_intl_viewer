@@ -9,7 +9,7 @@
     {#await getPlayerStats() then stats}
         <h2 class="stats-name">{stats.name}</h2>
         <h2 class="stats-rating">{stats.rating}</h2>
-        <div class="stats-honor stats-honor-{stats.honor.type}">{stats.honor.text}</div>
+        <div class="stats-honor" data-honor={stats.honor.type}>{stats.honor.text}</div>
     {/await}
     <div class="overview-items">
         <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
@@ -49,8 +49,8 @@
             padding: 5px
             margin: 0 20px
             font-weight: bold
-            @each $t in ("normal", "bronze", "silver", "gold", "rainbow")
-                &.stats-honor-#{$t}
+            @each $t in ("normal", "bronze", "silver", "gold", "platina", "rainbow")
+                &[data-honor=#{$t}]
                     color: var(--theme-honor_#{$t})
         .overview-items
             width: fit-content
