@@ -54,4 +54,4 @@ export const sortBy = (() => {
     }
 })()
 
-export const showConfig = createToggleable(true)
+export const showConfig = createToggleable()
