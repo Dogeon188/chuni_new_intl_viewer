@@ -14,11 +14,9 @@
     {/await}
     <div class="overview-items">
         <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
-        <OverviewItem
-            title="Best 30 AVG"
-            content={floorAndToFixed2(calcB30(ratingList))} />
+        <OverviewItem title="Best 30 AVG" content={calcB30(ratingList).toFixed(4)} />
         {#await getOfficialR10() then r10}
-            <OverviewItem title="Recent 10 AVG" content={floorAndToFixed2(r10)} />
+            <OverviewItem title="Recent 10 AVG" content={r10.toFixed(4)} />
         {/await}
         <OverviewItem
             title="Max Possible"
