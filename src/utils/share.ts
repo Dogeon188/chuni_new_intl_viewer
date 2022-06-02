@@ -1,5 +1,5 @@
 import { toBlob } from "html-to-image"
-import { isMobile } from "./utils"
+import { isMobile } from "@/utils/utils"
 
 export async function saveResultAsPicture(mode: "b30" | "b40" = "b40") {
     const resultNode = <HTMLElement>document.body.shadowRoot?.querySelector("main")

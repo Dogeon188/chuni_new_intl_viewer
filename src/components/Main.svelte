@@ -1,15 +1,15 @@
 <script lang="ts">
     import { onMount } from "svelte"
-    import { themes } from "../themes"
-    import { getRecord } from "../utils/fetch"
-    import { setRootColors } from "../utils/utils"
-    import Result from "./Result.svelte"
-    import Buttons from "./Buttons.svelte"
-    import ConfigModal from "./ConfigModal.svelte"
-    import Overview from "./Overview.svelte"
-    import { theme } from "../stores"
-    import LoadingModal from "./LoadingModal.svelte"
-    import Footer from "./Footer.svelte"
+    import { themes } from "@/themes"
+    import { getRecord } from "@/utils/fetch"
+    import { setRootColors } from "@/utils/utils"
+    import Result from "@/components/Result.svelte"
+    import Buttons from "@/components/Buttons.svelte"
+    import ConfigModal from "@/components/ConfigModal.svelte"
+    import Overview from "@/components/Overview.svelte"
+    import { theme } from "@/stores"
+    import LoadingModal from "@/components/LoadingModal.svelte"
+    import Footer from "@/components/Footer.svelte"
 
     onMount(() => {
         setRootColors(themes[$theme])

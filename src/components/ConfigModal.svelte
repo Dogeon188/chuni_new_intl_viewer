@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { showConfig, sortBy, filterB40, theme } from "../stores"
-    import { themeNames } from "../themes"
-    import Select from "./Select.svelte"
-    import ToggleSwitch from "./ToggleSwitch.svelte"
+    import { showConfig, sortBy, filterB40, theme } from "@/stores"
+    import { themeNames } from "@/themes"
+    import Select from "@/components/Select.svelte"
+    import ToggleSwitch from "@/components/ToggleSwitch.svelte"
 </script>
 
 <div class="modal-wrapper" class:hidden={!$showConfig}>

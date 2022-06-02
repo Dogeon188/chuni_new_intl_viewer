@@ -1,7 +1,6 @@
 import { writable } from "svelte/store"
-import { isMobile } from "./utils/utils"
-import { setRootColors } from "./utils/utils"
-import { themes } from "./themes"
+import { isMobile, setRootColors } from "@/utils/utils"
+import { themes } from "@/themes"
 
 function createToggleable(dft = false, onToggle = (cur: boolean) => { }) {
     const { subscribe, set, update } = writable(dft)

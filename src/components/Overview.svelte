@@ -1,7 +1,8 @@
 <script lang="ts">
-    import OverviewItem from "./OverviewItem.svelte"
-    import { getOfficialR10, getPlayerStats } from "../utils/fetch"
-    import { calcB30, calcMaxPossible } from "../utils/rating"
+    import OverviewItem from "@/components/OverviewItem.svelte"
+    import { getOfficialR10, getPlayerStats } from "@/utils/fetch"
+    import { calcB30, calcMaxPossible } from "@/utils/rating"
+    import { floorAndToFixed2 } from "@/utils/utils"
     export let ratingList: number[]
 </script>
 
@@ -13,13 +14,15 @@
     {/await}
     <div class="overview-items">
         <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
-        <OverviewItem title="Best 30 AVG" content={calcB30(ratingList).toFixed(2)} />
+        <OverviewItem
+            title="Best 30 AVG"
+            content={floorAndToFixed2(calcB30(ratingList))} />
         {#await getOfficialR10() then r10}
-            <OverviewItem title="Recent 10 AVG" content={r10.toFixed(2)} />
+            <OverviewItem title="Recent 10 AVG" content={floorAndToFixed2(r10)} />
         {/await}
         <OverviewItem
             title="Max Possible"
-            content={calcMaxPossible(ratingList).toFixed(2)} />
+            content={floorAndToFixed2(calcMaxPossible(ratingList))} />
     </div>
 </div>
 

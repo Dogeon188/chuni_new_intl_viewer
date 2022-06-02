@@ -1,12 +1,15 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
-  "include": ["src/**/*", "tests/chart/chart.ts"],
+  "include": ["src"],
   "exclude": ["node_modules/*"],
   "compilerOptions": {
     "target": "es2020",
     "module": "es2020",
     "moduleResolution": "node",
     "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { msgText } from "../stores"
+    import { msgText } from "@/stores"
 </script>
 
 <div class="modal-wrapper">

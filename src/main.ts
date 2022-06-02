@@ -1,5 +1,5 @@
-import { getCookie } from "./utils/utils"
-import Svelte from "./components/Main.svelte"
+import { getCookie } from "@/utils/utils"
+import Svelte from "@/components/Main.svelte"
 
 async function main() {
     if ((window as any).chuniIntlViewer) {

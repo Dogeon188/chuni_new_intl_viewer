@@ -16,8 +16,8 @@ export function parseNumber(str: string) {
     return Number([...str].filter(e => e !== ",").join(""))
 }
 
-export function floorAndFixTo2(f: Number) {
-    return 
+export function floorAndToFixed2(f: number) {
+    return (Math.floor(f * 100) / 100).toFixed(2)
 }
 
 export function setRootColors(theme: Theme) {

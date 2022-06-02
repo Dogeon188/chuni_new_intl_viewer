@@ -1,6 +1,6 @@
-import { calcRating } from "./rating"
-import { getCookie, parseNumber } from "./utils"
-import { msgText } from "../stores"
+import { calcRating } from "@/utils/rating"
+import { getCookie, parseNumber } from "@/utils/utils"
+import { msgText } from "@/stores"
 
 const Difficulty = {
     basic: "BAS",
@@ -48,7 +48,7 @@ async function fetchRawRecord() {
                 score: parseNumber(songData.find(".text_b")?.text()),
                 difficulty: Object.values(Difficulty)[di],
                 clear: icons.find(`img[src*="alljustice"]`).length ? "AJ" :
-                        icons.find(`img[src*="fullcombo"]`).length ? "FC" : ""
+                    icons.find(`img[src*="fullcombo"]`).length ? "FC" : ""
             }
         }).filter(s => s.title !== null && s.score > 0)
     )

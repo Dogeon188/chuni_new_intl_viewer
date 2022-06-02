@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { floorAndToFixed2 } from "@/utils/utils"
+    import { sortBy, filterB40 } from "@/stores"
     export let recordList: ChuniRecord[]
-
-    import { sortBy, filterB40 } from "../stores"
 
     const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
         Rating: (a, b) => a.rank - b.rank,
@@ -40,16 +40,14 @@
                 <td data-diff={song.difficulty}>{song.title}</td>
                 <td>{song.const?.toFixed(1) ?? "??.?"}</td>
                 <td>{song.score}</td>
-                <td>{song.rating?.toFixed(2) ?? "??.??"}</td>
+                <td>{song.rating == null ? "??.??" : floorAndToFixed2(song.rating)}</td>
                 <td data-clear={song.clear}>{song.clear}</td>
             </tr>
         {/each}
     </tbody>
 </table>
-{#if $filterB40}    
-    <div class="see-more" on:click={filterB40.toggle}>
-        See more...
-    </div>
+{#if $filterB40}
+    <div class="see-more" on:click={filterB40.toggle}>See more...</div>
 {/if}
 
 <style lang="sass">

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { showConfig, sortBy } from "../stores"
-    import { saveResultAsPicture } from "../utils/share"
+    import { showConfig, sortBy } from "@/stores"
+    import { saveResultAsPicture } from "@/utils/share"
 </script>
 
 <div class="btn-container">
