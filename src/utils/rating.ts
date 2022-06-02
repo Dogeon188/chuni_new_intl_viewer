@@ -17,7 +17,7 @@ export function calcRating(score: number, chartConst: number) {
     points.some((v, i) => (p = i, score > v[0]))
     const prev = points[p - 1], cur = points[p]
     const ret = cur[1] + (prev[1] - cur[1]) / (prev[0] - cur[0]) * (score - cur[0])
-    return Math.floor(ret + Number.EPSILON) / 100
+    return Math.floor(Math.max(0, ret)) / 100
 }
 
 export function calcB30(ratingList: number[]) {
@@ -25,5 +25,5 @@ export function calcB30(ratingList: number[]) {
 }
 
 export function calcMaxPossible(ratingList: number[]) {
-    return (calcB30(ratingList) * 30 + ratingList[0] * 10) / 40
+    return (ratingList.slice(0, 30).reduce((a, b) => a + b) + ratingList[0] * 10) / 40
 }
