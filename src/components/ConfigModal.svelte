@@ -1,8 +1,16 @@
 <script lang="ts">
-    import { showConfig, sortBy, filterB40, theme } from "@/stores"
+    import {
+        showConfig,
+        sortBy,
+        filterB40,
+        theme,
+        filterConstMin,
+        filterConstMax,
+    } from "@/stores"
     import { themeNames } from "@/themes"
     import Select from "@/components/Select.svelte"
     import ToggleSwitch from "@/components/ToggleSwitch.svelte"
+    import DualSlider from "@/components/DualSlider.svelte"
 </script>
 
 <div class="modal-wrapper" class:hidden={!$showConfig}>
@@ -19,6 +27,13 @@
                 <option value="AJ">AJ&#xFF0F;FC</option>
             </Select>
             <ToggleSwitch label="Show Only B40" bind:checked={$filterB40} />
+            <DualSlider
+                label="Filter By Constant"
+                max={15.4}
+                min={1}
+                bind:low={$filterConstMin}
+                bind:high={$filterConstMax}
+                step={0.1} />
             <Select label="Theme" bind:value={$theme}>
                 {#each themeNames as t}
                     <option value={t}>{t}</option>

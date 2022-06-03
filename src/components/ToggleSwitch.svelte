@@ -14,8 +14,8 @@
 <style lang="sass">
     label
         display: flex
-        padding: .5rem
         flex-direction: column
+        padding: .5rem
         gap: .2rem
     .wrapper
         position: relative
@@ -27,7 +27,7 @@
         height: 0
         opacity: 0
         &:checked + .wrapper .slider
-            background-color: var(--theme-switch_on)
+            background-color: var(--theme-bg_control)
             &:before
                 transform: translateX(2.5rem)
             &:after
@@ -45,7 +45,7 @@
         transition: .2s
         border-radius: 2rem
         &:after // text
-            color: var(--theme-switch_fill)
+            color: var(--theme-text_control)
             position: absolute
             content: "OFF"
             display: flex
@@ -60,7 +60,7 @@
             width: 1.6rem
             left: .2rem
             bottom: .2rem
-            background-color: var(--theme-switch_fill)
+            background-color: var(--theme-text_control)
             transition: .2s
             border-radius: 50%
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { sortBy, filterB40 } from "@/stores"
+    import { sortBy, filterB40, filterConstMin, filterConstMax } from "@/stores"
     export let recordList: ChuniRecord[]
 
     const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
@@ -19,7 +19,13 @@
         },
     }
     $: sortedList = recordList.sort(sorts[$sortBy])
-    $: filteredList = $filterB40 ? sortedList.slice(0, 40) : sortedList
+    $: filteredList = sortedList.filter((v, i) => {
+        return (
+            (!$filterB40 || i < 40) &&
+            $filterConstMax >= v.const &&
+            v.const >= $filterConstMin
+        )
+    })
 </script>
 
 <table>

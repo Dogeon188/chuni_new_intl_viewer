@@ -21,8 +21,8 @@ export const themes: Record<ThemeNames, Theme> = {
         song_bas: "#1c3",
         clear_aj: "#fc1",
         clear_fc: "#5e7",
-        switch_on: "#36b",
-        switch_fill: "#eed"
+        bg_control: "#36b",
+        text_control: "#eed"
     },
     Purple: {
         text: "#ddc",
@@ -46,34 +46,9 @@ export const themes: Record<ThemeNames, Theme> = {
         song_bas: "#1c3",
         clear_aj: "#fc1",
         clear_fc: "#5e7",
-        switch_on: "#739",
-        switch_fill: "#eed"
-    },
-    Light: {
-        text: "#012",
-        text_dim: "#999",
-        link: "#3cc",
-        label: "#576",
-        bg_main: "#ffe",
-        bg_sub: "#ddc",
-        border: "#998",
-        honor_normal: "#998",
-        honor_bronze: "#c62",
-        honor_silver: "#3cc",
-        honor_gold: "#fb4",
-        honor_platina: "#db1",
-        honor_rainbow: "#2b4",
-        rank_b30: "#d2c",
-        song_ult: "#3cf",
-        song_mas: "#a0c",
-        song_exp: "#c10",
-        song_adv: "#f50",
-        song_bas: "#373",
-        clear_aj: "#c81",
-        clear_fc: "#1a3",
-        switch_on: "#3bd",
-        switch_fill: "#ffe"
-    },
+        bg_control: "#739",
+        text_control: "#eed"
+    }
 }
 
 export const themeNames = Object.keys(themes)

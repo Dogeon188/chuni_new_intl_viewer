@@ -13,8 +13,8 @@
 <style lang="sass">
     label
         display: flex
-        padding: .5rem
         flex-direction: column
+        padding: .5rem
         gap: .5rem
     select
         width: 100%
