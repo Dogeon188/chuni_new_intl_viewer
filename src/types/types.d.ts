@@ -2,6 +2,8 @@ type ChunirecDifficulty = "ULT" | "MAS" | "EXP" | "ADV" | "BAS"
 
 type ThemeNames = string
 
+type SongDataTypes = "intl" | "jp"
+
 interface Theme {
     text, text_dim, text_control, rank_b30, link, label,
     bg_main, bg_sub, bg_control, border,

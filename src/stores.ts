@@ -1,4 +1,4 @@
-import { writable } from "svelte/store"
+import { Writable, writable } from "svelte/store"
 import { isMobile, setRootColors } from "@/utils/utils"
 import { themeNames, themes } from "@/themes"
 
@@ -18,9 +18,9 @@ function createToggleable(dft = false, onToggle = (cur: boolean) => { }) {
 
 function createStoredWritable<T>(key: string, dft: T, onToggle = (cur: T) => { }) {
     if (localStorage[key] == null) localStorage[key] = dft
-    const { subscribe, set, update } = writable((typeof dft == "number") ?
-        parseFloat(localStorage[key]) :
-        localStorage[key])
+    const { subscribe, set, update } = writable((typeof dft == "number")
+        ? parseFloat(localStorage[key])
+        : localStorage[key])
     return {
         subscribe,
         set(value: T) {
@@ -29,7 +29,7 @@ function createStoredWritable<T>(key: string, dft: T, onToggle = (cur: T) => { }
             onToggle(value)
         },
         update
-    }
+    } as Writable<T>
 }
 
 export const msgText = writable("")
@@ -37,6 +37,7 @@ export const msgText = writable("")
 export const sortBy = createStoredWritable("CV_sortBy", "Rating", sort => {
     if (sort != "Rating") filterB40.set(false)
 })
+export const usedSongData = createStoredWritable("CV_songData", "intl" as SongDataTypes)
 
 if (localStorage.CV_filterB40 == null) localStorage.CV_filterB40 = isMobile()
 export const filterB40 = createToggleable(JSON.parse(localStorage.CV_filterB40), cur => {

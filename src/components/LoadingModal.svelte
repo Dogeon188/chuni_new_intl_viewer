@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { msgText } from "@/stores"
+    import { msgText, usedSongData } from "@/stores"
 </script>
 
 <div class="modal-wrapper">
@@ -8,6 +8,11 @@
         <h3>Chunithm International Score Viewer</h3>
         <div class="loader" />
         <p>{$msgText}</p>
+        <p>
+            Using song data: {$usedSongData == "intl"
+                ? "International"
+                : "Japanese (NEW+)"}
+        </p>
     </div>
 </div>
 

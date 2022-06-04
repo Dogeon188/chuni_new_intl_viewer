@@ -14,7 +14,7 @@ Chart constant data ~~extracted~~ compiled from [chunirec](https://developer.chu
 2. Edit the bookmark. Copy the following code and paste it as the url of the bookmark
 
     ```js
-    javascript:((d)=>{s=d.createElement("script");s.src = "https://unpkg.com/chuni_new_intl_viewer@latest/main.min.js";d.head.append(s);})(document)
+    javascript:((d)=>{s=d.createElement("script");s.src="https://unpkg.com/chuni_new_intl_viewer@latest/main.min.js";d.head.append(s);})(document)
     ```
 
 3. Open [CHUNITHM-NET](https://chunithm-net-eng.com/) and run the bookmarklet

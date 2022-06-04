@@ -1,6 +1,7 @@
+import { get } from "svelte/store"
 import { calcRating } from "@/utils/rating"
 import { getCookie, parseNumber } from "@/utils/utils"
-import { msgText } from "@/stores"
+import { msgText, usedSongData } from "@/stores"
 
 const Difficulty = {
     basic: "BAS",
@@ -9,6 +10,13 @@ const Difficulty = {
     master: "MAS",
     ultima: "ULT"
 } as Record<string, ChunirecDifficulty>
+
+async function getSongData() {
+    return await (await fetch(`https://unpkg.com/chuni_new_intl_viewer/${{
+        intl: "songDataIntl",
+        jp: "songData"
+    }[get(usedSongData)]}.json`)).json()
+}
 
 async function getSongList(diff = Difficulty.master) {
     const fd = new FormData()
@@ -56,7 +64,7 @@ async function fetchRawRecord() {
 
 export async function getRecord() {
     msgText.set("Fetching song data...")
-    const musicData = await (await fetch("https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/songData.json")).json()
+    const musicData = await getSongData()
     const recordList = await fetchRawRecord() as ChuniRecord[]
 
     msgText.set("Calculating data...")
@@ -100,7 +108,7 @@ export async function getPlayerStats(): Promise<ChuniPlayerStats> {
 
 export async function getOfficialR10() {
     const res = await fetch("https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailRecent/")
-    const musicData = await (await fetch("https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/songData.json")).json()
+    const musicData = await getSongData()
     const r10list = [...$(await res.text()).find("form")].map(s => {
         const songData = $(s)
         const r = {
