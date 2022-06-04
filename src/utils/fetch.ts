@@ -12,7 +12,7 @@ const Difficulty = {
 } as Record<string, ChunirecDifficulty>
 
 async function getSongData() {
-    return await (await fetch(`https://unpkg.com/chuni_new_intl_viewer/${{
+    return await (await fetch(`https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/${{
         intl: "songDataIntl",
         jp: "songData"
     }[get(usedSongData)]}.json`)).json()
