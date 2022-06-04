@@ -14,11 +14,13 @@ Chart constant data ~~extracted~~ compiled from [chunirec](https://developer.chu
 2. Edit the bookmark. Copy the following code and paste it as the url of the bookmark
 
     ```js
-    javascript:(async()=>{eval(await(await fetch('https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/main.min.js')).text())})();
+    javascript:((d)=>{s=d.createElement("script");s.src = "https://unpkg.com/chuni_new_intl_viewer@latest/main.min.js";d.head.append(s);})(document)
     ```
 
 3. Open [CHUNITHM-NET](https://chunithm-net-eng.com/) and run the bookmarklet
 4. Wait for the program to finish
+
+NOTE: The old script will still work (and being updated still), but it's still recommended to move to the new "unpkg" version for a probably safer and more stable experience.
 
 ## Dev
 
