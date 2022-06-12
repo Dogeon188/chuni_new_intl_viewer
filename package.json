@@ -2,7 +2,7 @@
   "name": "chuni_new_intl_viewer",
   "version": "2.0.3",
   "description": "A bookmarklet tool to let you view the records of [CHUNITHM-NET (International)](https://chunithm-net-eng.com/) in rating order.",
-  "main": "src/main.ts",
+  "main": "main.min.js",
   "scripts": {
     "build": "vite build",
     "buildData": "node buildData.js"
@@ -21,6 +21,7 @@
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.41",
     "@tsconfig/svelte": "^2.0.1",
     "@types/jquery": "^3.5.14",
+    "axios": "^0.27.2",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "node-sass": "^7.0.1",

@@ -1,9 +1,8 @@
-const { request } = require("https")
+const axios = require("axios").default
 const fs = require("fs")
 
 let oldData = JSON.parse(fs.readFileSync("songData.json"))
 
-let rawData = ""
 let musicData = {}
 
 const logger = fs.createWriteStream("dataLog.md")
@@ -11,11 +10,10 @@ const log = (m = "") => { logger.write(m + "\n") }
 
 log("# Chunithm Viewer - Song Data Changelog\n")
 
-const parseData = () => {
+const parseData = (rawData) => {
     let errors = { dup: [], unc: [] }
     console.log("Fetched song data. Now parsing it...")
-    let rawDataJSON = JSON.parse(rawData)
-    for (const song of rawDataJSON) {
+    for (const song of rawData) {
         if (musicData[song.meta.title] !== undefined) {
             errors.dup.push(song.meta.title)
         }
@@ -25,8 +23,8 @@ const parseData = () => {
         musicData[song.meta.title] = {}
         for (const diff in song.data) {
             if (song.data[diff].const === 0) {
-                if (song.data[diff].is_const_unknown) {
-                    errors.unc.push([song.meta.title, diff])
+                if (song.data[diff].is_const_unknown && song.data[diff].level > 9.5) {
+                    errors.unc.push([song.meta.title, diff, song.data[diff].level])
                 }
                 musicData[song.meta.title][diff] = song.data[diff].level
             } else {
@@ -44,9 +42,9 @@ const parseData = () => {
         }
         if (errors.unc.length) {
             log(`### Songs w/ unknown const\n`)
-            log("Name|Diff.")
-            log("----|-----")
-            errors.unc.forEach(s => { log(`${s[0]}|\`${s[1]}\``) })
+            log("Name|Diff.|Level")
+            log("----|-----|-----")
+            errors.unc.forEach(s => { log(`${s[0]}|\`${s[1]}\`|\`${s[2]}\``) })
             log()
         }
     }
@@ -107,19 +105,11 @@ const compareData = () => {
     }
 }
 
-const req = request(
-    "https://api.chunirec.net/2.0/music/showall.json?region=jp2&token=" + process.env.CHUNIREC_TOKEN,
-    { method: "GET" },
-    res => {
-        res.on('data', d => { rawData += d })
-        res.on("end", () => {
-            parseData()
-            console.log("Parsed data.")
-            console.log("Comparing data difference...")
-            compareData()
-            fs.writeFileSync("songData.json", JSON.stringify(musicData))
-            console.log("Stored data at songData.json")
-        })
-    })
-req.on("error", console.error)
-req.end()
+axios.get("https://api.chunirec.net/2.0/music/showall.json?region=jp2&token=" + process.env.CHUNIREC_TOKEN).then(res => {
+    parseData(res.data)
+    console.log("Parsed data.")
+    console.log("Comparing data difference...")
+    compareData()
+    fs.writeFileSync("songData.json", JSON.stringify(musicData))
+    console.log("Stored data at songData.json")
+})
