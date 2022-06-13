@@ -7,6 +7,7 @@
         filterConstMin,
         filterConstMax,
         usedSongData,
+        showPlayCount
     } from "@/stores"
     import { themeNames } from "@/themes"
     import Select from "@/components/Select.svelte"
@@ -26,12 +27,14 @@
                 <option value="Const">Chart Constant</option>
                 <option value="Title">Title</option>
                 <option value="AJ">AJ&#xFF0F;FC</option>
+                <option value="Play">Play Count</option>
             </Select>
-            <Select label="Song Data to Use (require reload)" bind:value={$usedSongData}>
+            <Select label="Song Data to Use" bind:value={$usedSongData} needReload>
                 <option value="intl">Internation Ver.</option>
                 <option value="jp">Japanese ver. (NEW+)</option>
             </Select>
             <ToggleSwitch label="Show Only B40" bind:checked={$filterB40} />
+            <ToggleSwitch label="Show Play Count" bind:checked={$showPlayCount} needReload/>
             <DualSlider
                 label="Filter By Constant"
                 max={15.4}
@@ -44,12 +47,6 @@
                     <option value={t}>{t}</option>
                 {/each}
             </Select>
-            <!-- <label>
-                <span>Filter By</span>
-                Constant
-                B40
-                Difficulty
-            </label> -->
         </div>
     </div>
 </div>

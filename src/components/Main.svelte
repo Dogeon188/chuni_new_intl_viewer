@@ -31,6 +31,17 @@
 </body>
 
 <style lang="sass">
+    :global(::-webkit-scrollbar)
+        width: .6rem
+    :global(::-webkit-scrollbar-thumb)
+        border-radius: .1rem
+        width: .2rem
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3)
+        background-color: var(--theme-border)
+        border-width: 1rem .2rem
+        border-style: solid
+        border-color: transparent
+        background-clip: content-box
     body
         padding-top: 1rem
         background-color: var(--theme-bg_main)

@@ -1,5 +1,14 @@
 <script lang="ts">
-    import { sortBy, filterB40, filterConstMin, filterConstMax } from "@/stores"
+    import { get } from "svelte/store"
+    import {
+        sortBy,
+        filterB40,
+        filterConstMin,
+        filterConstMax,
+        showPlayCount,
+        msgText,
+    } from "@/stores"
+    import { getPlayCounts } from "@/utils/fetch"
     export let recordList: ChuniRecord[]
 
     const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
@@ -17,6 +26,21 @@
             const clears = ["", "FC", "AJ"]
             return clears.indexOf(b.clear) - clears.indexOf(a.clear)
         },
+        Play: (a, b) => {
+            if (
+                a.playCount == b.playCount ||
+                a.playCount == undefined ||
+                b.playCount == undefined
+            )
+                return a.rank - b.rank
+            return b.playCount - a.playCount
+        },
+    }
+    let fetchingPlayCount = $showPlayCount
+    if ($showPlayCount) {
+        getPlayCounts(recordList).then(() => {
+            fetchingPlayCount = false
+        })
     }
     $: sortedList = recordList.sort(sorts[$sortBy])
     $: filteredList = sortedList.filter((v, i) => {
@@ -28,6 +52,9 @@
     })
 </script>
 
+{#if fetchingPlayCount}
+    <span style="text-align:center;color:var(--theme-text_dim);">{$msgText}</span>
+{/if}
 <table>
     <thead>
         <tr>
@@ -36,6 +63,13 @@
                 <th class:current-sort={h == $sortBy} on:click={() => ($sortBy = h)}
                     >{h}</th>
             {/each}
+            {#if get(showPlayCount)}
+                <th
+                    class:current-sort={"Play" == $sortBy}
+                    on:click={() => {
+                        if (!fetchingPlayCount) $sortBy = "Play"
+                    }}>Play</th>
+            {/if}
         </tr>
     </thead>
     <tbody>
@@ -47,6 +81,15 @@
                 <td>{song.score}</td>
                 <td>{song.rating == null ? "??.??" : song.rating.toFixed(2)}</td>
                 <td data-clear={song.clear}>{song.clear}</td>
+                {#if get(showPlayCount)}
+                    <td>
+                        {#if fetchingPlayCount}
+                            ...
+                        {:else}
+                            {song.playCount}
+                        {/if}
+                    </td>
+                {/if}
             </tr>
         {/each}
     </tbody>

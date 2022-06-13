@@ -19,7 +19,9 @@ interface ChuniRecord {
     const: number;
     rank: number;
     rating: number;
+    idx: string;
     clear: "AJ" | "FC" | "";
+    playCount: number | undefined;
 }
 
 interface ChuniPlayerStats {

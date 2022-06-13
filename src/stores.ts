@@ -17,7 +17,7 @@ function createToggleable(dft = false, onToggle = (cur: boolean) => { }) {
 }
 
 function createStoredWritable<T>(key: string, dft: T, onToggle = (cur: T) => { }) {
-    if (localStorage[key] == null) localStorage[key] = dft
+    localStorage[key] ??= dft
     const { subscribe, set, update } = writable((typeof dft == "number")
         ? parseFloat(localStorage[key])
         : localStorage[key])
@@ -37,12 +37,19 @@ export const msgText = writable("")
 export const sortBy = createStoredWritable("CV_sortBy", "Rating", sort => {
     if (sort != "Rating") filterB40.set(false)
 })
+if (localStorage.CV_sortBy == "Play") sortBy.set("Rating")
+
 export const usedSongData = createStoredWritable("CV_songData", "intl" as SongDataTypes)
 
-if (localStorage.CV_filterB40 == null) localStorage.CV_filterB40 = isMobile()
+localStorage.CV_filterB40 ??= isMobile()
 export const filterB40 = createToggleable(JSON.parse(localStorage.CV_filterB40), cur => {
     if (cur) sortBy.set("Rating")
     localStorage.CV_filterB40 = cur
+})
+
+localStorage.CV_showPlayCount ??= false
+export const showPlayCount = createToggleable(JSON.parse(localStorage.CV_showPlayCount), cur => {
+    localStorage.CV_showPlayCount = cur
 })
 
 export const filterConstMin = createStoredWritable("CV_filterConstMin", 1)

@@ -8,7 +8,7 @@
         <h3>Chunithm International Score Viewer</h3>
         <div class="loader" />
         <p>{$msgText}</p>
-        <p>
+        <p style="color:var(--theme-text_dim)">
             Using song data: {$usedSongData == "intl"
                 ? "International"
                 : "Japanese (NEW+)"}

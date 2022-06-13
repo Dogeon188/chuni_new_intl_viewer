@@ -56,7 +56,8 @@ async function fetchRawRecord() {
                 score: parseNumber(songData.find(".text_b")?.text()),
                 difficulty: Object.values(Difficulty)[di],
                 clear: icons.find(`img[src*="alljustice"]`).length ? "AJ" :
-                    icons.find(`img[src*="fullcombo"]`).length ? "FC" : ""
+                    icons.find(`img[src*="fullcombo"]`).length ? "FC" : "",
+                idx: songData.find(`input[name="idx"]`).attr("value")
             }
         }).filter(s => s.title !== null && s.score > 0)
     )
@@ -89,11 +90,11 @@ export async function getPlayerStats(): Promise<ChuniPlayerStats> {
     const res = await fetch(`https://chunithm-net-eng.com/mobile/home/`)
     const homePage = $(await res.text())
     const rating = [...homePage.find(".player_rating_num_block img")].map(i => {
-            const imgSrc = i.getAttribute("src") ?? ""
-            if (/rating_.*_comma.png/.test(imgSrc)) return "."
-            let num = (/rating_.*_[0-9]*(?=\.png)/g.exec(imgSrc) ?? ["**.**"])[0]
-            return num.slice(-1)
-        }
+        const imgSrc = i.getAttribute("src") ?? ""
+        if (/rating_.*_comma.png/.test(imgSrc)) return "."
+        let num = (/rating_.*_[0-9]*(?=\.png)/g.exec(imgSrc) ?? ["**.**"])[0]
+        return num.slice(-1)
+    }
     ).join("")
     const honorBg = homePage.find(".player_honor_short").css("background-image")
     return {
@@ -114,9 +115,31 @@ export async function getOfficialR10() {
         const r = {
             score: parseNumber(songData.find(".text_b")?.text()),
             title: songData.find(".music_title")?.text(),
-            diff: Object.values(Difficulty)[+songData.find("input[name=diff]")?.attr("value")]
+            diff: Object.values(Difficulty)[Number.parseInt(songData.find("input[name=diff]")?.attr("value"))]
         }
         return calcRating(r.score, musicData[r.title][r.diff])
     })
     return r10list.reduce((a, b) => a + b) / 10
+}
+
+export async function getPlayCounts(recordList: ChuniRecord[]) {
+    for (const [i, song] of recordList.entries()) {
+        msgText.set(`Fetching play count... (${i}/${recordList.length})`)
+        song.playCount = await fetchPlayCount(song.idx, song.difficulty)
+    }
+}
+
+async function fetchPlayCount(idx: string, diff: ChunirecDifficulty) {
+    const fd = new FormData()
+    fd.append("idx", idx)
+    fd.append("genre", "99")
+    fd.append("diff", Object.values(Difficulty).indexOf(diff))
+    fd.append("token", getCookie("_t"))
+    const res = await fetch("https://chunithm-net-eng.com/mobile/record/musicGenre/sendMusicDetail/", {
+        headers: { "Cache-Control": "no-cache" },
+        method: "POST",
+        body: fd
+    })
+    return Number.parseInt($(await res.text()).find(`.music_box.bg_${Object.keys(Difficulty).find(key => Difficulty[key] === diff)} .box14 > div`)
+        .eq(1).find(".text_b").text().replace("times", ""))
 }

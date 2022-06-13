@@ -68,13 +68,14 @@
         position: relative
         & div
             background-color: var(--theme-bg_sub)
-            height: 2rem
-            width: 2rem
+            height: 1.6rem
+            width: 1.6rem
             border-radius: 50%
             display: flex
             justify-content: center
             align-items: center
             position: absolute
+            border: var(--theme-border) .2rem solid
             &.low
                 border-bottom-right-radius: 0
                 transform: translateX(-.4rem)
@@ -86,7 +87,7 @@
         flex-direction: column
         justify-content: center
         width: 100%
-        height: 3rem
+        height: 3.5rem
         position: relative
     .slider-bg
         height: .4rem
@@ -115,7 +116,7 @@
             -webkit-appearance: none
             pointer-events: all
             width: 1.5rem
-            height: 1.5rem
+            height: 2rem
             background-color: var(--theme-text_dim)
             border-radius: 0 50% 50% 0
             cursor: pointer
