@@ -9,11 +9,13 @@
         usedSongData,
         showPlayCount,
         configs,
+        filterDiff,
     } from "@/stores"
     import { themeNames } from "@/themes"
     import Select from "@/components/Select.svelte"
     import ToggleSwitch from "@/components/ToggleSwitch.svelte"
     import DualSlider from "@/components/DualSlider.svelte"
+    import DiffFilterButtons from "./DiffFilterButtons.svelte"
 </script>
 
 <div class="modal-wrapper" class:hidden={!$showConfig}>
@@ -40,6 +42,7 @@
                     bind:low={$filterConstMin}
                     bind:high={$filterConstMax}
                     step={0.1} />
+                <DiffFilterButtons bind:config={$filterDiff} />
             </div>
             <hr />
             <h4>General</h4>
@@ -63,9 +66,15 @@
                 </Select>
             </div>
         </div>
-        <div class="reset-btn" on:click={() => {
-            for (const config of configs) config.reset()
-        }}>Reset Settings</div>
+        <hr/>
+        <div
+            class="reset-btn"
+            on:click={() => {
+                localStorage.clear()
+                for (const config of configs) config.reset()
+            }}>
+            Reset Settings
+        </div>
     </div>
 </div>
 

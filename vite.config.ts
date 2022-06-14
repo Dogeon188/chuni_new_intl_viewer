@@ -1,10 +1,13 @@
-import { defineConfig } from "vite";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
-import sveltePreprocessor from "svelte-preprocess";
+import { defineConfig } from "vite"
+import { svelte } from "@sveltejs/vite-plugin-svelte"
+import sveltePreprocessor from "svelte-preprocess"
 import path from "path"
 
 export default defineConfig({
     // mode: "development",
+    define: {
+        "__APP_VERSION__": process.env.npm_package_version
+    },
     resolve: {
         alias: {
           '@': path.resolve(__dirname, './src'),

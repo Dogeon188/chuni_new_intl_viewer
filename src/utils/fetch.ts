@@ -1,7 +1,7 @@
 import { get } from "svelte/store"
 import { calcRating } from "@/utils/rating"
 import { getCookie, parseNumber } from "@/utils/utils"
-import { msgText, usedSongData } from "@/stores"
+import { filterDiff, msgText, usedSongData } from "@/stores"
 
 const Difficulty = {
     basic: "BAS",
@@ -42,7 +42,8 @@ async function getSongList(diff = Difficulty.master) {
 async function fetchRawRecord() {
     const rawSongList: HTMLFormElement[][] = []
 
-    for (const difficulty of Object.values(Difficulty)) {
+    for (const [i, difficulty] of Object.values(Difficulty).entries()) {
+        if (!get(filterDiff).at(i)) continue
         msgText.set(`Fetching ${difficulty} record...`)
         rawSongList.push(await getSongList(difficulty))
     }

@@ -28,12 +28,16 @@ function createStored<T>(key: string, dft: T, kwargs: {
             ? parseFloat(localStorage[key])
             : (typeof dft == "boolean")
                 ? JSON.parse(localStorage[key])
-                : localStorage[key])
+                : Array.isArray(dft)
+                    ? JSON.parse("[" + localStorage[key] + "]")
+                    : localStorage[key])
+
     function _set(value: T) {
         set(value)
         localStorage[key] = value
         onWrite(value)
     }
+    
     return {
         subscribe,
         set: _set,
@@ -45,6 +49,12 @@ function createStored<T>(key: string, dft: T, kwargs: {
 
 export const msgText = writable("")
 
+export const filterB40 = createStored(
+    "CV_filterB40",
+    isMobile(),
+    { onWrite(cur) { if (cur) sortBy.set("Rating") } }
+)
+
 export const sortBy = createStored(
     "CV_sortBy",
     "Rating",
@@ -54,27 +64,23 @@ export const sortBy = createStored(
     })
 if (localStorage.CV_sortBy == "Play") sortBy.set("Rating")
 
-export const usedSongData = createStored(
-    "CV_songData",
-    "intl" as SongDataTypes,
-    { accept: ["jp", "intl"] })
-
-export const filterB40 = createStored(
-    "CV_filterB40",
-    isMobile(),
-    { onWrite(cur) { if (cur) sortBy.set("Rating") } }
-)
-
-export const showPlayCount = createStored("CV_showPlayCount", "0", { accept: ["0", "40", "100", "200", "-1"] })
-
 export const filterConstMin = createStored("CV_filterConstMin", 1, { accept: [1, 15.4] })
 export const filterConstMax = createStored("CV_filterConstMax", 15.4, { accept: [1, 15.4] })
+
+export const filterDiff = createStored("CV_filterDiff", [false, false, true, true, true])
 
 export const theme = createStored("CV_theme", "Dark" as ThemeNames, {
     onWrite(cur) { setRootColors(themes[cur]) },
     accept: themeNames
 })
 
-export const configs = [sortBy, usedSongData, filterB40, showPlayCount, filterConstMin, filterConstMax, theme]
+export const usedSongData = createStored(
+    "CV_songData",
+    "intl" as SongDataTypes,
+    { accept: ["jp", "intl"] })
+
+export const showPlayCount = createStored("CV_showPlayCount", "0", { accept: ["0", "40", "100", "200", "-1"] })
+
+export const configs = [filterB40, sortBy, filterConstMin, filterConstMax, filterDiff, theme, usedSongData, showPlayCount]
 
 export const showConfig = createToggleable()
