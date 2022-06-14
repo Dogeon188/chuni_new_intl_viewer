@@ -4,6 +4,11 @@ type ThemeNames = string
 
 type SongDataTypes = "intl" | "jp"
 
+type StoredWritable<T> = import("svelte/store").Writable<T> & {
+    reset()
+    toggle()
+} 
+
 interface Theme {
     text, text_dim, text_control, rank_b30, link, label,
     bg_main, bg_sub, bg_control, border,
@@ -13,19 +18,19 @@ interface Theme {
 }
 
 interface ChuniRecord {
-    title: string;
-    score: number;
-    difficulty: ChunirecDifficulty;
-    const: number;
-    rank: number;
-    rating: number;
-    idx: string;
-    clear: "AJ" | "FC" | "";
-    playCount: number | undefined;
+    title: string
+    score: number
+    difficulty: ChunirecDifficulty
+    const: number
+    rank: number
+    rating: number
+    idx: string
+    clear: "AJ" | "FC" | ""
+    playCount: number | undefined
 }
 
 interface ChuniPlayerStats {
-    name: string;
-    honor: { text: string, type: string };
-    rating: string;
+    name: string
+    honor: { text: string, type: string }
+    rating: string
 }

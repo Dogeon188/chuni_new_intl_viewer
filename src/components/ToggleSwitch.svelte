@@ -1,18 +1,11 @@
 <script lang="ts">
     export let checked = false
     export let label: string
-    export let needReload = false
-    let changed = false
 </script>
 
 <label>
-    <span>
-        {label}
-        {#if needReload && changed}
-            <span style="color:var(--theme-text_dim)">*require reload</span>
-        {/if}
-    </span>
-    <input type="checkbox" bind:checked on:change={() => (changed = true)}/>
+    <span>{label}</span>
+    <input type="checkbox" bind:checked/>
     <div class="wrapper">
         <span class="slider" />
     </div>

@@ -36,9 +36,9 @@
             return b.playCount - a.playCount
         },
     }
-    let fetchingPlayCount = $showPlayCount
+    let fetchingPlayCount = get(showPlayCount) != "0"
     if ($showPlayCount) {
-        getPlayCounts(recordList).then(() => {
+        getPlayCounts(recordList, parseInt(get(showPlayCount))).then(() => {
             fetchingPlayCount = false
         })
     }
@@ -63,7 +63,7 @@
                 <th class:current-sort={h == $sortBy} on:click={() => ($sortBy = h)}
                     >{h}</th>
             {/each}
-            {#if get(showPlayCount)}
+            {#if get(showPlayCount) != "0"}
                 <th
                     class:current-sort={"Play" == $sortBy}
                     on:click={() => {
@@ -81,12 +81,12 @@
                 <td>{song.score}</td>
                 <td>{song.rating == null ? "??.??" : song.rating.toFixed(2)}</td>
                 <td data-clear={song.clear}>{song.clear}</td>
-                {#if get(showPlayCount)}
+                {#if get(showPlayCount) != "0"}
                     <td>
                         {#if fetchingPlayCount}
                             ...
                         {:else}
-                            {song.playCount}
+                            {song.playCount ?? "..."}
                         {/if}
                     </td>
                 {/if}

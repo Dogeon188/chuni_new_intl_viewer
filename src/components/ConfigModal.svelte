@@ -7,7 +7,8 @@
         filterConstMin,
         filterConstMax,
         usedSongData,
-        showPlayCount
+        showPlayCount,
+        configs,
     } from "@/stores"
     import { themeNames } from "@/themes"
     import Select from "@/components/Select.svelte"
@@ -21,33 +22,50 @@
         <div class="close-btn" on:click={showConfig.toggle}>✕</div>
         <h3>Options</h3>
         <div class="config-content">
-            <Select label="Sort By" bind:value={$sortBy}>
-                <option value="Rating">Rating</option>
-                <option value="Score">Score</option>
-                <option value="Const">Chart Constant</option>
-                <option value="Title">Title</option>
-                <option value="AJ">AJ&#xFF0F;FC</option>
-                <option value="Play">Play Count</option>
-            </Select>
-            <Select label="Song Data to Use" bind:value={$usedSongData} needReload>
-                <option value="intl">Internation Ver.</option>
-                <option value="jp">Japanese ver. (NEW+)</option>
-            </Select>
-            <ToggleSwitch label="Show Only B40" bind:checked={$filterB40} />
-            <ToggleSwitch label="Show Play Count" bind:checked={$showPlayCount} needReload/>
-            <DualSlider
-                label="Filter By Constant"
-                max={15.4}
-                min={1}
-                bind:low={$filterConstMin}
-                bind:high={$filterConstMax}
-                step={0.1} />
-            <Select label="Theme" bind:value={$theme}>
-                {#each themeNames as t}
-                    <option value={t}>{t}</option>
-                {/each}
-            </Select>
+            <h4>Sort & Filter</h4>
+            <div>
+                <ToggleSwitch label="Show Only B40" bind:checked={$filterB40} />
+                <Select label="Sort By" bind:value={$sortBy}>
+                    <option value="Rating">Rating</option>
+                    <option value="Score">Score</option>
+                    <option value="Const">Chart Constant</option>
+                    <option value="Title">Title</option>
+                    <option value="AJ">AJ&#xFF0F;FC</option>
+                    <option value="Play">Play Count</option>
+                </Select>
+                <DualSlider
+                    label="Filter By Constant"
+                    max={15.4}
+                    min={1}
+                    bind:low={$filterConstMin}
+                    bind:high={$filterConstMax}
+                    step={0.1} />
+            </div>
+            <hr />
+            <h4>General</h4>
+            <div>
+                <Select label="Theme" bind:value={$theme}>
+                    {#each themeNames as t}
+                        <option value={t}>{t}</option>
+                    {/each}
+                </Select>
+                <Select label="Song Data to Use" bind:value={$usedSongData} needReload>
+                    <option value="intl">Internation Ver.</option>
+                    <option value="jp">Japanese ver. (NEW+)</option>
+                </Select>
+                <Select label="Show Play Count" bind:value={$showPlayCount} needReload>
+                    <option value="0">Don't show</option>
+                    <option value="40">Show for best 40</option>
+                    <option value="100">Show for best 100</option>
+                    <option value="200">Show for best 200</option>
+                    <option value="400">Show for best 400</option>
+                    <option value="-1">Show all (Cost long time & large data)</option>
+                </Select>
+            </div>
         </div>
+        <div class="reset-btn" on:click={() => {
+            for (const config of configs) config.reset()
+        }}>Reset Settings</div>
     </div>
 </div>
 
@@ -83,6 +101,13 @@
         text-align: left
     h3
         margin: 0
+    h4
+        margin: .5rem 0
+        color: var(--theme-text_dim)
+    hr
+        border: none
+        border-top: var(--theme-border) 0.1rem solid
+        margin: 2rem auto
     .config-content
         padding: 5px
     .close-btn
@@ -101,4 +126,16 @@
         cursor: pointer
         &:hover
             opacity: 0.9
+    .reset-btn
+        width: fit-content
+        padding: 0.5rem 2rem
+        margin-left: auto
+        border-radius: 0.5rem
+        background-color: #920
+        font-weight: bold
+        cursor: pointer
+        opacity: 0.9
+        transition: .2s
+        &:hover
+            opacity: 1
 </style>

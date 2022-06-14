@@ -5,7 +5,7 @@
 <div class="modal-wrapper">
     <div class="modal-bg" />
     <div class="modal">
-        <h3>Chunithm International Score Viewer</h3>
+        <h3>Chunithm International Score Viewer <span style="color:var(--theme-text_dim);font-weight:normal;font-size:small">@2.0.5</span></h3>
         <div class="loader" />
         <p>{$msgText}</p>
         <p style="color:var(--theme-text_dim)">
