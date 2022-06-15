@@ -43,7 +43,10 @@ async function fetchRawRecord() {
     const rawSongList: HTMLFormElement[][] = []
 
     for (const [i, difficulty] of Object.values(Difficulty).entries()) {
-        if (!get(filterDiff).at(i)) continue
+        if (!get(filterDiff).at(i)) {
+            rawSongList.push([])
+            continue
+        }
         msgText.set(`Fetching ${difficulty} record...`)
         rawSongList.push(await getSongList(difficulty))
     }
