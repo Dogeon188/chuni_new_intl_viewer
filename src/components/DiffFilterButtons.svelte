@@ -9,6 +9,9 @@
         {#if changed}
             <span style="color:var(--theme-text_dim)">*require reload</span>
         {/if}
+        {#if config.every(i => !i)}
+            <span style="color:var(--theme-song_exp)">*must select one!</span>
+        {/if}
     </span>
     <div class="btns">
         {#each ["BAS", "ADV", "EXP", "MAS", "ULT"] as diff, i}
