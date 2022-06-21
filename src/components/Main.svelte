@@ -42,6 +42,15 @@
         border-style: solid
         border-color: transparent
         background-clip: content-box
+    :global(em)
+        font-style: normal
+        font-weight: bold
+        color: var(--theme-link)
+    :global(a)
+        color: var(--theme-link)
+        text-decoration: none
+        &:hover
+            text-decoration: underline dotted
     body
         padding-top: 1rem
         background-color: var(--theme-bg_main)

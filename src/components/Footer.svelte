@@ -24,7 +24,4 @@
 <style lang="sass">
     footer
         padding: 10px
-    a
-        color: var(--theme-link)
-        text-decoration: none
 </style>

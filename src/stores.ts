@@ -20,8 +20,9 @@ function createStored<T>(key: string, dft: T, kwargs: {
     const local = localStorage[key]
     if (local == undefined
         || (typeof dft == "string" && !accept.includes(local))
-        || (typeof dft == "number" && local < accept[0] || local > accept[1]))
+        || (typeof dft == "number" && (local < accept[0] || local > accept[1]))) {
         localStorage[key] = dft
+    }
 
     const { subscribe, set, update } = writable(
         (typeof dft == "number")
@@ -37,7 +38,7 @@ function createStored<T>(key: string, dft: T, kwargs: {
         localStorage[key] = value
         onWrite(value)
     }
-    
+
     return {
         subscribe,
         set: _set,
@@ -85,3 +86,5 @@ export const showPlayCount = createStored("CV_showPlayCount", "0", { accept: ["0
 export const configs = [filterB40, sortBy, filterConstMin, filterConstMax, filterDiff, theme, usedSongData, showPlayCount]
 
 export const showConfig = createToggleable()
+
+export const errorFetching = writable(false)

@@ -53,7 +53,7 @@
                     {/each}
                 </Select>
                 <Select label="Song Data to Use" bind:value={$usedSongData} needReload>
-                    <option value="intl">Internation Ver.</option>
+                    <option value="intl">International Ver.</option>
                     <option value="jp">Japanese ver. (NEW+)</option>
                 </Select>
                 <Select label="Show Play Count" bind:value={$showPlayCount} needReload>
@@ -83,8 +83,8 @@
         position: fixed
         top: 0
         left: 0
-        width: 100vw
-        height: 100vh
+        width: 100%
+        height: 100%
         display: flex
         align-items: center
         &.hidden
@@ -94,8 +94,8 @@
         background: #0006
         top: 0
         left: 0
-        width: 100vw
-        height: 100vh
+        width: 100%
+        height: 100%
     .modal
         background: var(--theme-bg_main)
         width: 70%

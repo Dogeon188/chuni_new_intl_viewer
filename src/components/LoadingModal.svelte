@@ -1,18 +1,27 @@
 <script lang="ts">
-    import { msgText, usedSongData } from "@/stores"
+    import { errorFetching, msgText, usedSongData } from "@/stores"
 </script>
 
 <div class="modal-wrapper">
     <div class="modal-bg" />
     <div class="modal">
-        <h3>Chunithm International Score Viewer <span style="color:var(--theme-text_dim);font-weight:normal;font-size:small">@__APP_VERSION__</span></h3>
-        <div class="loader" />
-        <p>{$msgText}</p>
-        <p style="color:var(--theme-text_dim)">
-            Using song data: {$usedSongData == "intl"
-                ? "International"
-                : "Japanese (NEW+)"}
-        </p>
+        <h3>
+            Chunithm International Score Viewer <span
+                style="color:var(--theme-text_dim);font-weight:normal;font-size:small"
+                >@__APP_VERSION__</span>
+        </h3>
+        {#if $errorFetching}
+            <div class="error">:(</div>
+            <p>{@html $msgText}</p>
+        {:else}
+            <div class="loader" />
+            <p>{$msgText}</p>
+            <p style="color:var(--theme-text_dim)">
+                Using song data: {$usedSongData == "intl"
+                    ? "International"
+                    : "Japanese (NEW+)"}
+            </p>
+        {/if}
     </div>
 </div>
 
@@ -45,11 +54,16 @@
     .loader
         margin: 2rem auto
         border: .5rem solid transparent
-        border-top: .5rem solid var(--theme-label)
+        border-top-color: var(--theme-label)
         border-radius: 50%
         width: 4rem
         height: 4rem
         animation: spin 1s cubic-bezier(.5, .2, .5, .8) infinite
+    .error
+        margin: 4rem auto
+        height: 4rem
+        font-size: 5rem
+        color: var(--theme-label)
     @keyframes spin
         0%
             transform: rotate(0deg)

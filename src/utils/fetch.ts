@@ -1,7 +1,7 @@
 import { get } from "svelte/store"
 import { calcRating } from "@/utils/rating"
 import { getCookie, parseNumber } from "@/utils/utils"
-import { filterDiff, msgText, usedSongData } from "@/stores"
+import { errorFetching, filterDiff, msgText, usedSongData } from "@/stores"
 
 const Difficulty = {
     basic: "BAS",
@@ -34,6 +34,14 @@ async function getSongList(diff = Difficulty.master) {
         method: "POST",
         body: fd
     })
+    if (res.url == "https://chunithm-net-eng.com/mobile/error/") {
+        errorFetching.set(true)
+        msgText.set(`
+            Error fetching song record!<br/>
+            It might be caused by an outdated token.<br/>
+            <em>Reload the page</em> or <em>re-login CHUNITHM-NET</em> might help...`)
+        return []
+    }
     const formList = [...$(await res.text()).find("form")]
     formList.shift()
     return formList
@@ -49,6 +57,7 @@ async function fetchRawRecord() {
         }
         msgText.set(`Fetching ${difficulty} record...`)
         rawSongList.push(await getSongList(difficulty))
+        if (get(errorFetching)) return
     }
 
     return rawSongList.flatMap((d, di) =>
@@ -71,6 +80,7 @@ export async function getRecord() {
     msgText.set("Fetching song data...")
     const musicData = await getSongData()
     const recordList = await fetchRawRecord() as ChuniRecord[]
+    if (get(errorFetching)) return []
 
     msgText.set("Calculating data...")
     recordList.map(r => {
@@ -128,8 +138,7 @@ export async function getOfficialR10() {
 
 export async function getPlayCounts(recordList: ChuniRecord[], showPlayCount: number) {
     for (const [i, song] of (recordList.slice(0, showPlayCount == -1 ? undefined : showPlayCount)).entries()) {
-        msgText.set(`Fetching play count... (${i}/${
-            showPlayCount == -1 ? recordList.length : showPlayCount})`)
+        msgText.set(`Fetching play count... (${i}/${showPlayCount == -1 ? recordList.length : showPlayCount})`)
         song.playCount = await fetchPlayCount(song.idx, song.difficulty)
     }
 }
