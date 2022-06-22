@@ -24,4 +24,5 @@
 <style lang="sass">
     footer
         padding: 10px
+        margin-top: auto
 </style>

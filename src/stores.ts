@@ -69,7 +69,7 @@ export const filterConstMin = createStored("CV_filterConstMin", 1, { accept: [1,
 export const filterConstMax = createStored("CV_filterConstMax", 15.4, { accept: [1, 15.4] })
 
 export const filterDiff = createStored("CV_filterDiff", [false, false, true, true, true])
-if (get(filterDiff).every(i => !i)) filterDiff.reset()
+// if (get(filterDiff).every(i => !i)) filterDiff.reset()
 
 export const theme = createStored("CV_theme", "Dark" as ThemeNames, {
     onWrite(cur) { setRootColors(themes[cur]) },

@@ -4,6 +4,7 @@
     import { calcB30, calcMaxPossible } from "@/utils/rating"
     import { floorAndToFixed2 } from "@/utils/utils"
     export let ratingList: number[]
+    export let emptyRecList = false
 </script>
 
 <div id="chuni-overview">
@@ -14,13 +15,15 @@
     {/await}
     <div class="overview-items">
         <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
-        <OverviewItem title="Best 30 AVG" content={calcB30(ratingList).toFixed(4)} />
         {#await getOfficialR10() then r10}
-            <OverviewItem title="Recent 10 AVG" content={r10.toFixed(4)} />
+            <OverviewItem title="Recent 10" content={r10.toFixed(4)} />
         {/await}
-        <OverviewItem
-            title="Max Possible"
-            content={floorAndToFixed2(calcMaxPossible(ratingList))} />
+        {#if !emptyRecList}
+            <OverviewItem title="Best 30" content={calcB30(ratingList).toFixed(4)} />
+            <OverviewItem
+                title="Max Possible"
+                content={floorAndToFixed2(calcMaxPossible(ratingList))} />
+        {/if}
     </div>
 </div>
 

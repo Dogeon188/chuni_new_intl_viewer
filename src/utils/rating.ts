@@ -21,9 +21,9 @@ export function calcRating(score: number, chartConst: number) {
 }
 
 export function calcB30(ratingList: number[]) {
-    return ratingList.slice(0, 30).reduce((a, b) => a + b) / 30
+    return ratingList.slice(0, 30).reduce((a, b) => a + b, 0) / 30
 }
 
 export function calcMaxPossible(ratingList: number[]) {
-    return (ratingList.slice(0, 30).reduce((a, b) => a + b) + ratingList[0] * 10) / 40
+    return (ratingList.slice(0, 30).reduce((a, b) => a + b, 0) + ratingList[0] * 10) / 40
 }

@@ -18,7 +18,7 @@ async function getSongData() {
     }[get(usedSongData)]}.json`)).json()
 }
 
-async function getSongList(diff = Difficulty.master) {
+async function getSongList(diff = Difficulty.master): Promise<JQuery<HTMLElement>> {
     const fd = new FormData()
     fd.append("genre", "99")
     fd.append("token", getCookie("_t"))
@@ -40,19 +40,18 @@ async function getSongList(diff = Difficulty.master) {
             Error fetching song record!<br/>
             It might be caused by an outdated token.<br/>
             <em>Reload the page</em> or <em>re-login CHUNITHM-NET</em> might help...`)
-        return []
+        return $()
     }
-    const formList = [...$(await res.text()).find("form")]
-    formList.shift()
+    const formList = $(await res.text()).find(".box01.w420").eq(1).find("form")
     return formList
 }
 
 async function fetchRawRecord() {
-    const rawSongList: HTMLFormElement[][] = []
+    const rawSongList: JQuery<HTMLElement>[] = []
 
     for (const [i, difficulty] of Object.values(Difficulty).entries()) {
         if (!get(filterDiff).at(i)) {
-            rawSongList.push([])
+            rawSongList.push($())
             continue
         }
         msgText.set(`Fetching ${difficulty} record...`)
@@ -61,8 +60,8 @@ async function fetchRawRecord() {
     }
 
     return rawSongList.flatMap((d, di) =>
-        d.map(s => {
-            const songData = $(s)
+        d.map(function () {
+            const songData = $(this)
             const icons = songData.find(".play_musicdata_icon")
             return {
                 title: songData.find(".music_title")?.text(),
@@ -72,7 +71,7 @@ async function fetchRawRecord() {
                     icons.find(`img[src*="fullcombo"]`).length ? "FC" : "",
                 idx: songData.find(`input[name="idx"]`).attr("value")
             }
-        }).filter(s => s.title !== null && s.score > 0)
+        }).get().filter(s => s.title !== null && s.score > 0)
     )
 }
 
@@ -124,15 +123,15 @@ export async function getPlayerStats(): Promise<ChuniPlayerStats> {
 export async function getOfficialR10() {
     const res = await fetch("https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailRecent/")
     const musicData = await getSongData()
-    const r10list = [...$(await res.text()).find("form")].map(s => {
-        const songData = $(s)
+    const r10list = $(await res.text()).find("form").map(function () {
+        const songData = $(this)
         const r = {
             score: parseNumber(songData.find(".text_b")?.text()),
             title: songData.find(".music_title")?.text(),
             diff: Object.values(Difficulty)[Number.parseInt(songData.find("input[name=diff]")?.attr("value"))]
         }
         return calcRating(r.score, musicData[r.title][r.diff])
-    })
+    }).get()
     return r10list.reduce((a, b) => a + b) / 10
 }
 

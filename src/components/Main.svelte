@@ -20,12 +20,28 @@
     {#await getRecord()}
         <LoadingModal />
     {:then recordList}
-        <main>
-            <Overview ratingList={recordList.map((s) => s.rating)} />
-            <Result {recordList} />
-        </main>
-        <Buttons />
-        <Footer />
+        <div style="min-height:100vh;display:flex;flex-direction:column;">
+            <main>
+                {#if recordList.length == 0}
+                    <h3>
+                        Fetched nothing >:( <br />
+                    </h3>
+                    <p>
+                        I can't get any record with your current settings...<br />
+                    </p>
+                    <p>
+                        You should
+                        <em>change your difficulty filter</em>
+                        to something more interesting.
+                    </p>
+                {:else}
+                    <Overview ratingList={recordList.map((s) => s.rating)} />
+                    <Result {recordList} />
+                {/if}
+            </main>
+            <Buttons />
+            <Footer />
+        </div>
     {/await}
     <ConfigModal />
 </body>
@@ -52,7 +68,6 @@
         &:hover
             text-decoration: underline dotted
     body
-        padding-top: 1rem
         background-color: var(--theme-bg_main)
         color: var(--theme-text)
         margin: 0
@@ -61,5 +76,5 @@
         min-width: fit-content
     main
         width: fit-content
-        margin: auto
+        margin: 1rem auto
 </style>
