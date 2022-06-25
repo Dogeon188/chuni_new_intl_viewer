@@ -3,8 +3,8 @@
     import { getOfficialR10, getPlayerStats } from "@/utils/fetch"
     import { calcB30, calcMaxPossible } from "@/utils/rating"
     import { floorAndToFixed2 } from "@/utils/utils"
-    export let ratingList: number[]
-    export let emptyRecList = false
+    import { recordList } from "@/stores"
+    $: ratingList = $recordList.map((s) => s.rating)
 </script>
 
 <div id="chuni-overview">
@@ -18,12 +18,10 @@
         {#await getOfficialR10() then r10}
             <OverviewItem title="Recent 10" content={r10.toFixed(4)} />
         {/await}
-        {#if !emptyRecList}
-            <OverviewItem title="Best 30" content={calcB30(ratingList).toFixed(4)} />
-            <OverviewItem
-                title="Max Possible"
-                content={floorAndToFixed2(calcMaxPossible(ratingList))} />
-        {/if}
+        <OverviewItem title="Best 30" content={calcB30(ratingList).toFixed(4)} />
+        <OverviewItem
+            title="Max Possible"
+            content={floorAndToFixed2(calcMaxPossible(ratingList))} />
     </div>
 </div>
 

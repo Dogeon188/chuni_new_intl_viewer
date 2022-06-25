@@ -17,17 +17,20 @@ interface Theme {
     clear_aj, clear_fc
 }
 
-interface ChuniRecord {
+interface RawChuniRecord {
     title: string
     score: number
     difficulty: ChunirecDifficulty
+    idx: string
+    clear: "AJ" | "FC" | ""
+}
+
+type ChuniRecord = {
     const: number
     rank: number
     rating: number
-    idx: string
-    clear: "AJ" | "FC" | ""
     playCount: number | undefined
-}
+} & RawChuniRecord
 
 interface ChuniPlayerStats {
     name: string

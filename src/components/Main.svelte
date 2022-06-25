@@ -1,13 +1,13 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { themes } from "@/themes"
-    import { getRecord } from "@/utils/fetch"
     import { setRootColors } from "@/utils/utils"
     import Result from "@/components/Result.svelte"
     import Buttons from "@/components/Buttons.svelte"
     import ConfigModal from "@/components/ConfigModal.svelte"
     import Overview from "@/components/Overview.svelte"
-    import { theme } from "@/stores"
+    import { recordList } from "@/stores"
+    import { theme } from "@/config"
     import LoadingModal from "@/components/LoadingModal.svelte"
     import Footer from "@/components/Footer.svelte"
 
@@ -17,12 +17,12 @@
 </script>
 
 <body>
-    {#await getRecord()}
+    {#await recordList.init()}
         <LoadingModal />
-    {:then recordList}
+    {:then}
         <div style="min-height:100vh;display:flex;flex-direction:column;">
             <main>
-                {#if recordList.length == 0}
+                {#if $recordList.length == 0}
                     <h3>
                         Fetched nothing >:( <br />
                     </h3>
@@ -35,8 +35,8 @@
                         to something more interesting.
                     </p>
                 {:else}
-                    <Overview ratingList={recordList.map((s) => s.rating)} />
-                    <Result {recordList} />
+                    <Overview />
+                    <Result />
                 {/if}
             </main>
             <Buttons />

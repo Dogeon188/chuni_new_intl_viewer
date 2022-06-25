@@ -1,16 +1,12 @@
 <script lang="ts">
     export let config: boolean[]
-    let changed = false
 </script>
 
 <div class="wrapper">
     <span>
         Filter By Difficulty
-        {#if changed}
-            <span style="color:var(--theme-text_dim)">*require reload</span>
-        {/if}
-        {#if config.every(i => !i)}
-            <span style="color:var(--theme-song_exp)">*must select one!</span>
+        {#if config.every((i) => !i)}
+            <span style="color:var(--theme-song_exp)">*must select at least one!</span>
         {/if}
     </span>
     <div class="btns">
@@ -19,12 +15,14 @@
                 <input
                     type="checkbox"
                     value={diff.toLowerCase()}
-                    bind:checked={config[i]}
-                    on:change={() => (changed = true)} />
+                    bind:checked={config[i]} />
                 <div class="btn" data-diff={diff}>{diff}</div>
             </label>
         {/each}
     </div>
+    <span style="color:var(--theme-text_dim)">
+        *Filtering difficulties might cause the "Best 30" data to be inaccurate.
+    </span>
 </div>
 
 <style lang="sass">
@@ -32,13 +30,14 @@
         display: flex
         flex-direction: column
         padding: .5rem
-        gap: .5rem
+        gap: 1rem
     .btns
         display: flex
         flex-direction: row
         gap: .5rem
     label
         flex-grow: 1
+        display: flex
     input
         width: 0
         height: 0
@@ -46,6 +45,7 @@
         &:checked + .btn
             background-color: var(--theme-bg_control)
     .btn
+        width: 100%
         padding: .5rem
         border-radius: .2rem
         background-color: var(--theme-bg_sub)

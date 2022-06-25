@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { showConfig, sortBy } from "@/stores"
+    import { showConfig } from "@/stores"
+    import { sortBy } from "@/config"
     import { saveResultAsPicture } from "@/utils/share"
 </script>
 

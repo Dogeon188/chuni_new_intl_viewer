@@ -1,7 +1,8 @@
 import { get } from "svelte/store"
 import { calcRating } from "@/utils/rating"
 import { getCookie, parseNumber } from "@/utils/utils"
-import { errorFetching, filterDiff, msgText, usedSongData } from "@/stores"
+import { errorFetching, msgText } from "@/stores"
+import { filterDiff, usedSongData } from "@/config"
 
 const Difficulty = {
     basic: "BAS",
@@ -12,13 +13,13 @@ const Difficulty = {
 } as Record<string, ChunirecDifficulty>
 
 async function getSongData() {
-    return await (await fetch(`https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/${{
+    return await fetch(`https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/${{
         intl: "songDataIntl",
         jp: "songData"
-    }[get(usedSongData)]}.json`)).json()
+    }[get(usedSongData)]}.json`).then(d => d.json())
 }
 
-async function getSongList(diff = Difficulty.master): Promise<JQuery<HTMLElement>> {
+export async function getSongList(diff: ChunirecDifficulty = Difficulty.master) {
     const fd = new FormData()
     fd.append("genre", "99")
     fd.append("token", getCookie("_t"))
@@ -40,45 +41,43 @@ async function getSongList(diff = Difficulty.master): Promise<JQuery<HTMLElement
             Error fetching song record!<br/>
             It might be caused by an outdated token.<br/>
             <em>Reload the page</em> or <em>re-login CHUNITHM-NET</em> might help...`)
-        return $()
+        return []
     }
-    const formList = $(await res.text()).find(".box01.w420").eq(1).find("form")
-    return formList
-}
-
-async function fetchRawRecord() {
-    const rawSongList: JQuery<HTMLElement>[] = []
-
-    for (const [i, difficulty] of Object.values(Difficulty).entries()) {
-        if (!get(filterDiff).at(i)) {
-            rawSongList.push($())
-            continue
-        }
-        msgText.set(`Fetching ${difficulty} record...`)
-        rawSongList.push(await getSongList(difficulty))
-        if (get(errorFetching)) return
-    }
-
-    return rawSongList.flatMap((d, di) =>
-        d.map(function () {
+    const recList = $(await res.text()).find(".box01.w420").eq(1)
+        .find("form").map(function () {
             const songData = $(this)
             const icons = songData.find(".play_musicdata_icon")
             return {
                 title: songData.find(".music_title")?.text(),
                 score: parseNumber(songData.find(".text_b")?.text()),
-                difficulty: Object.values(Difficulty)[di],
+                difficulty: diff,
                 clear: icons.find(`img[src*="alljustice"]`).length ? "AJ" :
                     icons.find(`img[src*="fullcombo"]`).length ? "FC" : "",
                 idx: songData.find(`input[name="idx"]`).attr("value")
             }
         }).get().filter(s => s.title !== null && s.score > 0)
-    )
+    return recList as RawChuniRecord[]
 }
 
-export async function getRecord() {
+export async function fetchRawRecord() {
+    const rawRecList: RawChuniRecord[] = []
+
+    for (const [i, diff] of Object.values(Difficulty).entries()) {
+        if (!get(filterDiff).at(i)) {
+            continue
+        }
+        msgText.set(`Fetching ${diff} record...`)
+        Array.prototype.push.apply(rawRecList, await getSongList(diff))
+        if (get(errorFetching)) return []
+    }
+
+    return rawRecList
+}
+
+export async function parseRecord(rawRecord: RawChuniRecord[]) {
     msgText.set("Fetching song data...")
     const musicData = await getSongData()
-    const recordList = await fetchRawRecord() as ChuniRecord[]
+    const recordList = rawRecord as ChuniRecord[]
     if (get(errorFetching)) return []
 
     msgText.set("Calculating data...")

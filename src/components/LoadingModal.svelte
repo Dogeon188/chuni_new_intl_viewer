@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { errorFetching, msgText, usedSongData } from "@/stores"
+    import { errorFetching, msgText } from "@/stores"
+    import { usedSongData } from "@/config"
 </script>
 
 <div class="modal-wrapper">

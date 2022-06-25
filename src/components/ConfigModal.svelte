@@ -1,6 +1,5 @@
 <script lang="ts">
     import {
-        showConfig,
         sortBy,
         filterB40,
         theme,
@@ -10,7 +9,8 @@
         showPlayCount,
         configs,
         filterDiff,
-    } from "@/stores"
+    } from "@/config"
+    import { showConfig } from "@/stores"
     import { themeNames } from "@/themes"
     import Select from "@/components/Select.svelte"
     import ToggleSwitch from "@/components/ToggleSwitch.svelte"
@@ -52,7 +52,7 @@
                         <option value={t}>{t}</option>
                     {/each}
                 </Select>
-                <Select label="Song Data to Use" bind:value={$usedSongData} needReload>
+                <Select label="Song Data to Use" bind:value={$usedSongData}>
                     <option value="intl">International Ver.</option>
                     <option value="jp">Japanese ver. (NEW+)</option>
                 </Select>
@@ -66,7 +66,7 @@
                 </Select>
             </div>
         </div>
-        <hr/>
+        <hr />
         <div
             class="reset-btn"
             on:click={() => {

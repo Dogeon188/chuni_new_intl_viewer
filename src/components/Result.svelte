@@ -6,10 +6,10 @@
         filterConstMin,
         filterConstMax,
         showPlayCount,
-        msgText,
-    } from "@/stores"
+        filterDiff,
+    } from "@/config"
+    import { msgText, recordList } from "@/stores"
     import { getPlayCounts } from "@/utils/fetch"
-    export let recordList: ChuniRecord[]
 
     const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
         Rating: (a, b) => a.rank - b.rank,
@@ -38,13 +38,15 @@
     }
     let fetchingPlayCount = get(showPlayCount) != "0"
     if ($showPlayCount) {
-        getPlayCounts(recordList, parseInt(get(showPlayCount))).then(() => {
+        getPlayCounts($recordList, parseInt(get(showPlayCount))).then(() => {
             fetchingPlayCount = false
         })
     }
-    $: sortedList = recordList.sort(sorts[$sortBy])
+    $: sortedList = $recordList.sort(sorts[$sortBy])
     $: filteredList = sortedList.filter((v, i) => {
+        const diff = ["BAS", "ADV", "EXP", "MAS", "ULT"]
         return (
+            $filterDiff[diff.indexOf(v.difficulty)] &&
             (!$filterB40 || i < 40) &&
             $filterConstMax >= v.const &&
             v.const >= $filterConstMin

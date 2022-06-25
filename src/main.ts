@@ -24,4 +24,4 @@ async function main() {
     new Svelte({ target: shadow })
 }
 
-main()
+main().catch(console.log)
