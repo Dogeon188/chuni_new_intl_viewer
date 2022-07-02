@@ -89,9 +89,19 @@
                         </div>
                         <span>
                             from
-                            <input type="number" min="1" placeholder="1" bind:value={from} />
+                            <input
+                                type="number"
+                                min="1"
+                                placeholder="1"
+                                bind:value={from}
+                                pattern="\d*" />
                             to
-                            <input type="number" min="1" placeholder="40" bind:value={to} />
+                            <input
+                                type="number"
+                                min="1"
+                                placeholder="40"
+                                bind:value={to}
+                                pattern="\d*" />
                         </span>
                     </div>
                 {/if}
@@ -168,7 +178,7 @@
         padding: 5px
     .btn
         width: fit-content
-        padding: .5rem 2rem
+        padding: .5rem 1.5rem
         border-radius: .5rem
         font-weight: bold
         cursor: pointer
@@ -182,7 +192,7 @@
         color: var(--theme-text)
         border: none
         border-radius: .2rem
-        width: 5rem
+        width: 4rem
         padding: .5rem
         -moz-appearance: textfield
         &::-webkit-inner-spin-button
