@@ -88,14 +88,13 @@
                             Fetch
                         </div>
                         <span>
-                            from
                             <input
                                 type="number"
                                 min="1"
                                 placeholder="1"
                                 bind:value={from}
                                 pattern="\d*" />
-                            to
+                            &#xFF5E;
                             <input
                                 type="number"
                                 min="1"
