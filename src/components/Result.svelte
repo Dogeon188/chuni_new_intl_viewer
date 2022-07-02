@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { get } from "svelte/store"
     import {
         sortBy,
         filterB40,
@@ -8,8 +7,8 @@
         showPlayCount,
         filterDiff,
     } from "@/config"
-    import { msgText, recordList } from "@/stores"
-    import { getPlayCounts } from "@/utils/fetch"
+    import { recordList, msgText, fetchingPlayCount } from "@/stores"
+    import { fetchPlayCount } from "@/utils/fetch"
 
     const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
         Rating: (a, b) => a.rank - b.rank,
@@ -27,20 +26,11 @@
             return clears.indexOf(b.clear) - clears.indexOf(a.clear)
         },
         Play: (a, b) => {
-            if (
-                a.playCount == b.playCount ||
-                a.playCount == undefined ||
-                b.playCount == undefined
-            )
-                return a.rank - b.rank
+            if (a.playCount == undefined) return 100
+            if (b.playCount == undefined) return -100
+            if (a.playCount == b.playCount) return a.rank - b.rank
             return b.playCount - a.playCount
         },
-    }
-    let fetchingPlayCount = get(showPlayCount) != "0"
-    if ($showPlayCount) {
-        getPlayCounts($recordList, parseInt(get(showPlayCount))).then(() => {
-            fetchingPlayCount = false
-        })
     }
     $: sortedList = $recordList.sort(sorts[$sortBy])
     $: filteredList = sortedList.filter((v, i) => {
@@ -54,7 +44,7 @@
     })
 </script>
 
-{#if fetchingPlayCount}
+{#if $fetchingPlayCount}
     <span style="text-align:center;color:var(--theme-text_dim);">{$msgText}</span>
 {/if}
 <table>
@@ -65,12 +55,10 @@
                 <th class:current-sort={h == $sortBy} on:click={() => ($sortBy = h)}
                     >{h}</th>
             {/each}
-            {#if get(showPlayCount) != "0"}
+            {#if $showPlayCount}
                 <th
                     class:current-sort={"Play" == $sortBy}
-                    on:click={() => {
-                        if (!fetchingPlayCount) $sortBy = "Play"
-                    }}>Play</th>
+                    on:click={() => ($sortBy = "Play")}>Play</th>
             {/if}
         </tr>
     </thead>
@@ -83,14 +71,21 @@
                 <td>{song.score}</td>
                 <td>{song.rating == null ? "??.??" : song.rating.toFixed(2)}</td>
                 <td data-clear={song.clear}>{song.clear}</td>
-                {#if get(showPlayCount) != "0"}
-                    <td>
-                        {#if fetchingPlayCount}
-                            ...
-                        {:else}
-                            {song.playCount ?? "..."}
-                        {/if}
-                    </td>
+                {#if $showPlayCount}
+                    {#if song.playCount == undefined}
+                        <td
+                            class="pc-hidden"
+                            on:click={async () => {
+                                song.playCount = await fetchPlayCount(
+                                    song.idx,
+                                    song.difficulty
+                                )
+                            }}>
+                            <span>...</span>
+                        </td>
+                    {:else}
+                        <td>{song.playCount ?? "?"}</td>
+                    {/if}
                 {/if}
             </tr>
         {/each}
@@ -143,4 +138,11 @@
         margin: .5rem 5rem
         text-align: center
         cursor: pointer
+    .pc-hidden
+        cursor: pointer
+        span
+            border-radius: .2rem
+            background-color: var(--theme-bg_sub)
+            color: var(--theme-bg_sub)
+
 </style>

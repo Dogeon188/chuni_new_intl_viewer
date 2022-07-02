@@ -9,21 +9,32 @@ function createStored<T>(key: string, dft: T, kwargs: {
 } = {}) {
     const { onWrite = (cur: T) => { }, accept = [] } = kwargs
 
-    const local = localStorage[key]
-    if (local == undefined
-        || (typeof dft == "string" && !accept.includes(local))
-        || (typeof dft == "number" && (local < accept[0] || local > accept[1]))) {
-        localStorage[key] = dft
+    let local = localStorage[key]
+    let val
+
+    if (local == undefined) localStorage[key] = dft
+
+    switch (typeof dft) {
+        case "string":
+            if (!accept.includes(local)) local = dft
+            val = local
+            break
+        case "number":
+            if (isNaN(parseFloat(local)) || local < accept[0] || local > accept[1]) local = dft
+            val = parseFloat(local)
+            break
+        case "boolean":
+            if (local != "true" && local != "false") local = dft
+            val = JSON.parse(local)
+            break
+        default:
+            if (Array.isArray(dft)) val = JSON.parse("[" + local + "]")
+            break
     }
 
-    const { subscribe, set, update } = writable(
-        (typeof dft == "number")
-            ? parseFloat(localStorage[key])
-            : (typeof dft == "boolean")
-                ? JSON.parse(localStorage[key])
-                : Array.isArray(dft)
-                    ? JSON.parse("[" + localStorage[key] + "]")
-                    : localStorage[key])
+    localStorage[key] = local
+
+    const { subscribe, set, update } = writable(val)
 
     function _set(value: T) {
         set(value)
@@ -79,6 +90,6 @@ export const usedSongData = createStored(
         }
     })
 
-export const showPlayCount = createStored("CV_showPlayCount", "0", { accept: ["0", "40", "100", "200", "-1"] })
+export const showPlayCount = createStored("CV_showPlayCount", false)
 
 export const configs = [filterB40, sortBy, filterConstMin, filterConstMax, filterDiff, theme, usedSongData, showPlayCount]

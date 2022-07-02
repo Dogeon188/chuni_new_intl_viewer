@@ -1,7 +1,7 @@
 import { get } from "svelte/store"
 import { calcRating } from "@/utils/rating"
 import { getCookie, parseNumber } from "@/utils/utils"
-import { errorFetching, msgText } from "@/stores"
+import { errorFetching, msgText, recordList } from "@/stores"
 import { filterDiff, usedSongData } from "@/config"
 
 const Difficulty = {
@@ -134,14 +134,7 @@ export async function getOfficialR10() {
     return r10list.reduce((a, b) => a + b) / 10
 }
 
-export async function getPlayCounts(recordList: ChuniRecord[], showPlayCount: number) {
-    for (const [i, song] of (recordList.slice(0, showPlayCount == -1 ? undefined : showPlayCount)).entries()) {
-        msgText.set(`Fetching play count... (${i}/${showPlayCount == -1 ? recordList.length : showPlayCount})`)
-        song.playCount = await fetchPlayCount(song.idx, song.difficulty)
-    }
-}
-
-async function fetchPlayCount(idx: string, diff: ChunirecDifficulty) {
+export async function fetchPlayCount(idx: string, diff: ChunirecDifficulty) {
     const fd = new FormData()
     fd.append("idx", idx)
     fd.append("genre", "99")

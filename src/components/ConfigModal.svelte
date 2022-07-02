@@ -10,12 +10,28 @@
         configs,
         filterDiff,
     } from "@/config"
-    import { showConfig } from "@/stores"
+    import { showConfig, recordList, msgText, fetchingPlayCount } from "@/stores"
     import { themeNames } from "@/themes"
+    import { fetchPlayCount } from "@/utils/fetch"
     import Select from "@/components/Select.svelte"
     import ToggleSwitch from "@/components/ToggleSwitch.svelte"
     import DualSlider from "@/components/DualSlider.svelte"
     import DiffFilterButtons from "./DiffFilterButtons.svelte"
+
+    async function fetchMultiPlayCount(from: number, to: number) {
+        if ($fetchingPlayCount || isNaN(from) || isNaN(to) || to < from) return
+        $fetchingPlayCount = true
+        const l = $recordList.slice(from - 1, to).length
+        for (const [i, song] of $recordList.slice(from - 1, to).entries()) {
+            msgText.set(`Fetching play count... (${i}/${l})`)
+            if (song.playCount != undefined) continue
+            song.playCount = await fetchPlayCount(song.idx, song.difficulty)
+        }
+        recordList.set($recordList)
+        $fetchingPlayCount = false
+    }
+
+    let from: number, to: number
 </script>
 
 <div class="modal-wrapper" class:hidden={!$showConfig}>
@@ -56,19 +72,34 @@
                     <option value="intl">International Ver.</option>
                     <option value="jp">Japanese ver. (NEW+)</option>
                 </Select>
-                <Select label="Show Play Count" bind:value={$showPlayCount} needReload>
-                    <option value="0">Don't show</option>
-                    <option value="40">Show for best 40</option>
-                    <option value="100">Show for best 100</option>
-                    <option value="200">Show for best 200</option>
-                    <option value="400">Show for best 400</option>
-                    <option value="-1">Show all (Cost long time & large data)</option>
-                </Select>
+                <ToggleSwitch
+                    label="Show Play Count"
+                    bind:checked={$showPlayCount}
+                    needReload />
+                {#if $showPlayCount}
+                    <div style="padding:.5rem;display:flex;gap:.5rem">
+                        <div
+                            class="btn pc-multi-btn"
+                            class:disabled={$fetchingPlayCount ||
+                                isNaN(from) ||
+                                isNaN(to) ||
+                                to < from}
+                            on:click={() => fetchMultiPlayCount(from, to)}>
+                            Fetch
+                        </div>
+                        <span>
+                            from
+                            <input type="number" min="1" placeholder="1" bind:value={from} />
+                            to
+                            <input type="number" min="1" placeholder="40" bind:value={to} />
+                        </span>
+                    </div>
+                {/if}
             </div>
         </div>
         <hr />
         <div
-            class="reset-btn"
+            class="btn reset-btn"
             on:click={() => {
                 localStorage.clear()
                 for (const config of configs) config.reset()
@@ -108,17 +139,6 @@
         box-shadow: 2rem 2rem 10px #0008
         border-radius: 1rem
         text-align: left
-    h3
-        margin: 0
-    h4
-        margin: .5rem 0
-        color: var(--theme-text_dim)
-    hr
-        border: none
-        border-top: var(--theme-border) 0.1rem solid
-        margin: 2rem auto
-    .config-content
-        padding: 5px
     .close-btn
         position: absolute
         top: .5rem
@@ -135,16 +155,45 @@
         cursor: pointer
         &:hover
             opacity: 0.9
-    .reset-btn
+    h3
+        margin: 0
+    h4
+        margin: .5rem 0
+        color: var(--theme-text_dim)
+    hr
+        border: none
+        border-top: var(--theme-border) .1rem solid
+        margin: 2rem auto
+    .config-content
+        padding: 5px
+    .btn
         width: fit-content
-        padding: 0.5rem 2rem
-        margin-left: auto
-        border-radius: 0.5rem
-        background-color: #920
+        padding: .5rem 2rem
+        border-radius: .5rem
         font-weight: bold
         cursor: pointer
-        opacity: 0.9
+        user-select: none
+        opacity: .9
         transition: .2s
         &:hover
             opacity: 1
+    input[type=number]
+        background-color: var(--theme-bg_sub)
+        color: var(--theme-text)
+        border: none
+        border-radius: .2rem
+        width: 5rem
+        padding: .5rem
+        -moz-appearance: textfield
+        &::-webkit-inner-spin-button
+            -webkit-appearance: none
+            margin: 0
+    .pc-multi-btn
+        background-color: var(--theme-bg_control)
+        &.disabled
+            background-color: var(--theme-border)
+            cursor: no-drop
+    .reset-btn
+        margin-left: auto
+        background-color: #920
 </style>

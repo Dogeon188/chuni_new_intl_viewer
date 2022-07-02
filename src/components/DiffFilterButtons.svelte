@@ -35,6 +35,7 @@
         display: flex
         flex-direction: row
         gap: .5rem
+        user-select: none
     label
         flex-grow: 1
         display: flex
