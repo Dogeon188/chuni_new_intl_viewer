@@ -14,8 +14,7 @@
     <div class="btn-container">
         <div
             class="btn"
-            class:disabled={$sortBy != "Rating"}
-            on:click={$sortBy == "Rating" ? saveResultAsPicture : undefined}>
+            on:click={saveResultAsPicture}>
             <svg width="18" height="18">
                 <path d="M7 2H11V8H15L9 14 3 8H7V2ZM3 14H15V16H3V14Z" fill="white" />
             </svg>
@@ -68,7 +67,4 @@
         transition-duration: 0.2s
         &:hover
             opacity: 0.9
-        &.disabled
-            opacity: 0.2
-            cursor: unset
 </style>

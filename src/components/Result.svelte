@@ -37,7 +37,7 @@
         const diff = ["BAS", "ADV", "EXP", "MAS", "ULT"]
         return (
             $filterDiff[diff.indexOf(v.difficulty)] &&
-            (!$filterB40 || i < 40) &&
+            (isRecent || !$filterB40 || i < 40) &&
             $filterConstMax >= v.const &&
             v.const >= $filterConstMin
         )
@@ -94,7 +94,7 @@
         {/each}
     </tbody>
 </table>
-{#if $filterB40}
+{#if !isRecent && $filterB40}
     <div class="see-more" on:click={filterB40.toggle}>See more...</div>
 {/if}
 
