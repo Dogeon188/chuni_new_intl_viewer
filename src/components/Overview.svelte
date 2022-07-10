@@ -1,27 +1,45 @@
+<script context="module">
+    let playerStats = getPlayerStats()
+</script>
+
 <script lang="ts">
     import OverviewItem from "@/components/OverviewItem.svelte"
     import { getOfficialR10, getPlayerStats } from "@/utils/fetch"
-    import { calcB30, calcMaxPossible } from "@/utils/rating"
+    import { calcBestN, calcMaxPossible } from "@/utils/rating"
     import { floorAndToFixed2 } from "@/utils/utils"
-    import { recordList } from "@/stores"
+    import { recordList, recentList, officialRecent } from "@/stores"
+    export let isRecent = false
     $: ratingList = $recordList.map((s) => s.rating)
+    $: recentRating = $recentList.map((s) => s.rating)
 </script>
 
 <div id="chuni-overview">
-    {#await getPlayerStats() then stats}
+    {#await playerStats then stats}
         <h2 class="stats-name">{stats.name}</h2>
-        <h2 class="stats-rating">{stats.rating}</h2>
+        <div class="stats-rating">
+            <h2>{stats.rating}</h2>
+            <span>({stats.ratingMax})</span>
+        </div>
         <div class="stats-honor" data-honor={stats.honor.type}>{stats.honor.text}</div>
     {/await}
     <div class="overview-items">
         <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
-        {#await getOfficialR10() then r10}
-            <OverviewItem title="Recent 10" content={r10.toFixed(4)} />
-        {/await}
-        <OverviewItem title="Best 30" content={calcB30(ratingList).toFixed(4)} />
-        <OverviewItem
-            title="Max Possible"
-            content={floorAndToFixed2(calcMaxPossible(ratingList))} />
+        <OverviewItem title="Official R10" content={$officialRecent.toFixed(4)} />
+        {#if isRecent}
+            <OverviewItem
+                title="Recent 10"
+                content={calcBestN(recentRating, 10).toFixed(4)} />
+            <OverviewItem
+                title="Recent 30"
+                content={calcBestN(recentRating, 30).toFixed(4)} />
+        {:else}
+            <OverviewItem
+                title="Best 30"
+                content={calcBestN(ratingList, 30).toFixed(4)} />
+            <OverviewItem
+                title="Max Possible"
+                content={floorAndToFixed2(calcMaxPossible(ratingList))} />
+        {/if}
     </div>
 </div>
 
@@ -43,6 +61,10 @@
         .stats-rating
             grid-column: 2
             justify-self: center
+            h2
+                display: inline
+            span
+                color: var(--theme-text_dim)
         .stats-honor
             grid-area: 2/1/3/3
             color: var(--theme-honor_normal)

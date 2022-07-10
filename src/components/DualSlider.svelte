@@ -70,7 +70,7 @@
             background-color: var(--theme-bg_sub)
             height: 1.6rem
             width: 1.6rem
-            border-radius: 50%
+            border-radius: 40%
             display: flex
             justify-content: center
             align-items: center

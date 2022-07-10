@@ -1,7 +1,7 @@
 import { get } from "svelte/store"
 import { calcRating } from "@/utils/rating"
 import { getCookie, parseNumber } from "@/utils/utils"
-import { errorFetching, msgText, recordList } from "@/stores"
+import { errorFetching, msgText } from "@/stores"
 import { filterDiff, usedSongData } from "@/config"
 
 const Difficulty = {
@@ -74,7 +74,7 @@ export async function fetchRawRecord() {
     return rawRecList
 }
 
-export async function parseRecord(rawRecord: RawChuniRecord[]) {
+export async function parseRecords(rawRecord: RawChuniRecord[]) {
     msgText.set("Fetching song data...")
     const musicData = await getSongData()
     const recordList = rawRecord as ChuniRecord[]
@@ -113,25 +113,42 @@ export async function getPlayerStats(): Promise<ChuniPlayerStats> {
         name: homePage.find(".player_name_in")[0].innerHTML,
         honor: {
             text: homePage.find(".player_honor_text_view span")[0].innerHTML,
-            type: (/honor_bg_.*(?=\.png)/g.exec(honorBg) ?? ["normal"])[0].slice(9)
+            type: (/honor_bg_.*(?=\.png)/.exec(honorBg) ?? ["normal"])[0].slice(9)
         },
-        rating
+        rating,
+        ratingMax: homePage.find(".player_rating_max")[0].innerHTML
     }
+}
+
+export async function fetchRecent() {
+    const res = await fetch("https://chunithm-net-eng.com/mobile/record/playlog")
+    const recentList = $(await res.text()).find(".mt_10 .frame02.w400").map(function () {
+        const songData = $(this)
+        const icons = songData.find(".play_musicdata_icon")
+        const diffString = /musiclevel_.*(?=\.png)/.exec(
+            songData.find(".play_track_result img").attr("src"))[0].slice(11)
+        return {
+            title: songData.find(".play_musicdata_title")?.text(),
+            score: parseNumber(songData.find(".play_musicdata_score_text")?.text()),
+            difficulty: diffString == "ultimate" ? "ULT" : Difficulty[diffString],
+            clear: icons.find(`img[src*="alljustice"]`).length ? "AJ" :
+                icons.find(`img[src*="fullcombo"]`).length ? "FC" : ""
+        }
+    }).get() as RawChuniRecord[]
+    return recentList.slice(0, 50)
 }
 
 export async function getOfficialR10() {
     const res = await fetch("https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailRecent/")
     const musicData = await getSongData()
-    const r10list = $(await res.text()).find("form").map(function () {
+    return $(await res.text()).find("form").map(function () {
         const songData = $(this)
-        const r = {
-            score: parseNumber(songData.find(".text_b")?.text()),
+        return {
             title: songData.find(".music_title")?.text(),
-            diff: Object.values(Difficulty)[Number.parseInt(songData.find("input[name=diff]")?.attr("value"))]
+            score: parseNumber(songData.find(".text_b")?.text()),
+            difficulty: Object.values(Difficulty)[Number.parseInt(songData.find("input[name=diff]")?.attr("value"))]
         }
-        return calcRating(r.score, musicData[r.title][r.diff])
-    }).get()
-    return r10list.reduce((a, b) => a + b) / 10
+    }).get() as RawChuniRecord[]
 }
 
 export async function fetchPlayCount(idx: string, diff: ChunirecDifficulty) {

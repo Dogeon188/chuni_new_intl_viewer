@@ -7,8 +7,9 @@
         showPlayCount,
         filterDiff,
     } from "@/config"
-    import { recordList, msgText, fetchingPlayCount } from "@/stores"
+    import { recordList, recentList, msgText, fetchingPlayCount } from "@/stores"
     import { fetchPlayCount } from "@/utils/fetch"
+    export let isRecent = false
 
     const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
         Rating: (a, b) => a.rank - b.rank,
@@ -32,8 +33,7 @@
             return b.playCount - a.playCount
         },
     }
-    $: sortedList = $recordList.sort(sorts[$sortBy])
-    $: filteredList = sortedList.filter((v, i) => {
+    $: filteredList = (isRecent ? $recentList : $recordList).filter((v, i) => {
         const diff = ["BAS", "ADV", "EXP", "MAS", "ULT"]
         return (
             $filterDiff[diff.indexOf(v.difficulty)] &&
@@ -42,6 +42,7 @@
             v.const >= $filterConstMin
         )
     })
+    $: sortedList = filteredList.sort(sorts[$sortBy])
 </script>
 
 {#if $fetchingPlayCount}
@@ -55,7 +56,7 @@
                 <th class:current-sort={h == $sortBy} on:click={() => ($sortBy = h)}
                     >{h}</th>
             {/each}
-            {#if $showPlayCount}
+            {#if $showPlayCount && !isRecent}
                 <th
                     class:current-sort={"Play" == $sortBy}
                     on:click={() => ($sortBy = "Play")}>Play</th>
@@ -63,15 +64,17 @@
         </tr>
     </thead>
     <tbody>
-        {#each filteredList as song}
-            <tr class:best30={song.rank <= 30} class:best40={song.rank <= 40}>
+        {#each sortedList as song}
+            <tr
+                class:best30={song.rank <= (isRecent ? 10 : 30)}
+                class:best40={song.rank <= (isRecent ? 10 : 40)}>
                 <td>{song.rank}</td>
                 <td data-diff={song.difficulty}>{song.title}</td>
                 <td>{song.const?.toFixed(1) ?? "??.?"}</td>
                 <td>{song.score}</td>
                 <td>{song.rating == null ? "??.??" : song.rating.toFixed(2)}</td>
                 <td data-clear={song.clear}>{song.clear}</td>
-                {#if $showPlayCount}
+                {#if $showPlayCount && !isRecent}
                     {#if song.playCount == undefined}
                         <td
                             class="pc-hidden"
@@ -84,7 +87,7 @@
                             <span>...</span>
                         </td>
                     {:else}
-                        <td>{song.playCount ?? "?"}</td>
+                        <td>{song.playCount || "?"}</td>
                     {/if}
                 {/if}
             </tr>

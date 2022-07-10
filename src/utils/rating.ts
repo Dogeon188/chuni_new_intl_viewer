@@ -20,8 +20,8 @@ export function calcRating(score: number, chartConst: number) {
     return Math.floor(Math.max(0, ret)) / 100
 }
 
-export function calcB30(ratingList: number[]) {
-    return ratingList.slice(0, 30).reduce((a, b) => a + b, 0) / 30
+export function calcBestN(ratingList: number[], n: number) {
+    return ratingList.slice(0, n).reduce((a, b) => a + b, 0) / n
 }
 
 export function calcMaxPossible(ratingList: number[]) {

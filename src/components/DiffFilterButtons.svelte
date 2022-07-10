@@ -48,7 +48,7 @@
     .btn
         width: 100%
         padding: .5rem
-        border-radius: .2rem
+        border-radius: .5rem
         background-color: var(--theme-bg_sub)
         text-align: center
         font-weight: bold

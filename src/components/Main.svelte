@@ -3,13 +3,13 @@
     import { themes } from "@/themes"
     import { setRootColors } from "@/utils/utils"
     import Result from "@/components/Result.svelte"
-    import Buttons from "@/components/Buttons.svelte"
     import ConfigModal from "@/components/ConfigModal.svelte"
     import Overview from "@/components/Overview.svelte"
-    import { recordList } from "@/stores"
+    import { recentList, recordList, officialRecent, shownTab } from "@/stores"
     import { theme } from "@/config"
     import LoadingModal from "@/components/LoadingModal.svelte"
     import Footer from "@/components/Footer.svelte"
+    import Header from "./Header.svelte"
 
     onMount(() => {
         setRootColors(themes[$theme])
@@ -17,10 +17,11 @@
 </script>
 
 <body>
-    {#await recordList.init()}
+    {#await Promise.all( [recordList.init(), recentList.init(), officialRecent.init()] )}
         <LoadingModal />
     {:then}
         <div style="min-height:100vh;display:flex;flex-direction:column;">
+            <Header />
             <main>
                 {#if $recordList.length == 0}
                     <h3>
@@ -34,12 +35,14 @@
                         <em>change your difficulty filter</em>
                         to something more interesting.
                     </p>
-                {:else}
+                {:else if $shownTab == "best"}
                     <Overview />
                     <Result />
+                {:else if $shownTab == "recent"}
+                    <Overview isRecent />
+                    <Result isRecent />
                 {/if}
             </main>
-            <Buttons />
             <Footer />
         </div>
     {/await}
@@ -76,5 +79,5 @@
         min-width: fit-content
     main
         width: fit-content
-        margin: 1rem auto
+        margin: auto
 </style>

@@ -50,7 +50,7 @@
         bottom: 0
         background-color: var(--theme-bg_sub)
         transition: .2s
-        border-radius: 2rem
+        border-radius: .8rem
         &:after // text
             color: var(--theme-text_control)
             position: absolute
@@ -69,5 +69,5 @@
             bottom: .2rem
             background-color: var(--theme-text_control)
             transition: .2s
-            border-radius: 50%
+            border-radius: 40%
 </style>

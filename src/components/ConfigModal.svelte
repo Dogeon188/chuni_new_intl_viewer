@@ -77,9 +77,9 @@
                     bind:checked={$showPlayCount}
                     needReload />
                 {#if $showPlayCount}
-                    <div style="padding:.5rem;display:flex;gap:.5rem">
+                    <div class="playcount-multi">
                         <div
-                            class="btn pc-multi-btn"
+                            class="btn"
                             class:disabled={$fetchingPlayCount ||
                                 isNaN(from) ||
                                 isNaN(to) ||
@@ -87,21 +87,19 @@
                             on:click={() => fetchMultiPlayCount(from, to)}>
                             Fetch
                         </div>
-                        <span>
-                            <input
-                                type="number"
-                                min="1"
-                                placeholder="1"
-                                bind:value={from}
-                                pattern="\d*" />
-                            &#xFF5E;
-                            <input
-                                type="number"
-                                min="1"
-                                placeholder="40"
-                                bind:value={to}
-                                pattern="\d*" />
-                        </span>
+                        <input
+                            type="number"
+                            min="1"
+                            placeholder="1"
+                            bind:value={from}
+                            pattern="\d*" />
+                        &#xFF5E;
+                        <input
+                            type="number"
+                            min="1"
+                            placeholder="40"
+                            bind:value={to}
+                            pattern="\d*" />
                     </div>
                 {/if}
             </div>
@@ -155,7 +153,7 @@
         width: 2rem
         height: 2rem
         background-color: var(--theme-border)
-        border-radius: 50%
+        border-radius: 40%
         display: inline-flex
         justify-content: center
         align-items: center
@@ -178,7 +176,7 @@
     .btn
         width: fit-content
         padding: .5rem 1.5rem
-        border-radius: .5rem
+        border-radius: .8rem
         font-weight: bold
         cursor: pointer
         user-select: none
@@ -186,22 +184,28 @@
         transition: .2s
         &:hover
             opacity: 1
-    input[type=number]
-        background-color: var(--theme-bg_sub)
-        color: var(--theme-text)
-        border: none
-        border-radius: .2rem
-        width: 4rem
+    .playcount-multi
         padding: .5rem
-        -moz-appearance: textfield
-        &::-webkit-inner-spin-button
-            -webkit-appearance: none
-            margin: 0
-    .pc-multi-btn
-        background-color: var(--theme-bg_control)
-        &.disabled
-            background-color: var(--theme-border)
-            cursor: no-drop
+        display: flex
+        gap: .5rem
+        align-items: center
+        input[type=number]
+            background-color: var(--theme-bg_sub)
+            color: var(--theme-text)
+            border: none
+            border-radius: .2rem
+            width: 4rem
+            padding: .5rem
+            -moz-appearance: textfield
+            flex-grow: 1
+            &::-webkit-inner-spin-button
+                -webkit-appearance: none
+                margin: 0
+        .btn
+            background-color: var(--theme-bg_control)
+            &.disabled
+                background-color: var(--theme-border)
+                cursor: no-drop
     .reset-btn
         margin-left: auto
         background-color: #920

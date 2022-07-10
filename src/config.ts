@@ -1,7 +1,7 @@
 import { writable } from "svelte/store"
 import { isMobile, setRootColors } from "@/utils/utils"
 import { themeNames, themes } from "@/themes"
-import { recordList } from "@/stores"
+import { officialRecent, recentList, recordList } from "@/stores"
 
 function createStored<T>(key: string, dft: T, kwargs: {
     onWrite?: (cur: T) => any,
@@ -53,17 +53,13 @@ function createStored<T>(key: string, dft: T, kwargs: {
 
 export const filterB40 = createStored(
     "CV_filterB40",
-    isMobile(),
-    { onWrite(cur) { if (cur) sortBy.set("Rating") } }
+    isMobile()
 )
 
 export const sortBy = createStored(
     "CV_sortBy",
     "Rating",
-    {
-        onWrite(sort) { if (sort != "Rating") filterB40.set(false) },
-        accept: ["Rating", "Score", "Const", "Title", "AJ", "Play"]
-    })
+    { accept: ["Rating", "Score", "Const", "Title", "AJ", "Play"] })
 if (localStorage.CV_sortBy == "Play") sortBy.set("Rating")
 
 export const filterConstMin = createStored("CV_filterConstMin", 1, { accept: [1, 15.4] })
@@ -87,6 +83,8 @@ export const usedSongData = createStored(
         accept: ["jp", "intl"],
         onWrite() {
             recordList.updateConstData()
+            recentList.updateConstData()
+            officialRecent.updateConstData()
         }
     })
 

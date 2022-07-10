@@ -32,7 +32,7 @@
         font-weight: bold
         background: var(--theme-bg_main)
         border: var(--theme-border) 2px solid
-        border-radius: .5rem
+        border-radius: 1rem
         color: inherit
         cursor: pointer
         appearance: none

@@ -4,6 +4,8 @@ type ThemeNames = string
 
 type SongDataTypes = "intl" | "jp"
 
+type ShownTabs = "best" | "recent"
+
 type StoredWritable<T> = import("svelte/store").Writable<T> & {
     reset()
     toggle()
@@ -29,11 +31,13 @@ type ChuniRecord = {
     const: number
     rank: number
     rating: number
-    playCount: number | undefined
+    playCount?: number
+    order?: number
 } & RawChuniRecord
 
 interface ChuniPlayerStats {
     name: string
     honor: { text: string, type: string }
     rating: string
+    ratingMax: string
 }

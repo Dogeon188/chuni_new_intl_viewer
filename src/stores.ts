@@ -1,5 +1,5 @@
 import { get, writable } from "svelte/store"
-import { fetchRawRecord, parseRecord, getSongList } from "@/utils/fetch"
+import { fetchRawRecord, parseRecords, getSongList, fetchRecent, getOfficialR10 } from "@/utils/fetch"
 import { filterDiff } from "@/config"
 
 function createToggleable(dft = false) {
@@ -15,9 +15,58 @@ export const msgText = writable("")
 
 export const showConfig = createToggleable()
 
+export const shownTab = writable("best" as ShownTabs)
+
 export const errorFetching = writable(false)
 
 export const fetchingPlayCount = writable(false)
+
+export const officialRecent = (() => {
+    const { subscribe, set } = writable(0)
+
+    let inited = false
+    let raw = [] as RawChuniRecord[]
+    let parsed = [] as ChuniRecord[]
+
+    const calc = () => parsed.map(r => r.rating).reduce((a, b) => a + b) / 10
+
+    return {
+        set,
+        subscribe,
+        async init() {
+            raw = await getOfficialR10()
+            parsed = await parseRecords(raw)
+            set(calc())
+            inited = true
+        },
+        async updateConstData() {
+            if (!inited) return
+            parsed = await parseRecords(raw)
+            set(calc())
+        }
+    }
+})()
+
+export const recentList = (() => {
+    const { subscribe, set } = writable([] as ChuniRecord[])
+
+    let inited = false
+    let raw = [] as RawChuniRecord[]
+
+    return {
+        set,
+        subscribe,
+        async init() {
+            raw = await fetchRecent()
+            set(await parseRecords(raw))
+            inited = true
+        },
+        async updateConstData() {
+            if (!inited) return
+            set(await parseRecords(raw))
+        }
+    }
+})()
 
 export const recordList = (() => {
     const { subscribe, set } = writable([] as ChuniRecord[])
@@ -31,13 +80,13 @@ export const recordList = (() => {
         subscribe,
         async init() {
             raw = await fetchRawRecord()
-            set(await parseRecord(raw))
+            set(await parseRecords(raw))
             diffFetched = Array.from(get(filterDiff))
             inited = true
         },
         async updateConstData() {
             if (!inited) return
-            set(await parseRecord(raw))
+            set(await parseRecords(raw))
         },
         async updateDiffFilter(diffFilter: boolean[]) {
             if (!inited) return
@@ -50,7 +99,7 @@ export const recordList = (() => {
                     fetchedAdditional = true
                 }
             }
-            if (fetchedAdditional) set(await parseRecord(raw))
+            if (fetchedAdditional) set(await parseRecords(raw))
         }
     }
 })()
