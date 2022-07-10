@@ -4,7 +4,7 @@
 
 <script lang="ts">
     import OverviewItem from "@/components/OverviewItem.svelte"
-    import { getOfficialR10, getPlayerStats } from "@/utils/fetch"
+    import { getPlayerStats } from "@/utils/fetch"
     import { calcBestN, calcMaxPossible } from "@/utils/rating"
     import { floorAndToFixed2 } from "@/utils/utils"
     import { recordList, recentList, officialRecent } from "@/stores"
@@ -61,8 +61,12 @@
         .stats-rating
             grid-column: 2
             justify-self: center
+            display: flex
+            flex-direction: column
+            gap: .5rem
             h2
                 display: inline
+                margin: 0
             span
                 color: var(--theme-text_dim)
         .stats-honor
