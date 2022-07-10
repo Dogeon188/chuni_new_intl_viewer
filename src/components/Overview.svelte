@@ -18,7 +18,7 @@
         <h2 class="stats-name">{stats.name}</h2>
         <div class="stats-rating">
             <h2>{stats.rating}</h2>
-            <span>({stats.ratingMax})</span>
+            <span>MAX {stats.ratingMax}</span>
         </div>
         <div class="stats-honor" data-honor={stats.honor.type}>{stats.honor.text}</div>
     {/await}
