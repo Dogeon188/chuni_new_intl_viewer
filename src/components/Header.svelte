@@ -59,7 +59,6 @@
         height: 2.5rem
         background: var(--theme-border)
         border-radius: 40%
-        box-shadow: 0.1rem 0.1rem 12px black
         display: inline-flex
         justify-content: center
         align-items: center
