@@ -49,7 +49,7 @@ export async function getSongList(diff: ChunirecDifficulty = Difficulty.master) 
                 score: parseNumber(songData.find(".text_b")?.text()),
                 difficulty: diff,
                 clear: icons.find(`img[src*="alljustice"]`).length ? "AJ" :
-                    icons.find(`img[src*="fullcombo"]`).length ? "FC" : undefined,
+                    icons.find(`img[src*="fullcombo"]`).length ? "FC" : "",
                 idx: songData.find(`input[name="idx"]`).attr("value")
             }
         }).get().filter(s => s.title !== null && s.score > 0)
