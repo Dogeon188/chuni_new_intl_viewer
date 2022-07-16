@@ -17,7 +17,7 @@ jobs:
       - uses: test-room-7/action-update-file@v1
         with:
           file-path: |
-            songData.json
-            dataLog.md
+            data/jp.json
+            log.md
           commit-msg: Update songData.json with GitHub actions
           github-token: ${{ secrets.GITHUB_TOKEN }}
