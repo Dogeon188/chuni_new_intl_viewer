@@ -1,0 +1,22 @@
+{
+    "name": "chuni_intl_viewer_data",
+    "version": "1.0.0",
+    "description": "Song data for [chuni_new_intl_viewer](https://github.com/Dogeon188/chuni_new_intl_viewer/issues)",
+    "main": "main.min.js",
+    "scripts": {
+      "main": "node main.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Dogeon188/chuni_new_intl_viewer.git"
+    },
+    "author": "Dogeon",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/Dogeon188/chuni_new_intl_viewer/issues"
+    },
+    "homepage": "https://github.com/Dogeon188/chuni_new_intl_viewer#readme",
+    "dependencies": {
+        "axios": "^0.27.2"
+    }
+  }
