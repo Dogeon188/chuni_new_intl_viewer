@@ -13,10 +13,7 @@ const Difficulty = {
 } as Record<string, ChunirecDifficulty>
 
 async function getSongData() {
-    return await fetch(`https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/main/${{
-        intl: "songDataIntl",
-        jp: "songData"
-    }[get(usedSongData)]}.json`).then(d => d.json())
+    return await fetch(`https://raw.githubusercontent.com/Dogeon188/chuni_new_intl_viewer/data/data/${get(usedSongData)}.json`).then(d => d.json())
 }
 
 export async function getSongList(diff: ChunirecDifficulty = Difficulty.master) {
@@ -52,7 +49,7 @@ export async function getSongList(diff: ChunirecDifficulty = Difficulty.master) 
                 score: parseNumber(songData.find(".text_b")?.text()),
                 difficulty: diff,
                 clear: icons.find(`img[src*="alljustice"]`).length ? "AJ" :
-                    icons.find(`img[src*="fullcombo"]`).length ? "FC" : "",
+                    icons.find(`img[src*="fullcombo"]`).length ? "FC" : undefined,
                 idx: songData.find(`input[name="idx"]`).attr("value")
             }
         }).get().filter(s => s.title !== null && s.score > 0)
@@ -81,11 +78,11 @@ export async function parseRecords(rawRecord: RawChuniRecord[]) {
     if (get(errorFetching)) return []
 
     msgText.set("Calculating data...")
+    const cannotFetch = [] as ChuniRecord[]
     recordList.map(r => {
         const songInfo = musicData[r.title]
         if (songInfo === undefined) {
-            alert(`[chuni-intl-viewer] Found unknown song "${r.title} ${r.difficulty}".\nThe data should be updating soon, please run chuni-viewer again later to get proper song data.`)
-            fetch(new Request("https://chuniupdate.dogeon188.repl.co/sendUpdate", { method: "POST" }))
+            cannotFetch.push(r)
             r.const = 0
             r.rating = 0
             return
@@ -93,6 +90,12 @@ export async function parseRecords(rawRecord: RawChuniRecord[]) {
         r.const = songInfo[r.difficulty]
         r.rating = calcRating(r.score, r.const)
     })
+    if (cannotFetch.length) {
+        alert(`[chuni-intl-viewer] Found unknown song(s):\n${
+            cannotFetch.map(r => `    ${r.title} ${r.difficulty}`).join("\n")
+        }\nThe data should be updating soon, please run chuni-viewer again later to get proper song data.`)
+        fetch(new Request("https://chuniupdate.dogeon188.repl.co/sendUpdate", { method: "POST" }))
+    }
     recordList.sort((a, b) => b.rating - a.rating || b.const - a.const || a.score - b.score)
     recordList.map((r, i) => { r.rank = i + 1 })
     return recordList

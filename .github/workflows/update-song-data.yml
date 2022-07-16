@@ -5,11 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: 'data'
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
       - run: npm i
-      - run: npm run buildData
+      - run: npm run main
         env:
           CHUNIREC_TOKEN: ${{ secrets.CHUNIREC_TOKEN }}
       - uses: test-room-7/action-update-file@v1

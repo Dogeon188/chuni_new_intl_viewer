@@ -1,6 +1,6 @@
 <script lang="ts">
     import { shownTab, showConfig } from "@/stores"
-    import { sortBy, usedSongData } from "@/config"
+    import { usedSongData } from "@/config"
     import { saveResultAsPicture } from "@/utils/share"
 </script>
 
