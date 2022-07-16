@@ -16,8 +16,9 @@ jobs:
           CHUNIREC_TOKEN: ${{ secrets.CHUNIREC_TOKEN }}
       - uses: test-room-7/action-update-file@v1
         with:
+          branch: 'data'
           file-path: |
             data/jp.json
             log.md
-          commit-msg: Update songData.json with GitHub actions
+          commit-msg: Update data/jp.json with GitHub actions
           github-token: ${{ secrets.GITHUB_TOKEN }}
