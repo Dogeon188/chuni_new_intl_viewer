@@ -6,6 +6,7 @@
 
 Name|Diff.|Old|New
 ----|-----|---|---
-QZKago Requiem|`EXP`|`13.5`|`13.7`
-QZKago Requiem|`MAS`|`14.5`|`14.9`
+#SUP3RORBITAL|`EXP`|`12`|`12.4`
+WE'RE BACK!!|`EXP`|`12.5`|`12.9`
+Λzure Vixen|`EXP`|`13.5`|`13.8`
 
