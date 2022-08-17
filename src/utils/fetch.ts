@@ -91,10 +91,13 @@ export async function parseRecords(rawRecord: RawChuniRecord[]) {
         r.rating = calcRating(r.score, r.const)
     })
     if (cannotFetch.length) {
-        alert(`[chuni-intl-viewer] Found unknown song(s):\n${
-            cannotFetch.map(r => `    ${r.title} ${r.difficulty}`).join("\n")
-        }\nThe data should be updating soon, please run chuni-viewer again later to get proper song data.`)
-        fetch(new Request("https://chuniupdate.dogeon188.repl.co/sendUpdate", { method: "POST" }))
+        alert(`[chuni-intl-viewer] Found unknown song(s):\n${cannotFetch.map(r => `    ${r.title} ${r.difficulty}`).join("\n")
+            }\nThe data should be updating soon, please run chuni-viewer again later to get proper song data.`)
+        fetch(new Request("https://chuniupdate.dogeon188.repl.co/sendUpdate", {
+            method: "POST",
+            body: JSON.stringify(cannotFetch.map(r => [r.title, r.difficulty])),
+            headers: { "Content-Type": "application/json;charset=utf-8" }
+        }))
     }
     recordList.sort((a, b) => b.rating - a.rating || b.const - a.const || a.score - b.score)
     recordList.map((r, i) => { r.rank = i + 1 })
@@ -143,7 +146,6 @@ export async function fetchRecent() {
 
 export async function getOfficialR10() {
     const res = await fetch("https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailRecent/")
-    const musicData = await getSongData()
     return $(await res.text()).find("form").map(function () {
         const songData = $(this)
         return {

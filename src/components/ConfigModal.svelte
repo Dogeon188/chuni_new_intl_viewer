@@ -68,10 +68,10 @@
                         <option value={t}>{t}</option>
                     {/each}
                 </Select>
-                <Select label="Song Data to Use" bind:value={$usedSongData}>
+                <!-- <Select label="Song Data to Use" bind:value={$usedSongData}>
                     <option value="intl">International Ver.</option>
                     <option value="jp">Japanese ver. (NEW+)</option>
-                </Select>
+                </Select> -->
                 <ToggleSwitch
                     label="Show Play Count"
                     bind:checked={$showPlayCount}

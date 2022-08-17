@@ -80,7 +80,7 @@ export const usedSongData = createStored(
     "CV_songData",
     "intl" as SongDataTypes,
     {
-        accept: ["jp", "intl"],
+        accept: [/* "jp", */ "intl"],
         onWrite() {
             recordList.updateConstData()
             recentList.updateConstData()
