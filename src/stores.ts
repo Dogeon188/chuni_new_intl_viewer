@@ -28,7 +28,7 @@ export const officialRecent = (() => {
     let raw = [] as RawChuniRecord[]
     let parsed = [] as ChuniRecord[]
 
-    const calc = () => parsed.map(r => r.rating).reduce((a, b) => a + b) / 10
+    const calc = () => parsed.map(r => r.rating).reduce((a, b) => a + b, 0) / 10
 
     return {
         set,

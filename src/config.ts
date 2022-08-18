@@ -37,7 +37,7 @@ function createStored<T>(key: string, dft: T, kwargs: {
     const { subscribe, set, update } = writable(val)
 
     function _set(value: T) {
-        set(value)
+        set(Array.isArray(dft) ? Array.from(value) : value)
         localStorage[key] = value
         onWrite(value)
     }
