@@ -7,18 +7,42 @@
     export let high: number
 
     let dist = max - min
-    $: lowPer = (low - min) / dist * 100
-    $: highPer = (high - min) / dist * 100
+    $: lowPer = ((low - min) / dist) * 100
+    $: highPer = ((high - min) / dist) * 100
 </script>
 
 <div class="wrapper">
     <span>{label}</span>
     <div class="indicators">
         <div class="low" style="left: calc((100% - 3rem) * {lowPer} / 100)">
-            {low.toFixed(1)}
+            <input
+                value={low}
+                type="number"
+                {min}
+                {max}
+                {step}
+                pattern="[0-9]*\.?[0-9]"
+                on:change={(e) => {
+                    low = e.target.value
+                    low = Math.min(max, Math.max(min, low))
+                    if (low > high) high = low
+                    e.target.value = low
+                }} />
         </div>
         <div class="high" style="left: calc((100% - 3rem) * {highPer} / 100)">
-            {high.toFixed(1)}
+            <input
+                value={high}
+                type="number"
+                {min}
+                {max}
+                {step}
+                pattern="[0-9]*\.?[0-9]"
+                on:change={(e) => {
+                    high = e.target.value
+                    high = Math.min(max, Math.max(min, high))
+                    if (high < low) low = high
+                    e.target.value = high
+                }} />
         </div>
     </div>
     <div class="slider">
@@ -96,6 +120,17 @@
         background-color: var(--theme-border)
         position: absolute
         border-radius: .2rem
+    input[type=number]
+        background-color: transparent
+        border: none
+        color: inherit
+        font-family: initial
+        max-width: 150%
+        text-align: center
+        -moz-appearance: textfield
+    input::-webkit-inner-spin-button
+        -webkit-appearance: none
+        margin: 0
     input[type=range]
         -webkit-appearance: none 
         appearance: none
