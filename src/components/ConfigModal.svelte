@@ -92,14 +92,14 @@
                             min="1"
                             placeholder="1"
                             bind:value={from}
-                            pattern="\d*" />
+                            inputmode="numeric" />
                         &#xFF5E;
                         <input
                             type="number"
                             min="1"
                             placeholder="40"
                             bind:value={to}
-                            pattern="\d*" />
+                            inputmode="numeric" />
                     </div>
                 {/if}
             </div>

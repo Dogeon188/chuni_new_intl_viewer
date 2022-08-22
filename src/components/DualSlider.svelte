@@ -21,9 +21,9 @@
                 {min}
                 {max}
                 {step}
-                pattern="[0-9]*\.?[0-9]"
+                inputmode="decimal"
                 on:change={(e) => {
-                    low = e.target.value
+                    low = e.target.value || low
                     low = Math.min(max, Math.max(min, low))
                     if (low > high) high = low
                     e.target.value = low
@@ -36,9 +36,9 @@
                 {min}
                 {max}
                 {step}
-                pattern="[0-9]*\.?[0-9]"
+                inputmode="decimal"
                 on:change={(e) => {
-                    high = e.target.value
+                    high = e.target.value || high
                     high = Math.min(max, Math.max(min, high))
                     if (high < low) low = high
                     e.target.value = high
