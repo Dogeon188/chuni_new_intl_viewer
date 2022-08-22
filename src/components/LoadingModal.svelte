@@ -17,11 +17,11 @@
         {:else}
             <div class="loader" />
             <p>{$msgText}</p>
-            <p style="color:var(--theme-text_dim)">
+            <!-- <p style="color:var(--theme-text_dim)">
                 Using song data: {$usedSongData == "intl"
                     ? "International"
                     : "Japanese (NEW+)"}
-            </p>
+            </p> -->
         {/if}
     </div>
 </div>

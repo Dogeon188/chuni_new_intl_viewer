@@ -9,7 +9,8 @@ const Difficulty = {
     advanced: "ADV",
     expert: "EXP",
     master: "MAS",
-    ultima: "ULT"
+    ultima: "ULT",
+    worldsend: "WE"
 } as Record<string, ChunirecDifficulty>
 
 async function getSongData() {
@@ -80,6 +81,11 @@ export async function parseRecords(rawRecord: RawChuniRecord[]) {
     msgText.set("Calculating data...")
     const cannotFetch = [] as ChuniRecord[]
     recordList.map(r => {
+        if (r.difficulty == "WE") {
+            r.const = -1
+            r.rating = 0
+            return
+        }
         const songInfo = musicData[r.title]
         if (songInfo === undefined) {
             cannotFetch.push(r)
@@ -101,6 +107,7 @@ export async function parseRecords(rawRecord: RawChuniRecord[]) {
     }
     recordList.sort((a, b) => b.rating - a.rating || b.const - a.const || a.score - b.score)
     recordList.map((r, i) => { r.rank = i + 1 })
+    console.log(recordList)
     return recordList
 }
 
@@ -129,10 +136,10 @@ export async function getPlayerStats(): Promise<ChuniPlayerStats> {
 export async function fetchRecent() {
     const res = await fetch("https://chunithm-net-eng.com/mobile/record/playlog")
     const recentList = $(await res.text()).find(".mt_10 .frame02.w400").map(function () {
-        const songData = $(this)
+        const songData: JQuery = $(this)
         const icons = songData.find(".play_musicdata_icon")
         const diffString = /musiclevel_.*(?=\.png)/.exec(
-            songData.find(".play_track_result img").attr("src"))[0].slice(11)
+            songData.find(".play_track_result img").attr("src")!)![0].slice(11)
         return {
             title: songData.find(".play_musicdata_title")?.text(),
             score: parseNumber(songData.find(".play_musicdata_score_text")?.text()),
@@ -151,7 +158,7 @@ export async function getOfficialR10() {
         return {
             title: songData.find(".music_title")?.text(),
             score: parseNumber(songData.find(".text_b")?.text()),
-            difficulty: Object.values(Difficulty)[Number.parseInt(songData.find("input[name=diff]")?.attr("value"))]
+            difficulty: Object.values(Difficulty)[Number.parseInt(songData.find("input[name=diff]")?.attr("value")!)]
         }
     }).get() as RawChuniRecord[]
 }

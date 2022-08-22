@@ -8,7 +8,7 @@
         filterDiff,
     } from "@/config"
     import { recordList, recentList, msgText, fetchingPlayCount } from "@/stores"
-    import { fetchPlayCount } from "@/utils/fetch"
+    import { fetchPlayCount, getSongList } from "@/utils/fetch"
     export let isRecent = false
 
     const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
@@ -36,10 +36,11 @@
     $: filteredList = (isRecent ? $recentList : $recordList).filter((v, i) => {
         const diff = ["BAS", "ADV", "EXP", "MAS", "ULT"]
         return (
-            $filterDiff[diff.indexOf(v.difficulty)] &&
-            (isRecent || !$filterB40 || i < 40) &&
-            $filterConstMax >= v.const &&
-            v.const >= $filterConstMin
+            v.difficulty == "WE" ||
+            ($filterDiff[diff.indexOf(v.difficulty)] &&
+                (isRecent || !$filterB40 || i < 40) &&
+                $filterConstMax >= v.const &&
+                v.const >= $filterConstMin)
         )
     })
     $: sortedList = filteredList.sort(sorts[$sortBy])
@@ -70,9 +71,14 @@
                 class:best40={song.rank <= (isRecent ? 10 : 40)}>
                 <td>{song.rank}</td>
                 <td data-diff={song.difficulty}>{song.title}</td>
-                <td>{song.const?.toFixed(1) ?? "??.?"}</td>
+                <td>{song.const == -1 ? "-" : song.const?.toFixed(1) ?? "??.?"}</td>
                 <td>{song.score}</td>
-                <td>{song.rating == null ? "??.??" : song.rating.toFixed(2)}</td>
+                <td
+                    >{song.const == -1
+                        ? "-"
+                        : song.rating == null
+                        ? "??.??"
+                        : song.rating.toFixed(2)}</td>
                 <td data-clear={song.clear}>{song.clear}</td>
                 {#if $showPlayCount && !isRecent}
                     {#if song.playCount == undefined}
@@ -125,7 +131,7 @@
             font-weight: bold
             text-align: left
             max-width: 300px
-            @each $diff in ("ULT", "MAS", "EXP", "ADV", "BAS")
+            @each $diff in ("WE", "ULT", "MAS", "EXP", "ADV", "BAS")
                 &[data-diff="#{$diff}"]
                     color: var(--theme-song_#{to-lower-case($diff)})
         tr td:nth-child(6)
