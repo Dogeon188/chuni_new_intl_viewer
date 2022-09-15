@@ -14,6 +14,9 @@ const parseData = (rawData) => {
     let errors = { dup: [], unc: [] }
     console.log("Fetched song data. Now parsing it...")
     for (const song of rawData) {
+        // special case for "Reach For The Stars"
+        if (song.meta.title == "Reach for the Stars") song.meta.title = "Reach For The Stars"
+
         if (musicData[song.meta.title] !== undefined) {
             errors.dup.push(song.meta.title)
         }
