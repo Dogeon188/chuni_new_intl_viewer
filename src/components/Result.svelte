@@ -7,8 +7,14 @@
         showPlayCount,
         filterDiff,
     } from "@/config"
-    import { recordList, recentList, msgText, fetchingPlayCount } from "@/stores"
-    import { fetchPlayCount, getSongList } from "@/utils/fetch"
+    import {
+        recordList,
+        recentList,
+        msgText,
+        fetchingPlayCount,
+        officialRecent,
+    } from "@/stores"
+    import { fetchPlayCount } from "@/utils/fetch"
     export let isRecent = false
 
     const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
@@ -43,7 +49,10 @@
                 v.const >= $filterConstMin)
         )
     })
-    $: sortedList = filteredList.sort(sorts[$sortBy])
+    $: sortedList = Array.prototype.concat.call(
+        isRecent ? $officialRecent.sort(sorts[$sortBy]) : [],
+        filteredList.sort(sorts[$sortBy])
+    )
 </script>
 
 {#if $fetchingPlayCount}
@@ -67,7 +76,8 @@
     <tbody>
         {#each sortedList as song}
             <tr
-                class:best30={song.rank <= (isRecent ? 10 : 30)}
+                class:best30={song.rank <= (isRecent ? 10 : 30) &&
+                    (!isRecent || song.officialRecent)}
                 class:best40={song.rank <= (isRecent ? 10 : 40)}>
                 <td>{song.rank}</td>
                 <td data-diff={song.difficulty}>{song.title}</td>
@@ -140,6 +150,8 @@
                 color: var(--theme-clear_fc)
             &[data-clear="AJ"]
                 color: var(--theme-clear_aj)
+            &[data-clear=".."]
+                color: var(--theme-text_dim)
     .see-more
         background-color: var(--theme-bg_sub)
         border-radius: .5rem

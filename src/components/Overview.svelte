@@ -24,7 +24,11 @@
     {/await}
     <div class="overview-items">
         <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
-        <OverviewItem title="Official R10" content={$officialRecent.toFixed(4)} />
+        <OverviewItem
+            title="Official R10"
+            content={(
+                $officialRecent.map((r) => r.rating).reduce((a, b) => a + b, 0) / 10
+            ).toFixed(4)} />
         {#if isRecent}
             <OverviewItem
                 title="Recent 10"

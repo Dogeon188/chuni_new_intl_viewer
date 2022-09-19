@@ -22,27 +22,22 @@ export const errorFetching = writable(false)
 export const fetchingPlayCount = writable(false)
 
 export const officialRecent = (() => {
-    const { subscribe, set } = writable(0)
+    const { subscribe, set } = writable([] as ChuniRecord[])
 
     let inited = false
     let raw = [] as RawChuniRecord[]
-    let parsed = [] as ChuniRecord[]
-
-    const calc = () => parsed.map(r => r.rating).reduce((a, b) => a + b, 0) / 10
 
     return {
         set,
         subscribe,
         async init() {
             raw = await getOfficialR10()
-            parsed = await parseRecords(raw)
-            set(calc())
+            set(await parseRecords(raw))
             inited = true
         },
         async updateConstData() {
             if (!inited) return
-            parsed = await parseRecords(raw)
-            set(calc())
+            set(await parseRecords(raw))
         }
     }
 })()

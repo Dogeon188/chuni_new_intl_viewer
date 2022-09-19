@@ -24,7 +24,8 @@ interface RawChuniRecord {
     score: number
     difficulty: ChunirecDifficulty
     idx: string
-    clear: "" | "AJ" | "FC"
+    clear: "" | "AJ" | "FC" | ".."
+    officialRecent?: boolean
 }
 
 type ChuniRecord = {

@@ -107,7 +107,6 @@ export async function parseRecords(rawRecord: RawChuniRecord[]) {
     }
     recordList.sort((a, b) => b.rating - a.rating || b.const - a.const || a.score - b.score)
     recordList.map((r, i) => { r.rank = i + 1 })
-    console.log(recordList)
     return recordList
 }
 
@@ -158,7 +157,9 @@ export async function getOfficialR10() {
         return {
             title: songData.find(".music_title")?.text(),
             score: parseNumber(songData.find(".text_b")?.text()),
-            difficulty: Object.values(Difficulty)[Number.parseInt(songData.find("input[name=diff]")?.attr("value")!)]
+            difficulty: Object.values(Difficulty)[Number.parseInt(songData.find("input[name=diff]")?.attr("value")!)],
+            clear: "..",
+            officialRecent: true
         }
     }).get() as RawChuniRecord[]
 }
