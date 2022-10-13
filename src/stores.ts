@@ -75,13 +75,13 @@ export const recordList = (() => {
         subscribe,
         async init() {
             raw = await fetchRawRecord()
-            set(await parseRecords(raw))
+            set(await parseRecords(raw, true))
             diffFetched = Array.from(get(filterDiff))
             inited = true
         },
         async updateConstData() {
             if (!inited) return
-            set(await parseRecords(raw))
+            set(await parseRecords(raw, true))
         },
         async updateDiffFilter(diffFilter: boolean[]) {
             if (!inited) return
@@ -94,7 +94,7 @@ export const recordList = (() => {
                     fetchedAdditional = true
                 }
             }
-            if (fetchedAdditional) set(await parseRecords(raw))
+            if (fetchedAdditional) set(await parseRecords(raw, true))
         }
     }
 })()

@@ -9,6 +9,7 @@
         showPlayCount,
         configs,
         filterDiff,
+        acceptedSongData,
     } from "@/config"
     import { showConfig, recordList, msgText, fetchingPlayCount } from "@/stores"
     import { themeNames } from "@/themes"
@@ -21,6 +22,7 @@
     async function fetchMultiPlayCount(from: number, to: number) {
         if ($fetchingPlayCount || isNaN(from) || isNaN(to) || to < from) return
         $fetchingPlayCount = true
+        $showConfig = false
         const l = $recordList.slice(from - 1, to).length
         for (const [i, song] of $recordList.slice(from - 1, to).entries()) {
             msgText.set(`Fetching play count... (${i}/${l})`)
@@ -68,10 +70,12 @@
                         <option value={t}>{t}</option>
                     {/each}
                 </Select>
-                <!-- <Select label="Song Data to Use" bind:value={$usedSongData}>
-                    <option value="intl">International Ver.</option>
-                    <option value="jp">Japanese ver. (NEW+)</option>
-                </Select> -->
+                {#if acceptedSongData.indexOf("jp") > -1}
+                    <Select label="Song Data to Use" bind:value={$usedSongData}>
+                        <option value="intl">International Ver.</option>
+                        <option value="jp">Japanese ver. (NEW+)</option>
+                    </Select>
+                {/if}
                 <ToggleSwitch
                     label="Show Play Count"
                     bind:checked={$showPlayCount}

@@ -13,9 +13,11 @@
         msgText,
         fetchingPlayCount,
         officialRecent,
+        shownTab,
     } from "@/stores"
-    import { fetchPlayCount } from "@/utils/fetch"
-    export let isRecent = false
+    import RecordItem from "./RecordItem.svelte"
+
+    $: isRecent = $shownTab == "recent"
 
     const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
         Rating: (a, b) => a.rank - b.rank,
@@ -49,10 +51,8 @@
                 v.const >= $filterConstMin)
         )
     })
-    $: sortedList = Array.prototype.concat.call(
-        isRecent ? $officialRecent.sort(sorts[$sortBy]) : [],
-        filteredList.sort(sorts[$sortBy])
-    )
+    $: sortedList = filteredList.sort(sorts[$sortBy])
+    $: sortedOfficialRecent = $officialRecent.sort(sorts[$sortBy])
 </script>
 
 {#if $fetchingPlayCount}
@@ -74,39 +74,15 @@
         </tr>
     </thead>
     <tbody>
+        {#if isRecent}
+        <td colspan="6" class="r-title">Official Recent 10</td>
+            {#each sortedOfficialRecent as song}
+                <RecordItem {song} isOfficialRecent/>
+            {/each}
+        <td colspan="6" class="r-title">Play History R50</td>
+        {/if}
         {#each sortedList as song}
-            <tr
-                class:best30={song.rank <= (isRecent ? 10 : 30) &&
-                    (!isRecent || song.officialRecent)}
-                class:best40={song.rank <= (isRecent ? 10 : 40)}>
-                <td>{song.rank}</td>
-                <td data-diff={song.difficulty}>{song.title}</td>
-                <td>{song.const == -1 ? "-" : song.const?.toFixed(1) ?? "??.?"}</td>
-                <td>{song.score}</td>
-                <td
-                    >{song.const == -1
-                        ? "-"
-                        : song.rating == null
-                        ? "??.??"
-                        : song.rating.toFixed(2)}</td>
-                <td data-clear={song.clear}>{song.clear}</td>
-                {#if $showPlayCount && !isRecent}
-                    {#if song.playCount == undefined}
-                        <td
-                            class="pc-hidden"
-                            on:click={async () => {
-                                song.playCount = await fetchPlayCount(
-                                    song.idx,
-                                    song.difficulty
-                                )
-                            }}>
-                            <span>...</span>
-                        </td>
-                    {:else}
-                        <td>{song.playCount || "?"}</td>
-                    {/if}
-                {/if}
-            </tr>
+            <RecordItem {song} />
         {/each}
     </tbody>
 </table>
@@ -121,37 +97,15 @@
         padding-bottom: 0.5rem
         max-width: max-content
         margin: auto
-    td, th
-        padding: 0.5rem
-    td
-        border-top: var(--theme-border) 1.5px solid
     th
+        padding: 0.5rem
         color: var(--theme-text_dim)
         cursor: pointer
     th.current-sort
         color: inherit
-    tbody
-        tr.best30 td:first-child
-            color: var(--theme-rank_b30)
-        tr.best40 td:first-child
-            font-weight: bold
-        tr:not(.best40) td:first-child
-            color: var(--theme-text_dim)
-        tr td:nth-child(2)
-            font-weight: bold
-            text-align: left
-            max-width: 300px
-            @each $diff in ("WE", "ULT", "MAS", "EXP", "ADV", "BAS")
-                &[data-diff="#{$diff}"]
-                    color: var(--theme-song_#{to-lower-case($diff)})
-        tr td:nth-child(6)
-            font-weight: bold
-            &[data-clear="FC"]
-                color: var(--theme-clear_fc)
-            &[data-clear="AJ"]
-                color: var(--theme-clear_aj)
-            &[data-clear=".."]
-                color: var(--theme-text_dim)
+    td.r-title
+        font-weight: bold
+        color: var(--theme-label)
     .see-more
         background-color: var(--theme-bg_sub)
         border-radius: .5rem
@@ -159,11 +113,4 @@
         margin: .5rem 5rem
         text-align: center
         cursor: pointer
-    .pc-hidden
-        cursor: pointer
-        span
-            border-radius: .2rem
-            background-color: var(--theme-bg_sub)
-            color: var(--theme-bg_sub)
-
 </style>

@@ -51,10 +51,7 @@ function createStored<T>(key: string, dft: T, kwargs: {
     } as StoredWritable<T>
 }
 
-export const filterB40 = createStored(
-    "CV_filterB40",
-    isMobile()
-)
+export const filterB40 = createStored("CV_filterB40", isMobile())
 
 export const sortBy = createStored(
     "CV_sortBy",
@@ -66,9 +63,7 @@ export const filterConstMin = createStored("CV_filterConstMin", 1, { accept: [1,
 export const filterConstMax = createStored("CV_filterConstMax", 15.4, { accept: [1, 15.4] })
 
 export const filterDiff = createStored("CV_filterDiff", [false, false, true, true, true], {
-    onWrite(cur) {
-        recordList.updateDiffFilter(cur)
-    }
+    onWrite(cur) { recordList.updateDiffFilter(cur) }
 })
 
 export const theme = createStored("CV_theme", "Dark" as ThemeNames, {
@@ -76,11 +71,12 @@ export const theme = createStored("CV_theme", "Dark" as ThemeNames, {
     accept: themeNames
 })
 
+export const acceptedSongData = ["jp", "intl"]
 export const usedSongData = createStored(
     "CV_songData",
     "intl" as SongDataTypes,
     {
-        accept: [/* "jp", */ "intl"],
+        accept: acceptedSongData,
         onWrite() {
             recordList.updateConstData()
             recentList.updateConstData()

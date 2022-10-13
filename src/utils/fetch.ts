@@ -72,7 +72,7 @@ export async function fetchRawRecord() {
     return rawRecList
 }
 
-export async function parseRecords(rawRecord: RawChuniRecord[]) {
+export async function parseRecords(rawRecord: RawChuniRecord[], isBestRec = false) {
     msgText.set("Fetching song data...")
     const musicData = await getSongData()
     const recordList = rawRecord as ChuniRecord[]
@@ -96,7 +96,7 @@ export async function parseRecords(rawRecord: RawChuniRecord[]) {
         r.const = songInfo[r.difficulty]
         r.rating = calcRating(r.score, r.const)
     })
-    if (cannotFetch.length) {
+    if (isBestRec && cannotFetch.length) {
         alert(`[chuni-intl-viewer] Found unknown song(s):\n${cannotFetch.map(r => `    ${r.title} ${r.difficulty}`).join("\n")
             }\nThe data should be updating soon, please run chuni-viewer again later to get proper song data.`)
         fetch(new Request("https://chuniupdate.dogeon188.repl.co/sendUpdate", {
@@ -158,8 +158,7 @@ export async function getOfficialR10() {
             title: songData.find(".music_title")?.text(),
             score: parseNumber(songData.find(".text_b")?.text()),
             difficulty: Object.values(Difficulty)[Number.parseInt(songData.find("input[name=diff]")?.attr("value")!)],
-            clear: "..",
-            officialRecent: true
+            clear: "-"
         }
     }).get() as RawChuniRecord[]
 }

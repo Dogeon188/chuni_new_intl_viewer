@@ -17,7 +17,7 @@
 </script>
 
 <body>
-    {#await Promise.all( [recordList.init(), recentList.init(), officialRecent.init()] )}
+    {#await Promise.all([recordList.init(), recentList.init(), officialRecent.init()])}
         <LoadingModal />
     {:then}
         <div style="min-height:100vh;display:flex;flex-direction:column;">
@@ -35,12 +35,9 @@
                         <em>change your difficulty filter</em>
                         to something more interesting.
                     </p>
-                {:else if $shownTab == "best"}
+                {:else if $shownTab == "best" || $shownTab == "recent"}
                     <Overview />
                     <Result />
-                {:else if $shownTab == "recent"}
-                    <Overview isRecent />
-                    <Result isRecent />
                 {/if}
             </main>
             <Footer />
