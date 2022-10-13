@@ -1,7 +1,9 @@
 const axios = require("axios").default
 const fs = require("fs")
 
-let oldData = JSON.parse(fs.readFileSync("data/jp.json"))
+const fileName = "data/jp.json"
+
+let oldData = JSON.parse(fs.readFileSync(fileName))
 
 let musicData = {}
 
@@ -113,6 +115,6 @@ axios.get("https://api.chunirec.net/2.0/music/showall.json?region=jp2&token=" + 
     console.log("Parsed data.")
     console.log("Comparing data difference...")
     compareData()
-    fs.writeFileSync("data/jp.json", JSON.stringify(musicData))
+    fs.writeFileSync(fileName, JSON.stringify(musicData))
     console.log("Stored data to file")
 })
