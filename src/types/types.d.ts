@@ -40,4 +40,5 @@ interface ChuniPlayerStats {
     honor: { text: string, type: string }
     rating: string
     ratingMax: string
+    totalPlayCount: string
 }

@@ -111,24 +111,25 @@ export async function parseRecords(rawRecord: RawChuniRecord[], isBestRec = fals
 }
 
 export async function getPlayerStats(): Promise<ChuniPlayerStats> {
-    const res = await fetch(`https://chunithm-net-eng.com/mobile/home/`)
-    const homePage = $(await res.text())
-    const rating = [...homePage.find(".player_rating_num_block img")].map(i => {
+    const res = await fetch(`https://chunithm-net-eng.com/mobile/home/playerData`)
+    const statsPage = $(await res.text())
+    const rating = [...statsPage.find(".player_rating_num_block img")].map(i => {
         const imgSrc = i.getAttribute("src") ?? ""
         if (/rating_.*_comma.png/.test(imgSrc)) return "."
         let num = (/rating_.*_[0-9]*(?=\.png)/g.exec(imgSrc) ?? ["**.**"])[0]
         return num.slice(-1)
     }
     ).join("")
-    const honorBg = homePage.find(".player_honor_short").css("background-image")
+    const honorBg = statsPage.find(".player_honor_short").css("background-image")
     return {
-        name: homePage.find(".player_name_in")[0].innerHTML,
+        name: statsPage.find(".player_name_in")[0].innerHTML,
         honor: {
-            text: homePage.find(".player_honor_text_view span")[0].innerHTML,
+            text: statsPage.find(".player_honor_text_view span")[0].innerHTML,
             type: (/honor_bg_.*(?=\.png)/.exec(honorBg) ?? ["normal"])[0].slice(9)
         },
         rating,
-        ratingMax: homePage.find(".player_rating_max")[0].innerHTML
+        ratingMax: statsPage.find(".player_rating_max")[0].innerHTML,
+        totalPlayCount: statsPage.find(".user_data_play_count .user_data_text")[0].innerHTML
     }
 }
 

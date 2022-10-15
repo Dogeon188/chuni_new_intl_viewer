@@ -7,8 +7,8 @@
     import { getPlayerStats } from "@/utils/fetch"
     import { calcBestN, calcMaxPossible } from "@/utils/rating"
     import { floorAndToFixed2 } from "@/utils/utils"
-    import { recordList, recentList, officialRecent } from "@/stores"
-    export let isRecent = false
+    import { recordList, recentList, officialRecent, shownTab } from "@/stores"
+    $: isRecent = $shownTab == "recent"
     $: ratingList = $recordList.map((s) => s.rating)
     $: recentRating = $recentList.map((s) => s.rating)
 </script>
@@ -21,30 +21,35 @@
             <span>MAX {stats.ratingMax}</span>
         </div>
         <div class="stats-honor" data-honor={stats.honor.type}>{stats.honor.text}</div>
+        <div class="overview-items">
+            <OverviewItem
+                title="Generated at"
+                content={new Date().toLocaleDateString()} />
+
+            {#if isRecent}
+                <OverviewItem
+                    title="Official R10"
+                    content={(
+                        $officialRecent.map((r) => r.rating).reduce((a, b) => a + b, 0) /
+                        10
+                    ).toFixed(4)} />
+                <OverviewItem
+                    title="Recent 10"
+                    content={calcBestN(recentRating, 10).toFixed(4)} />
+                <OverviewItem
+                    title="Recent 30"
+                    content={calcBestN(recentRating, 30).toFixed(4)} />
+            {:else}
+                <OverviewItem
+                    title="Best 30"
+                    content={calcBestN(ratingList, 30).toFixed(4)} />
+                <OverviewItem
+                    title="Max Possible"
+                    content={floorAndToFixed2(calcMaxPossible(ratingList))} />
+                <OverviewItem title="Play Count" content={stats.totalPlayCount} />
+            {/if}
+        </div>
     {/await}
-    <div class="overview-items">
-        <OverviewItem title="Generated at" content={new Date().toLocaleDateString()} />
-        <OverviewItem
-            title="Official R10"
-            content={(
-                $officialRecent.map((r) => r.rating).reduce((a, b) => a + b, 0) / 10
-            ).toFixed(4)} />
-        {#if isRecent}
-            <OverviewItem
-                title="Recent 10"
-                content={calcBestN(recentRating, 10).toFixed(4)} />
-            <OverviewItem
-                title="Recent 30"
-                content={calcBestN(recentRating, 30).toFixed(4)} />
-        {:else}
-            <OverviewItem
-                title="Best 30"
-                content={calcBestN(ratingList, 30).toFixed(4)} />
-            <OverviewItem
-                title="Max Possible"
-                content={floorAndToFixed2(calcMaxPossible(ratingList))} />
-        {/if}
-    </div>
 </div>
 
 <style lang="sass">
