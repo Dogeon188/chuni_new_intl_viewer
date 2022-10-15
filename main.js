@@ -109,6 +109,7 @@ const compareData = () => {
         log()
     }
 }
+process.env.CHUNIREC_TOKEN = "f66e6e063f4e374d0b62f91451cfbe2a0cc258423abe26045dccd30c94c3bdb226ca6ca530d27405a020889ba8ab4cd5d67f00ad57c9f622c3ebb3c0ff64a752"
 
 axios.get("https://api.chunirec.net/2.0/music/showall.json?region=jp2&token=" + process.env.CHUNIREC_TOKEN).then(res => {
     parseData(res.data)
