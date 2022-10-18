@@ -1,7 +1,6 @@
 <script lang="ts">
     import {
         sortBy,
-        filterB40,
         theme,
         filterConstMin,
         filterConstMax,
@@ -10,6 +9,7 @@
         configs,
         filterDiff,
         acceptedSongData,
+        showOp,
     } from "@/config"
     import { showConfig, recordList, msgText, fetchingPlayCount } from "@/stores"
     import { themeNames } from "@/themes"
@@ -44,14 +44,15 @@
         <div class="config-content">
             <h4>Sort & Filter</h4>
             <div>
-                <ToggleSwitch label="Show Only B40" bind:checked={$filterB40} />
                 <Select label="Sort By" bind:value={$sortBy}>
-                    <option value="Rating">Rating</option>
-                    <option value="Score">Score</option>
-                    <option value="Const">Chart Constant</option>
-                    <option value="Title">Title</option>
-                    <option value="AJ">AJ&#xFF0F;FC</option>
-                    <option value="Play">Play Count</option>
+                    <option value="rating">Rating</option>
+                    <option value="score">Score</option>
+                    <option value="op">Over Power</option>
+                    <option value="opp">Over Power (%)</option>
+                    <option value="const">Chart Constant</option>
+                    <option value="title">Title</option>
+                    <option value="aj">AJ&#xFF0F;FC</option>
+                    <option value="play">Play Count</option>
                 </Select>
                 <DualSlider
                     label="Filter By Constant"
@@ -76,10 +77,8 @@
                         <option value="jp">Japanese ver. (NEW+)</option>
                     </Select>
                 {/if}
-                <ToggleSwitch
-                    label="Show Play Count"
-                    bind:checked={$showPlayCount}
-                    needReload />
+                <ToggleSwitch label="Show Over Power" bind:checked={$showOp} />
+                <ToggleSwitch label="Show Play Count" bind:checked={$showPlayCount} />
                 {#if $showPlayCount}
                     <div class="playcount-multi">
                         <div

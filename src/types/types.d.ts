@@ -29,10 +29,12 @@ interface RawChuniRecord {
 
 type ChuniRecord = {
     const: number
-    rank: number
+    rank: string
     rating: number
+    order: number
+    op: number
+    opmax: number
     playCount?: number
-    order?: number
 } & RawChuniRecord
 
 interface ChuniPlayerStats {

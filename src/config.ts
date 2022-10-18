@@ -1,5 +1,5 @@
-import { writable } from "svelte/store"
-import { isMobile, setRootColors } from "@/utils/utils"
+import { get, writable } from "svelte/store"
+import { setRootColors } from "@/utils/utils"
 import { themeNames, themes } from "@/themes"
 import { officialRecent, recentList, recordList } from "@/stores"
 
@@ -51,12 +51,10 @@ function createStored<T>(key: string, dft: T, kwargs: {
     } as StoredWritable<T>
 }
 
-export const filterB40 = createStored("CV_filterB40", isMobile())
-
 export const sortBy = createStored(
     "CV_sortBy",
-    "Rating",
-    { accept: ["Rating", "Score", "Const", "Title", "AJ", "Play"] })
+    "rating",
+    { accept: ["rating", "score", "op", "opp", "const", "title", "aj", "play"] })
 if (localStorage.CV_sortBy == "Play") sortBy.set("Rating")
 
 export const filterConstMin = createStored("CV_filterConstMin", 1, { accept: [1, 15.4] })
@@ -85,5 +83,11 @@ export const usedSongData = createStored(
     })
 
 export const showPlayCount = createStored("CV_showPlayCount", false)
+export const showOp = createStored("CV_showOp", false, {
+    onWrite(cur) {
+        if ((cur && get(sortBy) == "score") || (!cur && ["op", "opp"].includes(get(sortBy))))
+            sortBy.reset()
+    },
+})
 
-export const configs = [filterB40, sortBy, filterConstMin, filterConstMax, filterDiff, theme, usedSongData, showPlayCount]
+export const configs = [sortBy, filterConstMin, filterConstMax, filterDiff, theme, usedSongData, showPlayCount]

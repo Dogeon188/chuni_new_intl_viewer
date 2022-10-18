@@ -40,13 +40,13 @@
                     title="Recent 30"
                     content={calcBestN(recentRating, 30).toFixed(4)} />
             {:else}
+                <OverviewItem title="Play Count" content={stats.totalPlayCount} />
                 <OverviewItem
                     title="Best 30"
                     content={calcBestN(ratingList, 30).toFixed(4)} />
                 <OverviewItem
                     title="Max Possible"
                     content={floorAndToFixed2(calcMaxPossible(ratingList))} />
-                <OverviewItem title="Play Count" content={stats.totalPlayCount} />
             {/if}
         </div>
     {/await}

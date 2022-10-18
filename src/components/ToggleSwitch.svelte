@@ -12,7 +12,7 @@
             <span style="color:var(--theme-text_dim)">*require reload</span>
         {/if}
     </span>
-    <input type="checkbox" bind:checked />
+    <input type="checkbox" bind:checked on:change={() => (changed = true)}/>
     <div class="wrapper">
         <span class="slider" />
     </div>

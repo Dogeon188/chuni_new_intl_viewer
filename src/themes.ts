@@ -1,7 +1,7 @@
 export const themes: Record<ThemeNames, Theme> = {
     Dark: {
         text: "#ddc",
-        text_dim: "#abc",
+        text_dim: "#89a",
         link: "#3cc",
         label: "#9ce",
         bg_main: "#123",
@@ -27,7 +27,7 @@ export const themes: Record<ThemeNames, Theme> = {
     },
     Purple: {
         text: "#ddc",
-        text_dim: "#aac",
+        text_dim: "#87a",
         link: "#c3c",
         label: "#c9e",
         bg_main: "#103",

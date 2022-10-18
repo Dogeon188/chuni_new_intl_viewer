@@ -5,7 +5,7 @@
     import Result from "@/components/Result.svelte"
     import ConfigModal from "@/components/ConfigModal.svelte"
     import Overview from "@/components/Overview.svelte"
-    import { recentList, recordList, officialRecent, shownTab } from "@/stores"
+    import { recentList, recordList, officialRecent, shownTab, fetchingPlayCount, msgText } from "@/stores"
     import { theme } from "@/config"
     import LoadingModal from "@/components/LoadingModal.svelte"
     import Footer from "@/components/Footer.svelte"
@@ -37,6 +37,10 @@
                     </p>
                 {:else if $shownTab == "best" || $shownTab == "recent"}
                     <Overview />
+                    {#if $fetchingPlayCount}
+                        <span style="text-align:center;color:var(--theme-text_dim);"
+                            >{$msgText}</span>
+                    {/if}
                     <Result />
                 {/if}
             </main>

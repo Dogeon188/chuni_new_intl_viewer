@@ -1,5 +1,5 @@
 import { get } from "svelte/store"
-import { calcRating } from "@/utils/rating"
+import { calcOp, calcOpMax, calcRank, calcRating } from "@/utils/rating"
 import { getCookie, parseNumber } from "@/utils/utils"
 import { errorFetching, msgText } from "@/stores"
 import { filterDiff, usedSongData } from "@/config"
@@ -94,7 +94,10 @@ export async function parseRecords(rawRecord: RawChuniRecord[], isBestRec = fals
             return
         }
         r.const = songInfo[r.difficulty]
-        r.rating = calcRating(r.score, r.const)
+        r.rating = calcRating(r)
+        r.op = calcOp(r)
+        r.opmax = calcOpMax(r)
+        r.rank = calcRank(r.score)
     })
     if (isBestRec && cannotFetch.length) {
         alert(`[chuni-intl-viewer] Found unknown song(s):\n${cannotFetch.map(r => `    ${r.title} ${r.difficulty}`).join("\n")
@@ -106,7 +109,7 @@ export async function parseRecords(rawRecord: RawChuniRecord[], isBestRec = fals
         }))
     }
     recordList.sort((a, b) => b.rating - a.rating || b.const - a.const || a.score - b.score)
-    recordList.map((r, i) => { r.rank = i + 1 })
+    recordList.map((r, i) => { r.order = i + 1 })
     return recordList
 }
 
