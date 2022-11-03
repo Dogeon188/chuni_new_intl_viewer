@@ -1,6 +1,6 @@
 <script lang="ts">
     import { errorFetching, msgText } from "@/stores"
-    import { usedSongData } from "@/config"
+    import { acceptedSongData, usedSongData } from "@/config"
 </script>
 
 <div class="modal-wrapper">
@@ -17,11 +17,13 @@
         {:else}
             <div class="loader" />
             <p>{$msgText}</p>
-            <!-- <p style="color:var(--theme-text_dim)">
-                Using song data: {$usedSongData == "intl"
-                    ? "International"
-                    : "Japanese (NEW+)"}
-            </p> -->
+            {#if acceptedSongData.indexOf("jp") > -1}
+                <p style="color:var(--theme-text_dim)">
+                    Using song data: {$usedSongData == "intl"
+                        ? "International"
+                        : "Japanese (NEW+)"}
+                </p>
+            {/if}
         {/if}
     </div>
 </div>

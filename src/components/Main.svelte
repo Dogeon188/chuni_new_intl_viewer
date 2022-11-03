@@ -1,11 +1,20 @@
 <script lang="ts">
     import { onMount } from "svelte"
+    import { fly } from "svelte/transition"
     import { themes } from "@/themes"
     import { setRootColors } from "@/utils/utils"
     import Result from "@/components/Result.svelte"
     import ConfigModal from "@/components/ConfigModal.svelte"
     import Overview from "@/components/Overview.svelte"
-    import { recentList, recordList, officialRecent, shownTab, fetchingPlayCount, msgText } from "@/stores"
+    import {
+        recentList,
+        recordList,
+        officialRecent,
+        shownTab,
+        showMsgText,
+        msgText,
+        showConfig,
+    } from "@/stores"
     import { theme } from "@/config"
     import LoadingModal from "@/components/LoadingModal.svelte"
     import Footer from "@/components/Footer.svelte"
@@ -20,7 +29,7 @@
     {#await Promise.all([recordList.init(), recentList.init(), officialRecent.init()])}
         <LoadingModal />
     {:then}
-        <div style="min-height:100vh;display:flex;flex-direction:column;">
+        <div class="wrapper">
             <Header />
             <main>
                 {#if $recordList.length == 0}
@@ -37,17 +46,20 @@
                     </p>
                 {:else if $shownTab == "best" || $shownTab == "recent"}
                     <Overview />
-                    {#if $fetchingPlayCount}
-                        <span style="text-align:center;color:var(--theme-text_dim);"
-                            >{$msgText}</span>
-                    {/if}
                     <Result />
+                    {#if $showMsgText}
+                        <div class="msg-text" transition:fly={{ y: 200, duration: 1000 }}>
+                            <span>{$msgText}</span>
+                        </div>
+                    {/if}
                 {/if}
             </main>
             <Footer />
         </div>
     {/await}
-    <ConfigModal />
+    {#if $showConfig}
+        <ConfigModal />
+    {/if}
 </body>
 
 <style lang="sass">
@@ -81,4 +93,19 @@
     main
         width: fit-content
         margin: auto
+    .wrapper
+        min-height: 100vh
+        display: flex
+        flex-direction: column
+    .msg-text
+        position: fixed
+        bottom: .5rem
+        left: .5rem
+        padding: .5rem
+        border-radius: .5rem
+        background-color: #0006
+        backdrop-filter: blur(2px)
+        span
+            color: var(--theme-text_dim)
+            font-size: 8px
 </style>

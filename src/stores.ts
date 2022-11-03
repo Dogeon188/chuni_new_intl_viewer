@@ -19,7 +19,7 @@ export const shownTab = writable("best" as ShownTabs)
 
 export const errorFetching = writable(false)
 
-export const fetchingPlayCount = writable(false)
+export const showMsgText = writable(false)
 
 export const officialRecent = (() => {
     const { subscribe, set } = writable([] as ChuniRecord[])
@@ -81,10 +81,13 @@ export const recordList = (() => {
         },
         async updateConstData() {
             if (!inited) return
+            showMsgText.set(true)
             set(await parseRecords(raw, true))
+            showMsgText.set(false)
         },
         async updateDiffFilter(diffFilter: boolean[]) {
             if (!inited) return
+            showMsgText.set(true)
             let fetchedAdditional = false
             for (let i = 0; i < 5; i++) {
                 if (!diffFetched[i] && diffFilter[i]) {
@@ -95,6 +98,7 @@ export const recordList = (() => {
                 }
             }
             if (fetchedAdditional) set(await parseRecords(raw, true))
+            showMsgText.set(false)
         }
     }
 })()

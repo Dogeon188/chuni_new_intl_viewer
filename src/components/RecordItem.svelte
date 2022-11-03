@@ -17,8 +17,12 @@
     <td data-diff={song.difficulty}>{song.title}</td>
     <td>{song.const == -1 ? "-" : song.const?.toFixed(1) ?? "??.?"}</td>
     {#if $showOp}
-        <td>{song.op.toFixed(2)}<span class="opmx">&#xFF0F;{song.opmax.toFixed(1)}</span></td>
-        <td>{((100 * song.op) / song.opmax).toPrecision(5)}<span class="opmx">%</span></td>
+        <td>
+            {song.op.toFixed(2)}<span class="opmx">&#xFF0F;{song.opmax.toFixed(1)}</span>
+        </td>
+        <td>
+            {((100 * song.op) / song.opmax).toPrecision(5)}<span class="opmx">%</span>
+        </td>
     {:else}
         <td data-rank={song.rank}>{song.rank}</td>
         <td>{song.score}</td>
@@ -64,6 +68,7 @@
                 &[data-diff="#{$diff}"]
                     color: var(--theme-song_#{to-lower-case($diff)})
         tr td:nth-child(4)
+            white-space: nowrap
             &[data-rank="MAX"]
                 color: var(--theme-clear_aj)
                 text-shadow: 0 0 10px var(--theme-clear_aj)
@@ -80,7 +85,7 @@
                 color: #888
             &[data-rank="D"]
                 color: #666
-        tr td:nth-child(7)
+        tr td[data-clear]
             font-weight: bold
             &[data-clear="FC"]
                 color: var(--theme-clear_fc)
@@ -89,7 +94,7 @@
             &[data-clear="-"]
                 color: var(--theme-text_dim)
         tr.ajc
-            td:nth-child(4), td:nth-child(5), td:nth-child(7)
+            td:nth-child(4), td:nth-child(5), td[data-clear]
                 color: var(--theme-clear_aj)
                 text-shadow: 0 0 10px var(--theme-clear_aj)
     .opmx

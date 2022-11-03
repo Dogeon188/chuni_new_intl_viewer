@@ -1,7 +1,7 @@
 import { get } from "svelte/store"
 import { calcOp, calcOpMax, calcRank, calcRating } from "@/utils/rating"
 import { getCookie, parseNumber } from "@/utils/utils"
-import { errorFetching, msgText } from "@/stores"
+import { errorFetching, msgText, showMsgText } from "@/stores"
 import { filterDiff, usedSongData } from "@/config"
 
 const Difficulty = {

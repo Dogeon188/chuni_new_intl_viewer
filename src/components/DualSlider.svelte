@@ -7,8 +7,9 @@
     export let high: number
 
     let dist = max - min
-    $: lowPer = ((low - min) / dist) * 100
-    $: highPer = ((high - min) / dist) * 100
+    let _low = low, _high = high
+    $: lowPer = ((_low - min) / dist) * 100
+    $: highPer = ((_high - min) / dist) * 100
 </script>
 
 <div class="wrapper">
@@ -16,32 +17,34 @@
     <div class="indicators">
         <div class="low" style="left: calc((100% - 3rem) * {lowPer} / 100)">
             <input
-                value={low}
+                value={_low}
                 type="number"
                 {min}
                 {max}
                 {step}
                 inputmode="decimal"
                 on:change={(e) => {
-                    low = e.target.value || low
-                    low = Math.min(max, Math.max(min, low))
-                    if (low > high) high = low
-                    e.target.value = low
+                    _low = e.target.value || _low
+                    _low = Math.min(max, Math.max(min, _low))
+                    if (_low > _high) _high = _low
+                    e.target.value = _low
+                    low = _low, high = _high
                 }} />
         </div>
         <div class="high" style="left: calc((100% - 3rem) * {highPer} / 100)">
             <input
-                value={high}
+                value={_high}
                 type="number"
                 {min}
                 {max}
                 {step}
                 inputmode="decimal"
                 on:change={(e) => {
-                    high = e.target.value || high
-                    high = Math.min(max, Math.max(min, high))
-                    if (high < low) low = high
-                    e.target.value = high
+                    _high = e.target.value || _high
+                    _high = Math.min(max, Math.max(min, _high))
+                    if (_high < _low) _low = _high
+                    e.target.value = _high
+                    low = _low, high = _high
                 }} />
         </div>
     </div>
@@ -64,9 +67,10 @@
             {min}
             {max}
             {step}
-            bind:value={low}
+            bind:value={_low}
+            on:change={() => {low = _low, high = _high}}
             on:input={() => {
-                if (low > high) high = low
+                if (_low > _high) _high = _low
             }} />
         <input
             class="high"
@@ -74,7 +78,8 @@
             {min}
             {max}
             {step}
-            bind:value={high}
+            bind:value={_high}
+            on:change={() => {low = _low, high = _high}}
             on:input={() => {
                 if (high < low) low = high
             }} />

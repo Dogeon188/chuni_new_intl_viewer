@@ -56,7 +56,6 @@
         ;["AAA", "AA", "A", "BBB", "BB", "B", "C", "D"].forEach((e) => (rs[e] = 0))
         for (const r of filteredList) rs[r.rank]++
         Object.keys(rs).reduce((pre, cur) => ((rs[cur] += rs[pre]), cur))
-        rs.total = filteredList.length
         return rs
     })()
     $: ajCount = filteredList.filter((v) => v.clear == "AJ").length
@@ -64,7 +63,7 @@
 </script>
 
 {#if $shownTab == "best"}
-    <RankCounter {rankCounts} {fcCount} {ajCount} />
+    <RankCounter {rankCounts} total={filteredList.length} {fcCount} {ajCount} />
 {/if}
 <table>
     <thead>

@@ -2,19 +2,26 @@
     export let rankCounts: Record<string, number>
     export let fcCount: number
     export let ajCount: number
+    export let total: number
+    $: displayedRanks = Object.keys(rankCounts)
+        .filter((k) => rankCounts[k] != 0)
+        .slice(0, 5)
+        .reverse()
 </script>
 
 <div class="container">
     {#each ["S", "S+", "SS", "SS+", "SSS", "SSS+"] as r}
-        <div class="wrapper" class:zero={!(rankCounts[r] > 0)}>
+        <div class="wrapper" class:zero={!(rankCounts[r] > 0)} class:full={rankCounts[r] == total}>
             <div>{r}</div>
             <div>{rankCounts[r] ?? 0}</div>
         </div>
     {/each}
-    <div class="wrapper mx" class:zero={!(rankCounts["MAX"] > 0)}>
-        <div>MAX</div>
-        <div>{rankCounts["MAX"] ?? 0}</div>
-    </div>
+    {#if rankCounts["MAX"] > 0}
+        <div class="wrapper mx">
+            <div>MAX</div>
+            <div>{rankCounts["MAX"] ?? 0}</div>
+        </div>
+    {/if}
     <div class="wrapper fc" class:zero={fcCount == 0}>
         <div>FC</div>
         <div>{fcCount}</div>
@@ -23,7 +30,7 @@
         <div>AJ</div>
         <div>{ajCount}</div>
     </div>
-    <div class="total">/{rankCounts.total}</div>
+    <div class="total">/{total}</div>
 </div>
 
 <style lang="sass">
@@ -51,7 +58,7 @@
             color: var(--theme-clear_fc)
         &.aj div:nth-child(1)
             color: var(--theme-clear_aj)
-        &.mx:not(.zero) div:nth-child(2)
+        &.mx:not(.zero) div:nth-child(2), &.full div:nth-child(2)
             color: var(--theme-clear_aj)
             text-shadow: 0 0 10px var(--theme-clear_aj)
         &.zero div:nth-child(2)

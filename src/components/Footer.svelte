@@ -23,6 +23,7 @@
 
 <style lang="sass">
     footer
+        color: var(--theme-label)
         padding: 10px
         margin-top: auto
 </style>

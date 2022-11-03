@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { fade } from "svelte/transition"
     import {
         sortBy,
         theme,
@@ -11,7 +12,7 @@
         acceptedSongData,
         showOp,
     } from "@/config"
-    import { showConfig, recordList, msgText, fetchingPlayCount } from "@/stores"
+    import { showConfig, recordList, msgText, showMsgText } from "@/stores"
     import { themeNames } from "@/themes"
     import { fetchPlayCount } from "@/utils/fetch"
     import Select from "@/components/Select.svelte"
@@ -19,9 +20,13 @@
     import DualSlider from "@/components/DualSlider.svelte"
     import DiffFilterButtons from "./DiffFilterButtons.svelte"
 
+    function isInvalidPC(from: number, to: number) {
+        return $showMsgText || isNaN(from) || isNaN(to) || from == null || to == null || to < from
+    }
+
     async function fetchMultiPlayCount(from: number, to: number) {
-        if ($fetchingPlayCount || isNaN(from) || isNaN(to) || to < from) return
-        $fetchingPlayCount = true
+        if (isInvalidPC(from, to)) return
+        $showMsgText = true
         $showConfig = false
         const l = $recordList.slice(from - 1, to).length
         for (const [i, song] of $recordList.slice(from - 1, to).entries()) {
@@ -30,13 +35,13 @@
             song.playCount = await fetchPlayCount(song.idx, song.difficulty)
         }
         recordList.set($recordList)
-        $fetchingPlayCount = false
+        $showMsgText = false
     }
 
-    let from: number, to: number
+    let from = 1, to = 40
 </script>
 
-<div class="modal-wrapper" class:hidden={!$showConfig}>
+<div class="modal-wrapper" transition:fade={{duration: 100}}>
     <div class="modal-bg" on:click={showConfig.toggle} />
     <div class="modal">
         <div class="close-btn" on:click={showConfig.toggle}>✕</div>
@@ -83,24 +88,21 @@
                     <div class="playcount-multi">
                         <div
                             class="btn"
-                            class:disabled={$fetchingPlayCount ||
-                                isNaN(from) ||
-                                isNaN(to) ||
-                                to < from}
+                            class:disabled={isInvalidPC(from, to)}
                             on:click={() => fetchMultiPlayCount(from, to)}>
                             Fetch
                         </div>
                         <input
                             type="number"
                             min="1"
-                            placeholder="1"
+                            placeholder="from"
                             bind:value={from}
                             inputmode="numeric" />
                         &#xFF5E;
                         <input
                             type="number"
                             min="1"
-                            placeholder="40"
+                            placeholder="to"
                             bind:value={to}
                             inputmode="numeric" />
                     </div>
@@ -128,8 +130,6 @@
         height: 100%
         display: flex
         align-items: center
-        &.hidden
-            display: none
     .modal-bg
         position: fixed
         background: #0006
