@@ -2,6 +2,5 @@ node_modules
 package-lock.json
 server.js
 .prettierrc
-.env
 .vscode
 tests
