@@ -1,5 +1,5 @@
 import { get, writable } from "svelte/store"
-import { fetchRawRecord, parseRecords, getSongList, fetchRecent, getOfficialR10 } from "@/utils/fetch"
+import { fetchRawRecord, parseRecords, getSongList, fetchRecent, getOfficialR10, difficulties } from "@/utils/fetch"
 import { filterDiff } from "@/config"
 
 function createToggleable(dft = false) {
@@ -81,9 +81,7 @@ export const recordList = (() => {
         },
         async updateConstData() {
             if (!inited) return
-            showMsgText.set(true)
             set(await parseRecords(raw, true))
-            showMsgText.set(false)
         },
         async updateDiffFilter(diffFilter: boolean[]) {
             if (!inited) return
@@ -91,8 +89,7 @@ export const recordList = (() => {
             let fetchedAdditional = false
             for (let i = 0; i < 5; i++) {
                 if (!diffFetched[i] && diffFilter[i]) {
-                    Array.prototype.push.apply(raw, await getSongList(
-                        (["BAS", "ADV", "EXP", "MAS", "ULT"] as ChunirecDifficulty[])[i]))
+                    Array.prototype.push.apply(raw, await getSongList(difficulties[i]))
                     diffFetched[i] = true
                     fetchedAdditional = true
                 }

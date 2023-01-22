@@ -8,40 +8,20 @@
         usedSongData,
         showPlayCount,
         configs,
-        filterDiff,
         acceptedSongData,
         showOp,
     } from "@/config"
-    import { showConfig, recordList, msgText, showMsgText } from "@/stores"
+    import { showConfig } from "@/stores"
     import { themeNames } from "@/themes"
-    import { fetchPlayCount } from "@/utils/fetch"
     import Select from "@/components/Select.svelte"
     import ToggleSwitch from "@/components/ToggleSwitch.svelte"
     import DualSlider from "@/components/DualSlider.svelte"
-    import DiffFilterButtons from "./DiffFilterButtons.svelte"
-
-    function isInvalidPC(from: number, to: number) {
-        return $showMsgText || isNaN(from) || isNaN(to) || from == null || to == null || to < from
-    }
-
-    async function fetchMultiPlayCount(from: number, to: number) {
-        if (isInvalidPC(from, to)) return
-        $showMsgText = true
-        $showConfig = false
-        const l = $recordList.slice(from - 1, to).length
-        for (const [i, song] of $recordList.slice(from - 1, to).entries()) {
-            msgText.set(`Fetching play count... (${i}/${l})`)
-            if (song.playCount != undefined) continue
-            song.playCount = await fetchPlayCount(song.idx, song.difficulty)
-        }
-        recordList.set($recordList)
-        $showMsgText = false
-    }
-
-    let from = 1, to = 40
+    import ConfigDiffFilter from "@/components/ConfigDiffFilter.svelte"
+    import ConfigPlayCount from "@/components/ConfigPlayCount.svelte"
+    import ConfigGenreFilter from "./ConfigGenreFilter.svelte"
 </script>
 
-<div class="modal-wrapper" transition:fade={{duration: 100}}>
+<div class="modal-wrapper" transition:fade={{ duration: 100 }}>
     <div class="modal-bg" on:click={showConfig.toggle} />
     <div class="modal">
         <div class="close-btn" on:click={showConfig.toggle}>✕</div>
@@ -66,7 +46,8 @@
                     bind:low={$filterConstMin}
                     bind:high={$filterConstMax}
                     step={0.1} />
-                <DiffFilterButtons bind:config={$filterDiff} />
+                <ConfigDiffFilter />
+                <ConfigGenreFilter />
             </div>
             <hr />
             <h4>General</h4>
@@ -85,27 +66,7 @@
                 <ToggleSwitch label="Show Over Power" bind:checked={$showOp} />
                 <ToggleSwitch label="Show Play Count" bind:checked={$showPlayCount} />
                 {#if $showPlayCount}
-                    <div class="playcount-multi">
-                        <div
-                            class="btn"
-                            class:disabled={isInvalidPC(from, to)}
-                            on:click={() => fetchMultiPlayCount(from, to)}>
-                            Fetch
-                        </div>
-                        <input
-                            type="number"
-                            min="1"
-                            placeholder="from"
-                            bind:value={from}
-                            inputmode="numeric" />
-                        &#xFF5E;
-                        <input
-                            type="number"
-                            min="1"
-                            placeholder="to"
-                            bind:value={to}
-                            inputmode="numeric" />
-                    </div>
+                    <ConfigPlayCount />
                 {/if}
             </div>
         </div>
@@ -187,28 +148,6 @@
         transition: .2s
         &:hover
             opacity: 1
-    .playcount-multi
-        padding: .5rem
-        display: flex
-        gap: .5rem
-        align-items: center
-        input[type=number]
-            background-color: var(--theme-bg_sub)
-            color: var(--theme-text)
-            border: none
-            border-radius: .2rem
-            width: 4rem
-            padding: .5rem
-            -moz-appearance: textfield
-            flex-grow: 1
-            &::-webkit-inner-spin-button
-                -webkit-appearance: none
-                margin: 0
-        .btn
-            background-color: var(--theme-bg_control)
-            &.disabled
-                background-color: var(--theme-border)
-                cursor: no-drop
     .reset-btn
         margin-left: auto
         background-color: #920

@@ -10,7 +10,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-          '@': path.resolve(__dirname, './src'),
+            '@': path.resolve(__dirname, './src'),
         },
     },
     build: {
@@ -24,7 +24,7 @@ export default defineConfig({
     },
     plugins: [
         svelte({
-            // compilerOptions: {dev: true},
+            // compilerOptions: { dev: true },
             preprocess: [
                 sveltePreprocessor({
                     sourceMap: false,

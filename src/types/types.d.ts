@@ -35,6 +35,7 @@ type ChuniRecord = {
     op: number
     opmax: number
     playCount?: number
+    genre: number
 } & RawChuniRecord
 
 interface ChuniPlayerStats {

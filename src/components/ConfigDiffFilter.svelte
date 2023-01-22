@@ -1,21 +1,22 @@
 <script lang="ts">
-    export let config: boolean[]
+    import { difficulties } from "@/utils/fetch"
+    import { filterDiff } from "@/config"
 </script>
 
 <div class="wrapper">
     <span>
         Filter By Difficulty
-        {#if config.every((i) => !i)}
+        {#if $filterDiff.every((i) => !i)}
             <span style="color:var(--theme-song_exp)">*must select at least one!</span>
         {/if}
     </span>
     <div class="btns">
-        {#each ["BAS", "ADV", "EXP", "MAS", "ULT"] as diff, i}
+        {#each difficulties as diff, i}
             <label>
                 <input
                     type="checkbox"
                     value={diff.toLowerCase()}
-                    bind:checked={config[i]} />
+                    bind:checked={$filterDiff[i]} />
                 <div class="btn" data-diff={diff}>{diff}</div>
             </label>
         {/each}

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { fetchPlayCount } from "@/utils/fetch"
     import { showOp, showPlayCount } from "@/config"
-    import { shownTab } from "@/stores"
+    import { shownTab, showMsgText } from "@/stores"
 
     export let song: ChuniRecord
     export let isOfficialRecent = false
@@ -39,6 +39,7 @@
             <td
                 class="pc-hidden"
                 on:click={async () => {
+                    if ($showMsgText) return
                     song.playCount = await fetchPlayCount(song.idx, song.difficulty)
                 }}>
                 <span>...</span>

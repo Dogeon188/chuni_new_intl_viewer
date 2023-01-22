@@ -6,50 +6,26 @@
         showPlayCount,
         filterDiff,
         showOp,
+        filterGenre,
     } from "@/config"
+    import { recordSorts, difficulties } from "@/utils/fetch"
     import { recordList, recentList, officialRecent, shownTab } from "@/stores"
     import RankCounter from "./RankCounter.svelte"
     import RecordItem from "./RecordItem.svelte"
 
     $: isRecent = $shownTab == "recent"
-
-    const sorts: Record<string, (a: ChuniRecord, b: ChuniRecord) => number> = {
-        rating: (a, b) => a.order - b.order,
-        score: (a, b) => b.score - a.score,
-        op: (a, b) => b.op - a.op,
-        opp: (a, b) => b.op / b.opmax - a.op / a.opmax,
-        const: (a, b) => b.const - a.const,
-        title: (a, b) => {
-            if (a.title < b.title) return -1
-            if (a.title > b.title) return 1
-            const diffs = ["ULT", "MAS", "EXP", "ADV", "BAS"]
-            return diffs.indexOf(b.difficulty) - diffs.indexOf(a.difficulty)
-        },
-        aj: (a, b) => {
-            if (a.clear == b.clear) return a.order - b.order
-            const clears = ["", "FC", "AJ"]
-            return clears.indexOf(b.clear) - clears.indexOf(a.clear)
-        },
-        play: (a, b) => {
-            if (a.playCount == undefined) return 100
-            if (b.playCount == undefined) return -100
-            if (a.playCount == b.playCount) return a.order - b.order
-            return b.playCount - a.playCount
-        },
-    }
     $: filteredList = isRecent
         ? $recentList
         : $recordList.filter((v, i) => {
-              const diff = ["BAS", "ADV", "EXP", "MAS", "ULT"]
               return (
-                  v.difficulty == "WE" ||
-                  ($filterDiff[diff.indexOf(v.difficulty)] &&
-                      $filterConstMax >= v.const &&
-                      v.const >= $filterConstMin)
+                  $filterDiff[difficulties.indexOf(v.difficulty)] &&
+                  $filterGenre[v.genre] &&
+                  $filterConstMax >= v.const &&
+                  v.const >= $filterConstMin
               )
           })
-    $: sortedList = filteredList.sort(sorts[$sortBy])
-    $: sortedOfficialRecent = $officialRecent.sort(sorts[$sortBy])
+    $: sortedList = filteredList.sort(recordSorts[$sortBy])
+    $: sortedOfficialRecent = $officialRecent.sort(recordSorts[$sortBy])
     $: rankCounts = (() => {
         let rs = {} as Record<string, number>
         ;["MAX", "SSS+", "SSS", "SS+", "SS", "S+", "S"].forEach((e) => (rs[e] = 0))

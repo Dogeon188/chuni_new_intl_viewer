@@ -10,11 +10,9 @@ export async function saveResultAsPicture() {
     resultNode?.parentElement?.appendChild(n)
 
     n.style.margin = "initial"
-    n.querySelectorAll("tr").forEach((tr, i) => {
-        if (i > 40) tr.remove()
-    })
+    n.querySelectorAll("tr:nth-child(n+41)").forEach(tr => tr.remove())
 
-    toBlob(n, { backgroundColor: themes[get(theme)].bg_main }).then(async blob => {
+    toBlob(n, { backgroundColor: themes[get(theme)].bg_main }).then(async (blob) => {
         n.remove()
         if (blob == null) return alert("[chuni-intl-viewer] Something went wrong when converting your scores to PNG. Please ask the author to fix it.")
         if (isMobile()) {
