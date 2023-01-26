@@ -5,11 +5,12 @@
 </script>
 
 <header>
-    {#each [["best", "RECORDS"], ["recent", "RECENT"]] as [t, d]}
-        <h3 class:selected={$shownTab == t} on:click={() => ($shownTab = t)}>
-            {d}
-        </h3>
-    {/each}
+    <h3 class:selected={$shownTab == "best"} on:click={() => ($shownTab = "best")}>
+        BEST
+    </h3>
+    <h3 class:selected={$shownTab == "recent"} on:click={() => ($shownTab = "recent")}>
+        RECENT
+    </h3>
     <div style="flex-grow:1" />
     <div class="btn-container">
         <div class="btn" on:click={saveResultAsPicture}>

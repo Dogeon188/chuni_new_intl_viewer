@@ -214,6 +214,9 @@ export async function fetchPlayCount(idx: string, diff: ChunirecDifficulty) {
         method: "POST",
         body: fd
     })
-    return Number.parseInt($(await res.text()).find(`.music_box.bg_${difficulties.find(key => Difficulty[key] === diff)} .box14 > div`)
-        .eq(1).find(".text_b").text().replace("times", ""))
+
+    return Number.parseInt($(await res.text())
+        .find(`.music_box.bg_${Object.keys(Difficulty).find(key => Difficulty[key] === diff)} .box14 > div`)
+        .eq(1).find(".text_b")
+        .text().replace("times", ""))
 }
