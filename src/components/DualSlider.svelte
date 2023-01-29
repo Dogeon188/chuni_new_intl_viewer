@@ -24,10 +24,10 @@
                 {step}
                 inputmode="decimal"
                 on:change={(e) => {
-                    _low = e.target.value || _low
+                    _low = e.currentTarget.value || _low
                     _low = Math.min(max, Math.max(min, _low))
                     if (_low > _high) _high = _low
-                    e.target.value = _low
+                    e.currentTarget.value = _low
                     low = _low, high = _high
                 }} />
         </div>
@@ -81,7 +81,7 @@
             bind:value={_high}
             on:change={() => {low = _low, high = _high}}
             on:input={() => {
-                if (high < low) low = high
+                if (_high < _low) _low = _high
             }} />
     </div>
 </div>
