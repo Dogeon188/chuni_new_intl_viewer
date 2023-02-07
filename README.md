@@ -1,12 +1,8 @@
 # Chunithm New (International) Score Viewer
 
-A bookmarklet tool let you to view the records of [CHUNITHM-NET (International)](https://chunithm-net-eng.com/) in rating order.
+<span style="color:red;font-size:x-large;">This project is now deprecated, and will no longer get updated from now on.</span>
 
-Chart constant data ~~extracted~~ compiled from [chunirec](https://developer.chunirec.net/docs/v2.0/).
-
-## Some Notes
-
-Even though [the original repository](https://github.com/kyroslee/chuni_intl_viewer) has updated to the NEW version, I'll still keep updating this project if needed, since I really need something to spur me on.
+To use the newest version of score viewer, please refer to [Dogeon188/chuni-tools](https://github.com/Dogeon188/chuni-tools).
 
 ## Usage
 
